@@ -1,4 +1,4 @@
-part of aqueduct_test.client;
+part of conduit_test.client;
 
 /// Object to construct and execute an HTTP request during testing.
 ///

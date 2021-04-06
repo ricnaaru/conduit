@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/application/application.dart';
-import 'package:aqueduct/src/application/channel.dart';
-import 'package:aqueduct/src/application/isolate_application_server.dart';
-import 'package:aqueduct/src/application/options.dart';
-import 'package:aqueduct/src/http/controller.dart';
-import 'package:aqueduct/src/http/resource_controller.dart';
-import 'package:aqueduct/src/http/resource_controller_interfaces.dart';
-import 'package:aqueduct/src/http/serializable.dart';
-import 'package:aqueduct/src/runtime/resource_controller_impl.dart';
+import 'package:conduit/src/application/application.dart';
+import 'package:conduit/src/application/channel.dart';
+import 'package:conduit/src/application/isolate_application_server.dart';
+import 'package:conduit/src/application/options.dart';
+import 'package:conduit/src/http/controller.dart';
+import 'package:conduit/src/http/resource_controller.dart';
+import 'package:conduit/src/http/resource_controller_interfaces.dart';
+import 'package:conduit/src/http/serializable.dart';
+import 'package:conduit/src/runtime/resource_controller_impl.dart';
 import 'package:conduit_runtime/runtime.dart';
 import 'package:conduit_common/conduit_common.dart';
 
@@ -76,8 +76,8 @@ class ChannelRuntimeImpl extends ChannelRuntime implements SourceCompiler {
 
     return """
 import 'dart:async';    
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/application/isolate_application_server.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/application/isolate_application_server.dart';
 import '$originalFileUri';
 
 final instance = ChannelRuntimeImpl();
@@ -175,7 +175,7 @@ class ControllerRuntimeImpl extends ControllerRuntime
 
     return """
 import 'dart:async';    
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import '$originalFileUri';
 ${(resourceController as ResourceControllerRuntimeImpl)?.directives?.join("\n") ?? ""}
     

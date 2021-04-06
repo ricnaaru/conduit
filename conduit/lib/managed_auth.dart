@@ -19,13 +19,13 @@
 ///
 /// This library declares two [ManagedObject] subclasses, [ManagedAuthToken] and [ManagedAuthClient].
 /// An application using this library must ensure that these two types have corresponding database tables.
-/// The `aqueduct db` tool will create database tables for these types as long as they are visible
+/// The `conduit db` tool will create database tables for these types as long as they are visible
 /// to the application's library file, as noted above.
-library aqueduct.managed_auth;
+library conduit.managed_auth;
 
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 /// Represent an OAuth 2.0 authorization token and authorization code.
 ///
@@ -158,7 +158,7 @@ class _ManagedAuthToken {
 /// Only confidential clients may have a [redirectURI]. Only clients with a [redirectURI] may use the authorization
 /// code flow.
 ///
-/// Use the `aqueduct auth` tool to add new clients to an application.
+/// Use the `conduit auth` tool to add new clients to an application.
 class ManagedAuthClient extends ManagedObject<_ManagedAuthClient>
     implements _ManagedAuthClient {
   /// Default constructor.

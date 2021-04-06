@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/cli/running_process.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/running_process.dart';
 
 class CLIServer extends CLICommand with CLIProject {
   String derivedChannelType;
@@ -208,8 +208,8 @@ class CLIServer extends CLICommand with CLIProject {
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/starter.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/starter.dart';
 import 'package:___PACKAGE_NAME___/___LIBRARY_NAME___.dart';
 
 Future main(List<String> args, dynamic sendPort) async {

@@ -2,9 +2,9 @@ import 'dart:mirrors';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/runtime/orm/entity_builder.dart';
-import 'package:aqueduct/src/utilities/sourcify.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/runtime/orm/entity_builder.dart';
+import 'package:conduit/src/utilities/sourcify.dart';
 import 'package:meta/meta.dart';
 import 'package:conduit_runtime/runtime.dart';
 
@@ -412,7 +412,7 @@ return entity.symbolMap[Symbol(symbolName)];
       ..addAll(Set.from(importUris).map((uri) => "import '$uri';"));
 
     return """
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:conduit_runtime/runtime.dart';
 import '$originalFileUri';
 ${directives.join("\n")}

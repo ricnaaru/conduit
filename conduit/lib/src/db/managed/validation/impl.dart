@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/managed.dart';
 
 enum ValidateType { regex, comparison, length, present, absent, oneOf }
 

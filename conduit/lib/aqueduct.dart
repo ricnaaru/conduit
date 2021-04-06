@@ -13,11 +13,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 /// The core libraries of the Aqueduct framework.
 ///
-/// See documentation guides at https://aqueduct.io/docs/.
-library aqueduct;
+/// See documentation guides at https://conduit.io/docs/.
+library conduit;
 
 
-export 'package:aqueduct/src/runtime/compiler.dart';
+export 'package:conduit/src/runtime/compiler.dart';
 export 'package:logging/logging.dart';
 export 'package:safe_config/safe_config.dart';
 

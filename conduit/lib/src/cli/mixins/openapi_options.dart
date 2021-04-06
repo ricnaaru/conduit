@@ -1,5 +1,5 @@
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
 
 abstract class CLIDocumentOptions implements CLICommand {
   @Flag("resolve-relative-urls", defaultsTo: true,

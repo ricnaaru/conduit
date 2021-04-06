@@ -115,16 +115,16 @@ void main() {
       var res = await cli.run("create", ["test_project", "--offline"]);
       expect(res, 0);
 
-      var aqueductLocationString = File.fromUri(cli.agent.workingDirectory.uri
+      var conduitLocationString = File.fromUri(cli.agent.workingDirectory.uri
               .resolve("test_project/")
               .resolve(".packages"))
           .readAsStringSync()
           .split("\n")
-          .firstWhere((p) => p.startsWith("aqueduct:"))
-          .split("aqueduct:")
+          .firstWhere((p) => p.startsWith("conduit:"))
+          .split("conduit:")
           .last;
 
-      var path = path_lib.normalize(path_lib.fromUri(aqueductLocationString));
+      var path = path_lib.normalize(path_lib.fromUri(conduitLocationString));
       expect(path, path_lib.join(Directory.current.path, "lib"));
     });
 
@@ -134,8 +134,8 @@ void main() {
         .whereType<Directory>()
         .map((fse) => fse.uri.pathSegments[fse.uri.pathSegments.length - 2])
         .toList();
-    final aqueductPubspec = loadYaml(File("pubspec.yaml").readAsStringSync());
-    final aqueductVersion = Version.parse("${aqueductPubspec["version"]}");
+    final conduitPubspec = loadYaml(File("pubspec.yaml").readAsStringSync());
+    final conduitVersion = Version.parse("${conduitPubspec["version"]}");
 
     for (var template in templates) {
       test(
@@ -145,9 +145,9 @@ void main() {
           var pubspec = File.fromUri(projectDir.uri.resolve("pubspec.yaml"));
           var contents = loadYaml(pubspec.readAsStringSync());
           final projectVersionConstraint = VersionConstraint.parse(
-            contents["dependencies"]["aqueduct"] as String,
+            contents["dependencies"]["conduit"] as String,
           );
-          expect(projectVersionConstraint.allows(aqueductVersion), true);
+          expect(projectVersionConstraint.allows(conduitVersion), true);
         },
       );
 

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/db/persistent_store/persistent_store.dart';
-import 'package:aqueduct/src/db/postgresql/postgresql_persistent_store.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/db/persistent_store/persistent_store.dart';
+import 'package:conduit/src/db/postgresql/postgresql_persistent_store.dart';
 import 'package:conduit_config/conduit_config.dart';
-import 'package:aqueduct/src/cli/command.dart';
+import 'package:conduit/src/cli/command.dart';
 
 abstract class CLIDatabaseConnectingCommand implements CLICommand, CLIProject {
   static const String flavorPostgreSQL = "postgres";
@@ -36,7 +36,7 @@ abstract class CLIDatabaseConnectingCommand implements CLICommand, CLIProject {
       help:
           "A configuration file that provides connection information for the database. "
           "Paths are relative to project directory. If the connect option is set, this value is ignored. "
-          "See 'aqueduct db -h' for details.",
+          "See 'conduit db -h' for details.",
       defaultsTo: "database.yaml")
   File get databaseConfigurationFile =>
       fileInProjectDirectory(decode("database-config"));

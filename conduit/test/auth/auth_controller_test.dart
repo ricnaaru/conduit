@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct_test/aqueduct_test.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit_test/conduit_test.dart';
 
-import 'package:aqueduct/src/dev/helpers.dart';
+import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   HttpServer server;

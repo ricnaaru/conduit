@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:aqueduct/src/application/isolate_application_server.dart';
+import 'package:conduit/src/application/isolate_application_server.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:logging/logging.dart';
 import 'package:runtime/runtime.dart';
@@ -21,7 +21,7 @@ export 'service_registry.dart';
 /// This object starts and stops instances of your [ApplicationChannel].
 ///
 /// An application object opens HTTP listeners that forward requests to instances of your [ApplicationChannel].
-/// It is unlikely that you need to use this class directly - the `aqueduct serve` command creates an application object
+/// It is unlikely that you need to use this class directly - the `conduit serve` command creates an application object
 /// on your behalf.
 class Application<T extends ApplicationChannel> {
   /// A list of isolates that this application supervises.
@@ -40,8 +40,8 @@ class Application<T extends ApplicationChannel> {
 
   /// The logger that this application will write messages to.
   ///
-  /// This logger's name will appear as 'aqueduct'.
-  Logger logger = Logger("aqueduct");
+  /// This logger's name will appear as 'conduit'.
+  Logger logger = Logger("conduit");
 
   /// The options used to configure this application.
   ///
@@ -154,7 +154,7 @@ class Application<T extends ApplicationChannel> {
 
   /// Creates an [APIDocument] from an [ApplicationChannel].
   ///
-  /// This method is called by the `aqueduct document` CLI.
+  /// This method is called by the `conduit document` CLI.
   static Future<APIDocument> document(Type type, ApplicationOptions config,
       Map<String, dynamic> projectSpec) async {
     final runtime = RuntimeContext.current[type] as ChannelRuntime;

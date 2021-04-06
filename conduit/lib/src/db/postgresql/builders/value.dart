@@ -1,6 +1,6 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/postgresql/builders/column.dart';
-import 'package:aqueduct/src/db/postgresql/builders/table.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/postgresql/builders/column.dart';
+import 'package:conduit/src/db/postgresql/builders/table.dart';
 
 class ColumnValueBuilder extends ColumnBuilder {
   ColumnValueBuilder(

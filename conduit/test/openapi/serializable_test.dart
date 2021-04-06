@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 void main() {
   APIDocumentContext ctx;

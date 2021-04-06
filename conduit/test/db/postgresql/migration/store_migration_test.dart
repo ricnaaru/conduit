@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 void main() {
   var store =
@@ -25,7 +25,7 @@ void main() {
         temporary: true);
 
     var rows = await store.execute(
-        "SELECT versionNumber, dateOfUpgrade FROM _aqueduct_version_pgsql");
+        "SELECT versionNumber, dateOfUpgrade FROM _conduit_version_pgsql");
     expect(rows.length, 1);
     expect(rows.first.first, 1);
   });
@@ -39,7 +39,7 @@ void main() {
     await store.upgrade(s1, [EmptyMigration()..version = 2], temporary: true);
 
     var rows = await store.execute(
-        "SELECT versionNumber, dateOfUpgrade FROM _aqueduct_version_pgsql");
+        "SELECT versionNumber, dateOfUpgrade FROM _conduit_version_pgsql");
     expect(rows.length, 2);
     expect(rows.first.first, 1);
     expect(rows.last.first, 2);

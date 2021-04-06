@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -60,11 +60,11 @@ void main() {
 
       expect(
           responses.any(
-              (http.Response resp) => resp.headers["server"] == "aqueduct/1"),
+              (http.Response resp) => resp.headers["server"] == "conduit/1"),
           true);
       expect(
           responses.any(
-              (http.Response resp) => resp.headers["server"] == "aqueduct/2"),
+              (http.Response resp) => resp.headers["server"] == "conduit/2"),
           true);
     });
 

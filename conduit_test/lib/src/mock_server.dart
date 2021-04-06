@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 /// This class is used as a utility for testing.
 ///

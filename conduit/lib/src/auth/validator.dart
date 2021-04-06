@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/http/request.dart';
+import 'package:conduit/src/http/request.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';
 

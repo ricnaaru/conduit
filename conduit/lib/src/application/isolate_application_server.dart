@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:aqueduct/src/application/service_registry.dart';
+import 'package:conduit/src/application/service_registry.dart';
 import 'package:logging/logging.dart';
 
 import 'application.dart';

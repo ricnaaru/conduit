@@ -1,8 +1,8 @@
 // ignore: unnecessary_const
 @Tags(const ["cli"])
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/managed_auth.dart';
-import 'package:aqueduct/src/dev/context_helpers.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/managed_auth.dart';
+import 'package:conduit/src/dev/context_helpers.dart';
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:test/test.dart';
 
@@ -17,7 +17,7 @@ void main() {
 
   setUpAll(() async {
     cli = CLIClient(DartProjectAgent("application_test", dependencies: {
-      "aqueduct": {"path": "../.."}
+      "conduit": {"path": "../.."}
     }))
       ..defaultArgs = [
         "--connect",

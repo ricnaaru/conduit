@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/auth/auth.dart';
-import 'package:aqueduct/src/http/resource_controller_interfaces.dart';
+import 'package:conduit/src/auth/auth.dart';
+import 'package:conduit/src/http/resource_controller_interfaces.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:logging/logging.dart';
@@ -62,7 +62,7 @@ import 'http.dart';
 ///           }
 ///         }
 ///
-/// Bindings will automatically parse values into other types and validate that requests have the desired values. See [Bind] for all possible bindings and https://aqueduct.io/docs/http/resource_controller/ for more details.
+/// Bindings will automatically parse values into other types and validate that requests have the desired values. See [Bind] for all possible bindings and https://conduit.io/docs/http/resource_controller/ for more details.
 ///
 /// To access the request directly, use [request]. Note that the [Request.body] of [request] will be decoded prior to invoking an operation method.
 abstract class ResourceController extends Controller
@@ -263,7 +263,7 @@ abstract class ResourceController extends Controller
     if (operation.scopes != null) {
       if (request.authorization == null) {
         // todo: this should be done compile-time
-        Logger("aqueduct").warning(
+        Logger("conduit").warning(
             "'${runtimeType}' must be linked to channel that contains an 'Authorizer', because "
             "it uses 'Scope' annotation for one or more of its operation methods.");
         throw Response.serverError();

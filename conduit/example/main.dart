@@ -1,18 +1,18 @@
 /*
   This example demonstrates an HTTP application that uses the ORM and ORM-backed OAuth2 provider.
 
-  For building and running non-example applications, install 'aqueduct' command-line tool.
+  For building and running non-example applications, install 'conduit' command-line tool.
 
-      pub global activate aqueduct
-      aqueduct create my_app
+      pub global activate conduit
+      conduit create my_app
 
-  More examples available: https://github.com/stablekernel/aqueduct_examples
+  More examples available: https://github.com/stablekernel/conduit_examples
  */
 
 import 'dart:async';
 import 'dart:io';
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/managed_auth.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/managed_auth.dart';
 
 Future main() async {
   final app = Application<App>()

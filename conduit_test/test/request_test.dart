@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:aqueduct_test/aqueduct_test.dart';
+import 'package:conduit_test/conduit_test.dart';
 
 void main() {
   MockHTTPServer server;

@@ -1,4 +1,4 @@
-part of aqueduct_test.client;
+part of conduit_test.client;
 
 /// An HTTP response from a test application.
 ///

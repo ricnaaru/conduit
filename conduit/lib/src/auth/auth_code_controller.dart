@@ -24,7 +24,7 @@ abstract class AuthCodeControllerDelegate {
   ///         POST https://example.com/auth/code
   ///         Content-Type: application/x-www-form-urlencoded
   ///
-  ///         response_type=code&client_id=com.aqueduct.app&state=o9u3jla&username=bob&password=password
+  ///         response_type=code&client_id=com.conduit.app&state=o9u3jla&username=bob&password=password
   ///
   ///
   /// If not null, [scope] should also be included as an additional form parameter.

@@ -5,13 +5,13 @@
 /// Example:
 ///
 /// import 'package:test/test.dart';
-/// import 'package:aqueduct/aqueduct.dart';
-/// import 'package:aqueduct/test.dart';
+/// import 'package:conduit/conduit.dart';
+/// import 'package:conduit/test.dart';
 ///
 /// void main() {
 ///   test("...", () async => ...);
 /// }
-library aqueduct_test;
+library conduit_test;
 
 export 'src/agent.dart';
 export 'src/auth_harness.dart';

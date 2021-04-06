@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 Future<ManagedContext> contextWithModels(List<Type> instanceTypes) async {
   var persistentStore =

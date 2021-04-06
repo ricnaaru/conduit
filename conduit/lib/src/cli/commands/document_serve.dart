@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/openapi_options.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/cli/running_process.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/openapi_options.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/running_process.dart';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/scripts/openapi_builder.dart';
-import 'package:aqueduct/src/http/http.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/scripts/openapi_builder.dart';
+import 'package:conduit/src/http/http.dart';
 
 /// Used internally.
 class CLIDocumentServe extends CLICommand with CLIProject, CLIDocumentOptions {
@@ -20,7 +20,7 @@ class CLIDocumentServe extends CLICommand with CLIProject, CLIDocumentOptions {
   StoppableProcess runningProcess;
 
   Directory get _hostedDirectory =>
-      Directory.fromUri(projectDirectory.uri.resolve(".aqueduct_spec"));
+      Directory.fromUri(projectDirectory.uri.resolve(".conduit_spec"));
 
   @override
   Future<int> handle() async {
@@ -125,6 +125,6 @@ class CLIDocumentServe extends CLICommand with CLIProject, CLIDocumentOptions {
 
   @override
   String get detailedDescription {
-    return "This tool will start an HTTP server that serves an API reference web page. See `aqueduct document --help` for configuration options.";
+    return "This tool will start an HTTP server that serves an API reference web page. See `conduit document --help` for configuration options.";
   }
 }

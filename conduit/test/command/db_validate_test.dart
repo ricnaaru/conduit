@@ -25,7 +25,7 @@ void main() {
   setUp(() async {
     projectUnderTestCli = templateCli.replicate(Uri.parse("replica/"));
     projectUnderTestCli.projectAgent.addLibraryFile("application_test", """
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 class TestObject extends ManagedObject<_TestObject> {}
 

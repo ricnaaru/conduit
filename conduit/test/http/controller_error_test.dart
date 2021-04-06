@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:aqueduct/src/dev/helpers.dart';
+import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   HttpServer server;

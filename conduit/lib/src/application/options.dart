@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aqueduct/src/application/channel.dart';
+import 'package:conduit/src/application/channel.dart';
 
 import 'application.dart';
 
@@ -10,7 +10,7 @@ import 'application.dart';
 class ApplicationOptions {
   /// The absolute path of the configuration file for this application.
   ///
-  /// This path is provided when an application is started by the `--config-path` option to `aqueduct serve`.
+  /// This path is provided when an application is started by the `--config-path` option to `conduit serve`.
   /// You may load the file at this path in [ApplicationChannel] to use configuration values.
   String configurationFilePath;
 
@@ -40,14 +40,14 @@ class ApplicationOptions {
   /// The path to a SSL certificate.
   ///
   /// If specified - along with [privateKeyFilePath] - an [Application] will only allow secure connections over HTTPS.
-  /// This value is often set through the `--ssl-certificate-path` command line option of `aqueduct serve`. For finer control
+  /// This value is often set through the `--ssl-certificate-path` command line option of `conduit serve`. For finer control
   /// over how HTTPS is configured for an application, see [ApplicationChannel.securityContext].
   String certificateFilePath;
 
   /// The path to a private key.
   ///
   /// If specified - along with [certificateFilePath] - an [Application] will only allow secure connections over HTTPS.
-  /// This value is often set through the `--ssl-key-path` command line option of `aqueduct serve`. For finer control
+  /// This value is often set through the `--ssl-key-path` command line option of `conduit serve`. For finer control
   /// over how HTTPS is configured for an application, see [ApplicationChannel.securityContext].
   String privateKeyFilePath;
 

@@ -1,6 +1,6 @@
-import 'package:aqueduct/src/db/postgresql/builders/column.dart';
-import 'package:aqueduct/src/db/postgresql/builders/table.dart';
-import 'package:aqueduct/src/db/query/query.dart';
+import 'package:conduit/src/db/postgresql/builders/column.dart';
+import 'package:conduit/src/db/postgresql/builders/table.dart';
+import 'package:conduit/src/db/query/query.dart';
 
 class ColumnSortBuilder extends ColumnBuilder {
   ColumnSortBuilder(TableBuilder table, String key, QuerySortOrder order)

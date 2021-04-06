@@ -1,4 +1,4 @@
-export 'package:aqueduct/src/application/channel.dart';
+export 'package:conduit/src/application/channel.dart';
 
 export 'body_decoder.dart';
 export 'cache_policy.dart';

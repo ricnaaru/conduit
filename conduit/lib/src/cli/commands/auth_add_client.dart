@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/database_connecting.dart';
-import 'package:aqueduct/src/cli/mixins/database_managing.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/database_connecting.dart';
+import 'package:conduit/src/cli/mixins/database_managing.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 import 'package:crypto/crypto.dart';
-import 'package:aqueduct/managed_auth.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/managed_auth.dart';
+import 'package:conduit/conduit.dart';
 
 class CLIAuthAddClient extends CLICommand
     with CLIDatabaseConnectingCommand, CLIDatabaseManagingCommand, CLIProject {
@@ -133,7 +133,7 @@ class CLIAuthAddClient extends CLICommand
 
   @override
   String get description {
-    return "Adds an OAuth 2.0 client to a database when the database has been provisioned with the aqueduct/managed_auth package.";
+    return "Adds an OAuth 2.0 client to a database when the database has been provisioned with the conduit/managed_auth package.";
   }
 }
 

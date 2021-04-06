@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/auth/auth.dart';
-import 'package:aqueduct/src/http/http.dart';
-import 'package:aqueduct/src/http/resource_controller.dart';
-import 'package:aqueduct/src/http/resource_controller_bindings.dart';
+import 'package:conduit/src/auth/auth.dart';
+import 'package:conduit/src/http/http.dart';
+import 'package:conduit/src/http/resource_controller.dart';
+import 'package:conduit/src/http/resource_controller_bindings.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:meta/meta.dart';
 

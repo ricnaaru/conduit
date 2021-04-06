@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/mixins/database_connecting.dart';
-import 'package:aqueduct/src/cli/mixins/database_managing.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/cli/scripts/run_upgrade.dart';
-import 'package:aqueduct/src/db/postgresql/postgresql_persistent_store.dart';
-import 'package:aqueduct/src/db/query/query.dart';
-import 'package:aqueduct/src/cli/migration_source.dart';
-import 'package:aqueduct/src/db/schema/schema.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/mixins/database_connecting.dart';
+import 'package:conduit/src/cli/mixins/database_managing.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/scripts/run_upgrade.dart';
+import 'package:conduit/src/db/postgresql/postgresql_persistent_store.dart';
+import 'package:conduit/src/db/query/query.dart';
+import 'package:conduit/src/cli/migration_source.dart';
+import 'package:conduit/src/db/schema/schema.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 
 /// Used internally.
@@ -20,7 +20,7 @@ class CLIDatabaseUpgrade extends CLICommand
 
     if (migrations.isEmpty) {
       displayInfo("No migration files.");
-      displayProgress("Run 'aqueduct db generate' first.");
+      displayProgress("Run 'conduit db generate' first.");
       return 0;
     }
 

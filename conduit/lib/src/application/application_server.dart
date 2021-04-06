@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/application/channel.dart';
+import 'package:conduit/src/application/channel.dart';
 import 'package:logging/logging.dart';
 import 'package:conduit_runtime/runtime.dart';
 
@@ -55,7 +55,7 @@ class ApplicationServer {
   int identifier;
 
   /// The logger of this instance
-  Logger get logger => Logger("aqueduct");
+  Logger get logger => Logger("conduit");
 
   /// Starts this instance, allowing it to receive HTTP requests.
   ///
@@ -105,13 +105,13 @@ class ApplicationServer {
   ///
   /// [ApplicationChannel.willStartReceivingRequests] is invoked after this opening has completed.
   Future didOpen() async {
-    server.serverHeader = "aqueduct/$identifier";
+    server.serverHeader = "conduit/$identifier";
 
     logger.fine("ApplicationServer($identifier).didOpen start listening");
     server.map((baseReq) => Request(baseReq)).listen(entryPoint.receive);
 
     channel.willStartReceivingRequests();
-    logger.info("Server aqueduct/$identifier started.");
+    logger.info("Server conduit/$identifier started.");
   }
 
   void sendApplicationEvent(dynamic event) {

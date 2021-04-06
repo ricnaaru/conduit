@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/metadata.dart';
+import 'package:conduit/src/cli/metadata.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:pub_cache/pub_cache.dart';
 import 'package:yaml/yaml.dart';
 
-import 'package:aqueduct/src/cli/command.dart';
+import 'package:conduit/src/cli/command.dart';
 
 /// Used internally.
 class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
@@ -30,7 +30,7 @@ class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
   @override
   Future<int> handle() async {
     if (projectName == null) {
-      printHelp(parentCommandName: "aqueduct");
+      printHelp(parentCommandName: "conduit");
       return 1;
     }
 
@@ -55,16 +55,16 @@ class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
     }
 
     displayProgress("Template source is: ${templateSourceDirectory.path}");
-    displayProgress("See more templates with 'aqueduct create list-templates'");
+    displayProgress("See more templates with 'conduit create list-templates'");
     copyProjectFiles(destDirectory, templateSourceDirectory, projectName);
 
     createProjectSpecificFiles(destDirectory.path);
-    if (aqueductPackageRef.sourceType == "path") {
-      final aqueductLocation = aqueductPackageRef.resolve().location;
+    if (conduitPackageRef.sourceType == "path") {
+      final conduitLocation = conduitPackageRef.resolve().location;
 
       addDependencyOverridesToPackage(destDirectory.path, {
-        "aqueduct": aqueductLocation.uri,
-        "aqueduct_test": aqueductLocation.parent.uri.resolve("aqueduct_test/")
+        "conduit": conduitLocation.uri,
+        "conduit_test": conduitLocation.parent.uri.resolve("conduit_test/")
       });
     }
 
@@ -281,7 +281,7 @@ class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
 
   @override
   String get detailedDescription {
-    return "This command will use a template from the aqueduct package determined by either "
+    return "This command will use a template from the conduit package determined by either "
         "git-url (and git-ref), path-source or version. If none of these "
         "are specified, the most recent version on pub.dartlang.org is used.";
   }
@@ -336,15 +336,15 @@ class CLITemplateList extends CLICommand with CLIAqueductGlobal {
 class CLIAqueductGlobal {
   PubCache pub = PubCache();
 
-  PackageRef get aqueductPackageRef {
+  PackageRef get conduitPackageRef {
     return pub
         .getGlobalApplications()
-        .firstWhere((app) => app.name == "aqueduct")
+        .firstWhere((app) => app.name == "conduit")
         .getDefiningPackageRef();
   }
 
   Uri get templateDirectory {
-    return aqueductPackageRef.resolve().location.uri.resolve("templates/");
+    return conduitPackageRef.resolve().location.uri.resolve("templates/");
   }
 
   Uri getTemplateLocation(String templateName) {

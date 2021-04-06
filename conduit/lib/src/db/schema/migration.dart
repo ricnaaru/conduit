@@ -62,7 +62,7 @@ abstract class Migration {
 
     return """
 import 'dart:async';
-import 'package:aqueduct/aqueduct.dart';   
+import 'package:conduit/conduit.dart';   
 
 class Migration$version extends Migration { 
   @override

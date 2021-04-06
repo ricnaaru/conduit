@@ -43,7 +43,7 @@ Future main(List<String> args) async {
     print("${makePrompt()} Loading test ${f.path}...");
 
     final ctx = BuildContext(
-        Directory.current.uri.resolve("lib/").resolve("aqueduct.dart"),
+        Directory.current.uri.resolve("lib/").resolve("conduit.dart"),
         Directory.current.uri.resolve("_build/"),
         Directory.current.uri.resolve("run"),
         f.readAsStringSync(),

@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/document.dart';
+import 'package:conduit/src/db/managed/document.dart';
 
 import 'managed.dart';
 

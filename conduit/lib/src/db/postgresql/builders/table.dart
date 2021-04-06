@@ -1,15 +1,15 @@
-import 'package:aqueduct/src/db/managed/key_path.dart';
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/managed/relationship_type.dart';
+import 'package:conduit/src/db/managed/key_path.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/relationship_type.dart';
 
-import 'package:aqueduct/src/db/postgresql/builders/column.dart';
-import 'package:aqueduct/src/db/postgresql/builders/expression.dart';
-import 'package:aqueduct/src/db/postgresql/builders/sort.dart';
-import 'package:aqueduct/src/db/postgresql/postgresql_query.dart';
-import 'package:aqueduct/src/db/query/matcher_expression.dart';
-import 'package:aqueduct/src/db/query/matcher_internal.dart';
-import 'package:aqueduct/src/db/query/predicate.dart';
-import 'package:aqueduct/src/db/query/query.dart';
+import 'package:conduit/src/db/postgresql/builders/column.dart';
+import 'package:conduit/src/db/postgresql/builders/expression.dart';
+import 'package:conduit/src/db/postgresql/builders/sort.dart';
+import 'package:conduit/src/db/postgresql/postgresql_query.dart';
+import 'package:conduit/src/db/query/matcher_expression.dart';
+import 'package:conduit/src/db/query/matcher_internal.dart';
+import 'package:conduit/src/db/query/predicate.dart';
+import 'package:conduit/src/db/query/query.dart';
 
 class TableBuilder implements Returnable {
   TableBuilder(PostgresQuery query, {this.parent, this.joinedBy})

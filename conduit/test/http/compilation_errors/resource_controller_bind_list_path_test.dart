@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:conduit_runtime/runtime.dart';
 import "package:test/test.dart";
 

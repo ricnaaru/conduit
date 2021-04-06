@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/http/http.dart';
+import 'package:conduit/src/http/http.dart';
 
 import '../persistent_store/persistent_store.dart';
 import 'query.dart';

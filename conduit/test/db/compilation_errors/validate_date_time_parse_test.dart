@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 class FailingDateTime extends ManagedObject<_FDT> {}
 

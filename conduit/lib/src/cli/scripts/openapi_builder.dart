@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/mixins/openapi_options.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/mixins/openapi_options.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:yaml/yaml.dart';
 
@@ -143,7 +143,7 @@ class OpenAPIBuilder extends Executable<Map<String, dynamic>> {
   }
 
   static List<String> importsForPackage(String packageName) => [
-        "package:aqueduct/aqueduct.dart",
+        "package:conduit/conduit.dart",
         "package:$packageName/$packageName.dart",
         "package:yaml/yaml.dart",
         "dart:convert",

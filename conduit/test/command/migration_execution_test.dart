@@ -4,9 +4,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:analyzer/dart/ast/ast.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:conduit_runtime/src/analyzer.dart';
-import 'package:aqueduct/src/cli/migration_source.dart';
+import 'package:conduit/src/cli/migration_source.dart';
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:fs_test_agent/working_directory_agent.dart';
 import 'package:test/test.dart';
@@ -46,7 +46,7 @@ void main() {
 
   tearDown(() async {
     var tables = [
-      "_aqueduct_version_pgsql",
+      "_conduit_version_pgsql",
       "_foo",
       "_testobject",
     ];
@@ -67,7 +67,7 @@ void main() {
   test("Generate and execute initial schema makes workable DB", () async {
     expect(await runMigrationCases(["Case1"]), isZero);
     var version = await store
-        .execute("SELECT versionNumber FROM _aqueduct_version_pgsql");
+        .execute("SELECT versionNumber FROM _conduit_version_pgsql");
     expect(version, [
       [1]
     ]);
@@ -80,7 +80,7 @@ void main() {
       expect(await runMigrationCases(["Case2"]), isZero);
 
       var versionRow = await store.execute(
-        "SELECT versionNumber, dateOfUpgrade FROM _aqueduct_version_pgsql",
+        "SELECT versionNumber, dateOfUpgrade FROM _conduit_version_pgsql",
       ) as List<List<dynamic>>;
       expect(versionRow.first.first, 1);
       var updateDate = versionRow.first.last;
@@ -88,7 +88,7 @@ void main() {
       cli.clearOutput();
       expect(await runMigrationCases(["Case2"]), isZero);
       versionRow = await store.execute(
-        "SELECT versionNumber, dateOfUpgrade FROM _aqueduct_version_pgsql",
+        "SELECT versionNumber, dateOfUpgrade FROM _conduit_version_pgsql",
       ) as List<List>;
       expect(versionRow.length, 1);
       expect(versionRow.first.last, equals(updateDate));
@@ -100,7 +100,7 @@ void main() {
     expect(await runMigrationCases(["Case31", "Case32"]), isZero);
 
     var version = await store
-        .execute("SELECT versionNumber FROM _aqueduct_version_pgsql");
+        .execute("SELECT versionNumber FROM _conduit_version_pgsql");
     expect(version, [
       [1],
       [2]
@@ -112,7 +112,7 @@ void main() {
   test("Only later migration files are ran if already at a version", () async {
     expect(await runMigrationCases(["Case41"]), isZero);
     var version = await store
-        .execute("SELECT versionNumber FROM _aqueduct_version_pgsql");
+        .execute("SELECT versionNumber FROM _conduit_version_pgsql");
     expect(version, [
       [1]
     ]);
@@ -123,7 +123,7 @@ void main() {
 
     expect(await runMigrationCases(["Case42"], fromVersion: 1), isZero);
     version = await store
-        .execute("SELECT versionNumber FROM _aqueduct_version_pgsql");
+        .execute("SELECT versionNumber FROM _conduit_version_pgsql");
     expect(version, [
       [1],
       [2]
@@ -185,7 +185,7 @@ void main() {
       expect(cli.output, contains("relation \"_unknowntable\" does not exist"));
 
       final version = await store
-          .execute("SELECT versionNumber FROM _aqueduct_version_pgsql");
+          .execute("SELECT versionNumber FROM _conduit_version_pgsql");
       expect(version, [
         [1],
       ]);
@@ -283,7 +283,7 @@ Future runMigrationCases(List<String> migrationNames,
     final file = File.fromUri(cli.defaultMigrationDirectory.uri
         .resolve("${mig.versionNumber}_name.migration.dart"));
     file.writeAsStringSync(
-      "import 'dart:async';\nimport 'package:aqueduct/aqueduct.dart';\n${mig.source}",
+      "import 'dart:async';\nimport 'package:conduit/conduit.dart';\n${mig.source}",
     );
   }
 

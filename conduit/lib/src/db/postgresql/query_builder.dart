@@ -1,8 +1,8 @@
-import 'package:aqueduct/src/db/managed/relationship_type.dart';
-import 'package:aqueduct/src/db/postgresql/builders/sort.dart';
-import 'package:aqueduct/src/db/postgresql/builders/table.dart';
-import 'package:aqueduct/src/db/postgresql/builders/value.dart';
-import 'package:aqueduct/src/db/postgresql/postgresql_query.dart';
+import 'package:conduit/src/db/managed/relationship_type.dart';
+import 'package:conduit/src/db/postgresql/builders/sort.dart';
+import 'package:conduit/src/db/postgresql/builders/table.dart';
+import 'package:conduit/src/db/postgresql/builders/value.dart';
+import 'package:conduit/src/db/postgresql/postgresql_query.dart';
 
 import '../db.dart';
 import 'row_instantiator.dart';

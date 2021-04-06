@@ -1,10 +1,10 @@
-library aqueduct_test.client;
+library conduit_test.client;
 
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 import 'harness.dart';
 import 'matchers.dart';

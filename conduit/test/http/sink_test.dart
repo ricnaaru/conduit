@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:conduit_runtime/runtime.dart';
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 void main() {
   test("Find default ApplicationChannel", () {

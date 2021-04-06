@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/runner.dart';
-import 'package:aqueduct/src/cli/running_process.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/runner.dart';
+import 'package:conduit/src/cli/running_process.dart';
 
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:fs_test_agent/working_directory_agent.dart';
@@ -38,7 +38,7 @@ class CLIClient {
   static Future deactivateCLI() {
     final cmd = Platform.isWindows ? "pub.bat" : "pub";
 
-    return Process.run(cmd, ["global", "deactivate", "aqueduct"]);
+    return Process.run(cmd, ["global", "deactivate", "conduit"]);
   }
 
   Directory get defaultMigrationDirectory {
@@ -78,7 +78,7 @@ class CLIClient {
       bool offline = true}) async {
     if (template == null) {
       final client = CLIClient(DartProjectAgent(name, dependencies: {
-        "aqueduct": {"path": "../.."}
+        "conduit": {"path": "../.."}
       }, devDependencies: {
         "test": "^1.0.0"
       }));
@@ -86,7 +86,7 @@ class CLIClient {
       client.projectAgent.addLibraryFile("channel", """
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 import '$name.dart';
 
@@ -168,7 +168,7 @@ class TestChannel extends ApplicationChannel {
     args.insert(0, command);
     args.addAll(defaultArgs ?? []);
 
-    print("Running 'aqueduct ${args.join(" ")}'");
+    print("Running 'conduit ${args.join(" ")}'");
     final saved = Directory.current;
     Directory.current = agent.workingDirectory;
 
@@ -190,7 +190,7 @@ class TestChannel extends ApplicationChannel {
     args.insert(0, command);
     args.addAll(defaultArgs ?? []);
 
-    print("Starting 'aqueduct ${args.join(" ")}'");
+    print("Starting 'conduit ${args.join(" ")}'");
     final saved = Directory.current;
     Directory.current = agent.workingDirectory;
 

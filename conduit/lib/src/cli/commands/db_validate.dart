@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/mixins/database_managing.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/cli/scripts/get_schema.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/mixins/database_managing.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/scripts/get_schema.dart';
 
 class CLIDatabaseValidate extends CLICommand
     with CLIDatabaseManagingCommand, CLIProject {

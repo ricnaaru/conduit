@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/managed.dart';
 
 /// Allows storage of unstructured data in a [ManagedObject] property.
 ///

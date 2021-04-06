@@ -1,6 +1,6 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/managed/validation/impl.dart';
-import 'package:aqueduct/src/db/query/query.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/validation/impl.dart';
+import 'package:conduit/src/db/query/query.dart';
 
 /// Validates properties of [ManagedObject] before an insert or update [Query].
 ///

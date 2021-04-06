@@ -1,11 +1,11 @@
 import 'dart:async';
 import "dart:core";
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:test/test.dart';
 
-import 'package:aqueduct/src/dev/helpers.dart';
+import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   APIDocument doc;

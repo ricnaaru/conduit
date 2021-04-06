@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
-import 'package:aqueduct/src/cli/scripts/schema_builder.dart';
-import 'package:aqueduct/src/cli/migration_source.dart';
-import 'package:aqueduct/src/db/schema/schema.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/scripts/schema_builder.dart';
+import 'package:conduit/src/cli/migration_source.dart';
+import 'package:conduit/src/db/schema/schema.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 
 abstract class CLIDatabaseManagingCommand implements CLICommand, CLIProject {

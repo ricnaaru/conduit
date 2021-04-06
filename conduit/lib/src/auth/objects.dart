@@ -3,9 +3,9 @@ import 'auth.dart';
 
 /// Represents an OAuth 2.0 client ID and secret pair.
 ///
-/// See the aqueduct/managed_auth library for a concrete implementation of this type.
+/// See the conduit/managed_auth library for a concrete implementation of this type.
 ///
-/// Use the command line tool `aqueduct auth` to create instances of this type and store them to a database.
+/// Use the command line tool `conduit auth` to create instances of this type and store them to a database.
 class AuthClient {
   /// Creates an instance of [AuthClient].
   ///
@@ -104,7 +104,7 @@ class AuthClient {
 /// [AuthServerDelegate] and [AuthServer] will exchange OAuth 2.0
 /// tokens through instances of this type.
 ///
-/// See the `package:aqueduct/managed_auth` library for a concrete implementation of this type.
+/// See the `package:conduit/managed_auth` library for a concrete implementation of this type.
 class AuthToken {
   /// The value to be passed as a Bearer Authorization header.
   String accessToken;
@@ -164,7 +164,7 @@ class AuthToken {
 /// [AuthServerDelegate] and [AuthServer] will exchange OAuth 2.0
 /// authorization codes through instances of this type.
 ///
-/// See the aqueduct/managed_auth library for a concrete implementation of this type.
+/// See the conduit/managed_auth library for a concrete implementation of this type.
 class AuthCode {
   /// The actual one-time code used to exchange for tokens.
   String code;
@@ -252,7 +252,7 @@ class Authorization {
 /// [Authorizer.bearer]. Scopes allow [Authorizer]s to restrict access to routes that do not have the
 /// appropriate scope values.
 ///
-/// An [AuthClient] has a list of valid scopes (see `aqueduct auth` tool). An access token issued for an [AuthClient] may ask for
+/// An [AuthClient] has a list of valid scopes (see `conduit auth` tool). An access token issued for an [AuthClient] may ask for
 /// any of the scopes the client provides. Scopes are then granted to the access token. An [Authorizer] may specify
 /// a one or more required scopes that a token must have to pass to the next controller.
 class AuthScope {

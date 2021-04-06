@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/application/channel.dart';
-import 'package:aqueduct/src/application/service_registry.dart';
-import 'package:aqueduct/src/db/managed/data_model_manager.dart';
-import 'package:aqueduct/src/http/http.dart';
+import 'package:conduit/src/application/channel.dart';
+import 'package:conduit/src/application/service_registry.dart';
+import 'package:conduit/src/db/managed/data_model_manager.dart';
+import 'package:conduit/src/http/http.dart';
 import 'package:conduit_common/conduit_common.dart';
 
 import '../persistent_store/persistent_store.dart';

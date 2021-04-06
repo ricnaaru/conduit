@@ -1,5 +1,5 @@
-import 'package:aqueduct/src/db/managed/backing.dart';
-import 'package:aqueduct/src/db/managed/key_path.dart';
+import 'package:conduit/src/db/managed/backing.dart';
+import 'package:conduit/src/db/managed/key_path.dart';
 import 'package:conduit_runtime/runtime.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';

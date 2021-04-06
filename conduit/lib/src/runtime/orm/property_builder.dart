@@ -1,12 +1,12 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/runtime/orm/data_model_compiler.dart';
-import 'package:aqueduct/src/runtime/orm/entity_builder.dart';
-import 'package:aqueduct/src/runtime/orm/validator_builder.dart';
-import 'package:aqueduct/src/runtime/orm/entity_mirrors.dart';
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/managed/relationship_type.dart';
-import 'package:aqueduct/src/utilities/mirror_helpers.dart';
+import 'package:conduit/src/runtime/orm/data_model_compiler.dart';
+import 'package:conduit/src/runtime/orm/entity_builder.dart';
+import 'package:conduit/src/runtime/orm/validator_builder.dart';
+import 'package:conduit/src/runtime/orm/entity_mirrors.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/relationship_type.dart';
+import 'package:conduit/src/utilities/mirror_helpers.dart';
 
 class PropertyBuilder {
   PropertyBuilder(this.parent, this.declaration)

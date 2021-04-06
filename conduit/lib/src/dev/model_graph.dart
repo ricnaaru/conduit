@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 class RootObject extends ManagedObject<_RootObject> implements _RootObject {
   RootObject();

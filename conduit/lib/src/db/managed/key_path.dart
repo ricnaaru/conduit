@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/managed.dart';
 
 class KeyPath {
   KeyPath(ManagedPropertyDescription root) : path = [root];

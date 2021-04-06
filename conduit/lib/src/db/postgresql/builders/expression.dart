@@ -1,8 +1,8 @@
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/postgresql/builders/column.dart';
-import 'package:aqueduct/src/db/postgresql/builders/table.dart';
-import 'package:aqueduct/src/db/query/matcher_internal.dart';
-import 'package:aqueduct/src/db/query/query.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/postgresql/builders/column.dart';
+import 'package:conduit/src/db/postgresql/builders/table.dart';
+import 'package:conduit/src/db/query/matcher_internal.dart';
+import 'package:conduit/src/db/query/query.dart';
 
 class ColumnExpressionBuilder extends ColumnBuilder {
   ColumnExpressionBuilder(

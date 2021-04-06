@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,10 +17,10 @@ void main() {
 
       app = Application<TestChannel>()
         ..options.certificateFilePath = ciDirUri
-            .resolve("aqueduct.cert.pem")
+            .resolve("conduit.cert.pem")
             .toFilePath(windows: Platform.isWindows)
         ..options.privateKeyFilePath = ciDirUri
-            .resolve("aqueduct.key.pem")
+            .resolve("conduit.key.pem")
             .toFilePath(windows: Platform.isWindows);
 
       await app.start(numberOfInstances: 1);

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
-  tearDownAll(Logger("aqueduct").clearListeners);
+  tearDownAll(Logger("conduit").clearListeners);
 
   group("Failures", () {
     test(

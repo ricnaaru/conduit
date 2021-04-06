@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/mixins/database_connecting.dart';
-import 'package:aqueduct/src/cli/mixins/database_managing.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/mixins/database_connecting.dart';
+import 'package:conduit/src/cli/mixins/database_managing.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 
 class CLIDatabaseShowMigrations extends CLICommand
     with CLIDatabaseManagingCommand, CLIProject, CLIDatabaseConnectingCommand {

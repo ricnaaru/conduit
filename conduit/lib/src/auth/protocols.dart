@@ -31,7 +31,7 @@ abstract class ResourceOwner {
 /// An [AuthServer] requires an instance of this type to manage storage of [ResourceOwner]s, [AuthToken], [AuthCode],
 /// and [AuthClient]s. You may also customize the token format or add more granular authorization scope rules.
 ///
-/// Prefer to use `ManagedAuthDelegate` from 'package:aqueduct/managed_auth.dart' instead of implementing this interface;
+/// Prefer to use `ManagedAuthDelegate` from 'package:conduit/managed_auth.dart' instead of implementing this interface;
 /// there are important details to consider and test when implementing this interface.
 abstract class AuthServerDelegate {
   /// Must return a [ResourceOwner] for a [username].

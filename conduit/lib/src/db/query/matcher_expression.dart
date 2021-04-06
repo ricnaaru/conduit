@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/key_path.dart';
+import 'package:conduit/src/db/managed/key_path.dart';
 
 import '../managed/managed.dart';
 import 'matcher_internal.dart';

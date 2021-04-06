@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/running_process.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/running_process.dart';
 import 'package:args/args.dart' as args;
 import 'package:conduit_runtime/runtime.dart';
 import 'package:yaml/yaml.dart';
@@ -177,12 +177,12 @@ abstract class CLICommand {
   Future determineToolVersion() async {
     try {
       var toolLibraryFilePath = (await Isolate.resolvePackageUri(
-              currentMirrorSystem().findLibrary(#aqueduct).uri))
+              currentMirrorSystem().findLibrary(#conduit).uri))
           .toFilePath(windows: Platform.isWindows);
-      var aqueductDirectory = Directory(FileSystemEntity.parentOf(
+      var conduitDirectory = Directory(FileSystemEntity.parentOf(
           FileSystemEntity.parentOf(toolLibraryFilePath)));
       var toolPubspecFile =
-          File.fromUri(aqueductDirectory.absolute.uri.resolve("pubspec.yaml"));
+          File.fromUri(conduitDirectory.absolute.uri.resolve("pubspec.yaml"));
 
       final toolPubspecContents = loadYaml(toolPubspecFile.readAsStringSync()) as Map;
       final toolVersion = toolPubspecContents["version"] as String;

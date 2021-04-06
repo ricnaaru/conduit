@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 
 class CLISetup extends CLICommand with CLIProject {
   bool get shouldSetupHeroku => herokuName != null;
 
   @Option("heroku",
       help:
-          "DEPRECATED. Please see https://aqueduct.io/docs/deploy/deploy_heroku/.")
+          "DEPRECATED. Please see https://conduit.io/docs/deploy/deploy_heroku/.")
   String get herokuName => decode("heroku");
 
   @Flag("tests",
@@ -35,7 +35,7 @@ class CLISetup extends CLICommand with CLIProject {
   Future<int> handle() async {
     if (shouldSetupHeroku) {
       displayInfo("This option has been deprecated.");
-      displayProgress("Please see https://aqueduct.io/docs/deploy/deploy_heroku/ for instructions.");
+      displayProgress("Please see https://conduit.io/docs/deploy/deploy_heroku/ for instructions.");
       return 0;
     } else /*if (shouldSetupTests*/ {
       return setupTestEnvironment();

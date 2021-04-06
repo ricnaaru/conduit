@@ -1,4 +1,4 @@
-import 'package:aqueduct/src/db/managed/relationship_type.dart';
+import 'package:conduit/src/db/managed/relationship_type.dart';
 
 import '../managed/managed.dart';
 import 'schema.dart';

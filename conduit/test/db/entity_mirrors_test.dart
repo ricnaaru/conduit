@@ -1,9 +1,9 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/runtime/orm/entity_mirrors.dart';
+import 'package:conduit/src/runtime/orm/entity_mirrors.dart';
 
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 void main() {
   ManagedContext context;

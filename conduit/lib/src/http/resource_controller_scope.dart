@@ -1,5 +1,5 @@
-import 'package:aqueduct/src/http/http.dart';
-import 'package:aqueduct/src/auth/auth.dart';
+import 'package:conduit/src/http/http.dart';
+import 'package:conduit/src/auth/auth.dart';
 
 /// Allows [ResourceController]s to have different scope for each operation method.
 ///

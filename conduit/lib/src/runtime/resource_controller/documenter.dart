@@ -1,13 +1,13 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/auth/objects.dart';
-import 'package:aqueduct/src/http/resource_controller.dart';
-import 'package:aqueduct/src/http/resource_controller_bindings.dart';
-import 'package:aqueduct/src/http/resource_controller_interfaces.dart';
-import 'package:aqueduct/src/http/serializable.dart';
-import 'package:aqueduct/src/runtime/impl.dart';
-import 'package:aqueduct/src/runtime/resource_controller_impl.dart';
-import 'package:aqueduct/src/utilities/mirror_helpers.dart';
+import 'package:conduit/src/auth/objects.dart';
+import 'package:conduit/src/http/resource_controller.dart';
+import 'package:conduit/src/http/resource_controller_bindings.dart';
+import 'package:conduit/src/http/resource_controller_interfaces.dart';
+import 'package:conduit/src/http/serializable.dart';
+import 'package:conduit/src/runtime/impl.dart';
+import 'package:conduit/src/runtime/resource_controller_impl.dart';
+import 'package:conduit/src/utilities/mirror_helpers.dart';
 import 'package:conduit_common/conduit_common.dart';
 
 import 'package:conduit_open_api/v3.dart';

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:mirrors';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/migration_source.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/migration_source.dart';
 import 'package:postgres/postgres.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 
@@ -92,10 +92,10 @@ class RunUpgradeExecutable extends Executable<Map<String, dynamic>> {
   }
 
   static List<String> get imports => [
-        "package:aqueduct/aqueduct.dart",
+        "package:conduit/conduit.dart",
         "package:logging/logging.dart",
         "package:postgres/postgres.dart",
-        "package:aqueduct/src/cli/migration_source.dart",
+        "package:conduit/src/cli/migration_source.dart",
         "package:conduit_runtime/runtime.dart"
       ];
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/http/resource_controller_interfaces.dart';
+import 'package:conduit/src/http/resource_controller_interfaces.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:logging/logging.dart';
@@ -84,8 +84,8 @@ abstract class Controller
   /// This value is set by [link] or [linkFunction].
   Controller get nextController => _nextController;
 
-  /// An instance of the 'aqueduct' logger.
-  Logger get logger => Logger("aqueduct");
+  /// An instance of the 'conduit' logger.
+  Logger get logger => Logger("conduit");
 
   /// The CORS policy of this controller.
   CORSPolicy policy = CORSPolicy();

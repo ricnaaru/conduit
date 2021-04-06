@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 void main() {
   test("Generated confidential, redirectable API client has valid values", () {

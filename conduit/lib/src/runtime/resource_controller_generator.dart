@@ -1,10 +1,10 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/http/resource_controller_bindings.dart';
-import 'package:aqueduct/src/http/resource_controller_interfaces.dart';
-import 'package:aqueduct/src/runtime/resource_controller/documenter.dart';
-import 'package:aqueduct/src/runtime/resource_controller_impl.dart';
-import 'package:aqueduct/src/utilities/sourcify.dart';
+import 'package:conduit/src/http/resource_controller_bindings.dart';
+import 'package:conduit/src/http/resource_controller_interfaces.dart';
+import 'package:conduit/src/runtime/resource_controller/documenter.dart';
+import 'package:conduit/src/runtime/resource_controller_impl.dart';
+import 'package:conduit/src/utilities/sourcify.dart';
 import 'package:conduit_runtime/runtime.dart';
 
 String getInvokerSource(BuildContext context,

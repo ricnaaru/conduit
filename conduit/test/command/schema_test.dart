@@ -17,7 +17,7 @@ void main() {
     ).createProject();
     await cli.agent.getDependencies(offline: true);
     cli.agent.addOrReplaceFile("lib/application_test.dart", """
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 class TestObject extends ManagedObject<_TestObject> {}
 

@@ -1,15 +1,15 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/runtime/orm/data_model_compiler.dart';
-import 'package:aqueduct/src/db/managed/attributes.dart';
-import 'package:aqueduct/src/db/managed/data_model.dart';
-import 'package:aqueduct/src/runtime/orm/entity_mirrors.dart';
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/db/managed/object.dart';
-import 'package:aqueduct/src/runtime/orm/property_builder.dart';
-import 'package:aqueduct/src/db/managed/relationship_type.dart';
-import 'package:aqueduct/src/runtime/orm_impl.dart';
-import 'package:aqueduct/src/utilities/mirror_helpers.dart';
+import 'package:conduit/src/runtime/orm/data_model_compiler.dart';
+import 'package:conduit/src/db/managed/attributes.dart';
+import 'package:conduit/src/db/managed/data_model.dart';
+import 'package:conduit/src/runtime/orm/entity_mirrors.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/db/managed/object.dart';
+import 'package:conduit/src/runtime/orm/property_builder.dart';
+import 'package:conduit/src/db/managed/relationship_type.dart';
+import 'package:conduit/src/runtime/orm_impl.dart';
+import 'package:conduit/src/utilities/mirror_helpers.dart';
 import 'package:logging/logging.dart';
 
 class EntityBuilder {
@@ -189,7 +189,7 @@ class EntityBuilder {
       return tableDefinitionTypeName;
     }
 
-    Logger("aqueduct").warning(
+    Logger("conduit").warning(
         "Overriding ManagedObject.tableName is deprecated. Use '@Table(name: ...)' instead.");
     return declaredTableNameClass.invoke(#tableName, []).reflectee as String;
   }

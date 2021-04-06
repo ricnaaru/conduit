@@ -1,4 +1,4 @@
-export 'package:aqueduct/src/db/managed/validation/metadata.dart';
+export 'package:conduit/src/db/managed/validation/metadata.dart';
 
 export 'attributes.dart';
 export 'context.dart';

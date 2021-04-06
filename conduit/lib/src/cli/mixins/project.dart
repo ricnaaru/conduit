@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/scripts/get_channel_type.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/scripts/get_channel_type.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:yaml/yaml.dart';
@@ -57,7 +57,7 @@ abstract class CLIProject implements CLICommand {
 
       final lockFileContents = loadYaml(lockFile.readAsStringSync()) as Map;
       final projectVersion =
-          lockFileContents["packages"]["aqueduct"]["version"] as String;
+          lockFileContents["packages"]["conduit"]["version"] as String;
       _projectVersion = Version.parse(projectVersion);
     }
 
@@ -89,9 +89,9 @@ abstract class CLIProject implements CLICommand {
 
       if (projectVersion?.major != toolVersion.major) {
         throw CLIException(
-            "CLI version is incompatible with project aqueduct version.",
+            "CLI version is incompatible with project conduit version.",
             instructions: [
-              "Install aqueduct@${projectVersion?.toString()} or upgrade your project to aqueduct${toolVersion.toString()}."
+              "Install conduit@${projectVersion?.toString()} or upgrade your project to conduit${toolVersion.toString()}."
             ]);
       }
     } on CLIException {

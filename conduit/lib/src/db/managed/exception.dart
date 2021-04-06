@@ -1,4 +1,4 @@
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 
 /// An exception thrown when an ORM property validator is violated.
 ///

@@ -16,7 +16,7 @@ export 'validator.dart';
 
 /// Exposes static utility methods for password, salt and API credential generation.
 ///
-/// Use the `aqueduct auth` tool to generate API credentials.
+/// Use the `conduit auth` tool to generate API credentials.
 class AuthUtility {
   /// A utility method to generate a password hash using the PBKDF2 scheme.
   ///

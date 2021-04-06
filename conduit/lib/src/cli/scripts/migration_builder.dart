@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 
 class MigrationBuilderExecutable extends Executable<Map<String, dynamic>> {
@@ -41,7 +41,7 @@ class MigrationBuilderExecutable extends Executable<Map<String, dynamic>> {
   }
 
   static List<String> importsForPackage(String packageName) => [
-        "package:aqueduct/aqueduct.dart",
+        "package:conduit/conduit.dart",
         "package:$packageName/$packageName.dart",
         "package:conduit_runtime/runtime.dart"
       ];

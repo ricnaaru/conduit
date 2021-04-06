@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:mirrors';
 
-import 'package:aqueduct/aqueduct.dart';
-import 'package:aqueduct/src/cli/command.dart';
-import 'package:aqueduct/src/cli/metadata.dart';
-import 'package:aqueduct/src/cli/mixins/project.dart';
+import 'package:conduit/conduit.dart';
+import 'package:conduit/src/cli/command.dart';
+import 'package:conduit/src/cli/metadata.dart';
+import 'package:conduit/src/cli/mixins/project.dart';
 import 'package:conduit_runtime/runtime.dart';
 import 'package:args/args.dart' as arg_package;
 
@@ -65,7 +65,7 @@ class CLIBuild extends CLICommand with CLIProject {
 import 'dart:async';
 import 'dart:io';
 
-import 'package:aqueduct/aqueduct.dart';
+import 'package:conduit/conduit.dart';
 import 'package:args/args.dart' as arg_package;
 import 'package:$packageName/$libraryName.dart';
 

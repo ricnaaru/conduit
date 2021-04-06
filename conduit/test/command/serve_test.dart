@@ -15,12 +15,12 @@ import '../not_tests/cli_helpers.dart';
 File get certificateFile => File.fromUri(Directory.current.uri
     .resolve("../")
     .resolve("ci/")
-    .resolve("aqueduct.cert.pem"));
+    .resolve("conduit.cert.pem"));
 
 File get keyFile => File.fromUri(Directory.current.uri
     .resolve("../")
     .resolve("ci/")
-    .resolve("aqueduct.key.pem"));
+    .resolve("conduit.key.pem"));
 
 void main() {
   CLIClient templateCli;
@@ -73,7 +73,7 @@ void main() {
   test("Ensure we don't find the base ApplicationChannel class", () async {
     projectUnderTestCli.agent.addOrReplaceFile(
       "lib/application_test.dart",
-      "import 'package:aqueduct/aqueduct.dart';",
+      "import 'package:conduit/conduit.dart';",
     );
 
     task = projectUnderTestCli.start("serve", ["-n", "1"]);

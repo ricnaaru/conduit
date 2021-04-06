@@ -2,7 +2,7 @@ import '../managed/managed.dart';
 import '../schema/schema.dart';
 
 class PostgreSQLSchemaGenerator {
-  String get versionTableName => "_aqueduct_version_pgsql";
+  String get versionTableName => "_conduit_version_pgsql";
 
   List<String> createTable(SchemaTable table, {bool isTemporary = false}) {
     var commands = <String>[];

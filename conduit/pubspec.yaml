@@ -1,7 +1,7 @@
-name: aqueduct
+name: conduit
 version: 4.0.0-b1
 description: A modern HTTP server application framework, ORM and OAuth2 provider with OpenAPI 3.0 integration. Foundation for REST, RPC or GraphQL services.
-homepage: https://aqueduct.io
+homepage: https://conduit.io
 documentation:
 
 environment:
@@ -29,8 +29,8 @@ dev_dependencies:
   test: ^1.3.0
   http: ^0.13.0
   fs_test_agent: ^1.0.0-b1
-  aqueduct_test:
-    path: ../aqueduct_test
+  conduit_test:
+    path: ../conduit_test
 
 dependency_overrides:
   # conduit_common: 
@@ -39,4 +39,4 @@ dependency_overrides:
   #   path: ../../open-api-dart    
 
 executables:
-  aqueduct: aqueduct
+  conduit: conduit

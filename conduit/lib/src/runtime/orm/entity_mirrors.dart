@@ -1,8 +1,8 @@
 import 'dart:mirrors';
 
-import 'package:aqueduct/src/db/managed/validation/metadata.dart';
-import 'package:aqueduct/src/db/managed/managed.dart';
-import 'package:aqueduct/src/utilities/mirror_helpers.dart';
+import 'package:conduit/src/db/managed/validation/metadata.dart';
+import 'package:conduit/src/db/managed/managed.dart';
+import 'package:conduit/src/utilities/mirror_helpers.dart';
 
 ManagedType getManagedTypeFromType(TypeMirror type) {
   ManagedPropertyType kind;

@@ -6,7 +6,7 @@ library wildfire;
 export 'dart:async';
 export 'dart:io';
 
-export 'package:aqueduct/aqueduct.dart';
-export 'package:aqueduct/managed_auth.dart';
+export 'package:conduit/conduit.dart';
+export 'package:conduit/managed_auth.dart';
 
 export 'channel.dart';

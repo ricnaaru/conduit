@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aqueduct/src/application/service_registry.dart';
+import 'package:conduit/src/application/service_registry.dart';
 import 'package:logging/logging.dart';
 import 'package:postgres/postgres.dart';
 
@@ -52,7 +52,7 @@ class PostgreSQLPersistentStore extends PersistentStore
   }
 
   /// The logger used by instances of this class.
-  static Logger logger = Logger("aqueduct");
+  static Logger logger = Logger("conduit");
 
   /// The username of the database user for the database this instance connects to.
   final String username;
