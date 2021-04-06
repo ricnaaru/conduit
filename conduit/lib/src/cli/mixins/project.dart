@@ -84,7 +84,7 @@ abstract class CLIProject implements CLICommand {
   void preProcess() {
     try {
       if (!isMachineOutput) {
-        displayInfo("Aqueduct project version: $projectVersion");
+        displayInfo("Conduit project version: $projectVersion");
       }
 
       if (projectVersion?.major != toolVersion.major) {

@@ -59,7 +59,7 @@ void main() {
     expect(projectUnderTestCli.output, contains("CLI Version: $thisVersion"));
     expect(
       projectUnderTestCli.output,
-      contains("Aqueduct project version: $thisVersion"),
+      contains("Conduit project version: $thisVersion"),
     );
 
     var result = await http.get(Uri.parse("http://localhost:8888/example"));

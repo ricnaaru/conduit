@@ -10,7 +10,7 @@ import 'package:yaml/yaml.dart';
 import 'package:conduit/src/cli/command.dart';
 
 /// Used internally.
-class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
+class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
   CLITemplateCreator() {
     registerCommand(CLITemplateList());
   }
@@ -288,11 +288,11 @@ class CLITemplateCreator extends CLICommand with CLIAqueductGlobal {
 
   @override
   String get description {
-    return "Creates Aqueduct applications from templates.";
+    return "Creates Conduit applications from templates.";
   }
 }
 
-class CLITemplateList extends CLICommand with CLIAqueductGlobal {
+class CLITemplateList extends CLICommand with CLIConduitGlobal {
   @override
   Future<int> handle() async {
     final templateRootDirectory = Directory.fromUri(templateDirectory);
@@ -318,7 +318,7 @@ class CLITemplateList extends CLICommand with CLIAqueductGlobal {
 
   @override
   String get description {
-    return "List Aqueduct application templates.";
+    return "List Conduit application templates.";
   }
 
   Future<String> _templateDescription(Directory templateDirectory) async {
@@ -333,7 +333,7 @@ class CLITemplateList extends CLICommand with CLIAqueductGlobal {
   }
 }
 
-class CLIAqueductGlobal {
+class CLIConduitGlobal {
   PubCache pub = PubCache();
 
   PackageRef get conduitPackageRef {

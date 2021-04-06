@@ -62,7 +62,7 @@ abstract class Controller
     implements APIComponentDocumenter, APIOperationDocumenter, Linkable {
   /// Returns a stacktrace and additional details about how the request's processing in the HTTP response.
   ///
-  /// By default, this is false. During debugging, setting this to true can help debug Aqueduct applications
+  /// By default, this is false. During debugging, setting this to true can help debug Conduit applications
   /// from the HTTP client.
   static bool includeErrorDetailsInServerErrorResponses = false;
 

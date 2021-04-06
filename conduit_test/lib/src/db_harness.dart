@@ -4,10 +4,10 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
-/// Use methods from this class to test applications that use the Aqueduct ORM.
+/// Use methods from this class to test applications that use the Conduit ORM.
 ///
 /// This class is mixed in to your [TestHarness] subclass to provide test
-/// utilities for applications that use use the Aqueduct ORM. Methods from this class
+/// utilities for applications that use use the Conduit ORM. Methods from this class
 /// manage setting up and tearing down your application's data model in a temporary database
 /// for the purpose of testing.
 ///

@@ -79,7 +79,7 @@ class Application<T extends ApplicationChannel> {
   Future start({int numberOfInstances = 1, bool consoleLogging = false}) async {
     if (server != null || supervisors.isNotEmpty) {
       throw StateError(
-          "Application error. Cannot invoke 'start' on already running Aqueduct application.");
+          "Application error. Cannot invoke 'start' on already running Conduit application.");
     }
 
     if (options.address == null) {
@@ -116,7 +116,7 @@ class Application<T extends ApplicationChannel> {
   Future startOnCurrentIsolate() async {
     if (server != null || supervisors.isNotEmpty) {
       throw StateError(
-          "Application error. Cannot invoke 'test' on already running Aqueduct application.");
+          "Application error. Cannot invoke 'test' on already running Conduit application.");
     }
 
     options.address ??= InternetAddress.loopbackIPv4;

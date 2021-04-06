@@ -1,6 +1,6 @@
 /// wildfire
 ///
-/// A Aqueduct web server.
+/// A Conduit web server.
 library wildfire;
 
 export 'dart:async';

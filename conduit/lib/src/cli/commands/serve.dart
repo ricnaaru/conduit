@@ -240,7 +240,7 @@ Future main(List<String> args, dynamic sendPort) async {
 
   @override
   String get description {
-    return "Runs Aqueduct applications.";
+    return "Runs Conduit applications.";
   }
 }
 

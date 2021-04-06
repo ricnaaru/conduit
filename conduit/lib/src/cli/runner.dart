@@ -33,6 +33,6 @@ class Runner extends CLICommand {
 
   @override
   String get description {
-    return "Aqueduct is a tool for managing Aqueduct applications.";
+    return "Conduit is a tool for managing Conduit applications.";
   }
 }

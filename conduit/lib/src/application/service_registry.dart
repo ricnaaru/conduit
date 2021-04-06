@@ -14,7 +14,7 @@ import '../db/persistent_store/persistent_store.dart';
 /// There is one registry per isolate. The order in which registrations are shut down is undefined. [close] triggers shutdown
 /// and is automatically invoked by [Application.stop].
 ///
-/// Built-in Aqueduct types that open a stream, like [PersistentStore], automatically register themselves
+/// Built-in Conduit types that open a stream, like [PersistentStore], automatically register themselves
 /// when instantiated. If you are unsure whether an object has already been registered, you may re-register it -
 /// multiple registrations have no effect.
 class ServiceRegistry {

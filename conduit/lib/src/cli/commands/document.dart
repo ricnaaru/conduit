@@ -36,7 +36,7 @@ class CLIDocument extends CLICommand with CLIProject, CLIDocumentOptions {
 
   @override
   String get detailedDescription {
-    return "This tool will generate an OpenAPI specification of an Aqueduct application. It operates by invoking Application.document. "
+    return "This tool will generate an OpenAPI specification of an Conduit application. It operates by invoking Application.document. "
         "This method locates the ApplicationChannel subclass and invokes the first three phases of initialization:\n\n"
         "\tApplicationChannel.initializeApplication\n"
         "\tAppplicationChannel.prepare\n"

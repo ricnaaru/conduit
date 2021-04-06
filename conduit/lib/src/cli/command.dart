@@ -141,12 +141,12 @@ abstract class CLICommand {
       await determineToolVersion();
 
       if (showVersion) {
-        outputSink.writeln("Aqueduct CLI version: $toolVersion");
+        outputSink.writeln("Conduit CLI version: $toolVersion");
         return 0;
       }
 
       if (!isMachineOutput) {
-        displayInfo("Aqueduct CLI Version: $toolVersion");
+        displayInfo("Conduit CLI Version: $toolVersion");
       }
 
       preProcess();

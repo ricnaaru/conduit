@@ -133,7 +133,7 @@ class Schema {
   /// in [tables]. If no table with this name exists, null is returned.
   ///
   /// Note: tables are typically prefixed with an underscore when using
-  /// Aqueduct naming conventions for [ManagedObject].
+  /// Conduit naming conventions for [ManagedObject].
   SchemaTable tableForName(String name) {
     var lowercaseName = name.toLowerCase();
 

@@ -1,4 +1,4 @@
-/// Testing utilities for Aqueduct applications
+/// Testing utilities for Conduit applications
 ///
 /// This library should be imported in test scripts. It should not be imported in application code.
 ///

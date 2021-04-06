@@ -12,7 +12,7 @@ import 'options.dart';
 
 /// Listens for HTTP requests and delivers them to its [ApplicationChannel] instance.
 ///
-/// An Aqueduct application creates instances of this type to pair an HTTP server and an
+/// An Conduit application creates instances of this type to pair an HTTP server and an
 /// instance of an [ApplicationChannel] subclass. Instances are created by [Application]
 /// and shouldn't be created otherwise.
 class ApplicationServer {

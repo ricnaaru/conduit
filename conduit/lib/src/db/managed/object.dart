@@ -22,7 +22,7 @@ import 'managed.dart';
 /// set. (Therefore, you must use [removeProperty] instead of setting a value to null to really remove it from instances
 /// of this type.)
 ///
-/// Aqueduct implements concrete subclasses of this class to provide behavior for property storage
+/// Conduit implements concrete subclasses of this class to provide behavior for property storage
 /// and query-building.
 abstract class ManagedBacking {
   /// Retrieve a property by its entity and name.

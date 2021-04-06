@@ -22,10 +22,10 @@ class Request implements RequestOrResponse {
   ///
   /// Use this property to access values from the HTTP request that aren't accessible through this instance.
   ///
-  /// You should typically not manipulate this property's [HttpRequest.response]. By default, Aqueduct controls
+  /// You should typically not manipulate this property's [HttpRequest.response]. By default, Conduit controls
   /// the response through its [Controller]s.
   ///
-  /// If you wish to respond to a request manually - and prohibit Aqueduct from responding to the request - you must
+  /// If you wish to respond to a request manually - and prohibit Conduit from responding to the request - you must
   /// remove this instance from the request channel. To remove a request from the channel, return null from a [Controller]
   /// handler method instead of a [Response] or [Request]. For example:
   ///

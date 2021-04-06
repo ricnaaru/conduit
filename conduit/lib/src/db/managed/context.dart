@@ -12,7 +12,7 @@ import 'managed.dart';
 
 /// A service object that handles connecting to and sending queries to a database.
 ///
-/// You create objects of this type to use the Aqueduct ORM. Create instances in [ApplicationChannel.prepare]
+/// You create objects of this type to use the Conduit ORM. Create instances in [ApplicationChannel.prepare]
 /// and inject them into controllers that execute database queries.
 ///
 /// A context contains two types of objects:

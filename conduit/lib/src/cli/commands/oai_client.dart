@@ -35,7 +35,7 @@ class CLIDocumentClient extends CLICommand with CLIProject, CLIDocumentOptions {
 
 <head>
     <meta charset="UTF-8">
-    <title>Aqueduct OpenAPI Client</title>
+    <title>Conduit OpenAPI Client</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@3.12.1/swagger-ui.css">
     <style>

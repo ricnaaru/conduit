@@ -8,7 +8,7 @@ import 'package:conduit/src/runtime/orm/data_model_compiler.dart';
 import 'package:conduit/src/runtime/impl.dart';
 import 'package:conduit_runtime/runtime.dart';
 
-class AqueductCompiler extends Compiler {
+class ConduitCompiler extends Compiler {
   @override
   Map<String, dynamic> compile(MirrorContext context) {
     final m = <String, dynamic>{};

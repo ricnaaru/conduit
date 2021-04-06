@@ -55,7 +55,7 @@ class CLIBuild extends CLICommand with CLIProject {
 
   @override
   String get description {
-    return "Creates an executable of an Aqueduct application.";
+    return "Creates an executable of an Conduit application.";
   }
 
   String getScriptSource(String channelName) {

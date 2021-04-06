@@ -139,7 +139,7 @@ void main() {
 
     for (var template in templates) {
       test(
-        "Templates can use 'this' version of Aqueduct in their dependencies",
+        "Templates can use 'this' version of Conduit in their dependencies",
         () {
           var projectDir = Directory("templates/$template/");
           var pubspec = File.fromUri(projectDir.uri.resolve("pubspec.yaml"));
