@@ -19,7 +19,7 @@ library conduit;
 
 export 'package:conduit/src/runtime/compiler.dart';
 export 'package:logging/logging.dart';
-export 'package:safe_config/safe_config.dart';
+export 'package:conduit_config/conduit_config.dart';
 
 export 'src/application/application.dart';
 export 'src/auth/auth.dart';

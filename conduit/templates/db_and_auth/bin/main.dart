@@ -1,9 +1,9 @@
-import 'package:wildfire/wildfire.dart';
+import 'package:conduit/conduit.dart';
 
 Future main() async {
   final app = Application<WildfireChannel>()
-      ..options.configurationFilePath = "config.yaml"
-      ..options.port = 8888;
+    ..options.configurationFilePath = "config.yaml"
+    ..options.port = 8888;
 
   await app.startOnCurrentIsolate();
 

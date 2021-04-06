@@ -13,6 +13,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
+import 'package:conduit_config/conduit_config.dart';
 
 Future main() async {
   final app = Application<App>()
