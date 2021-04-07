@@ -20,17 +20,19 @@ abstract class PersistentStore {
   /// specific to this type. Objects returned from this method must implement [Query]. They
   /// should mixin [QueryMixin] to most of the behavior provided by a query.
   Query<T> newQuery<T extends ManagedObject>(
-      ManagedContext context, ManagedEntity entity, {T values});
+      ManagedContext context, ManagedEntity entity,
+      {T? values});
+
 
   /// Executes an arbitrary command.
-  Future execute(String sql, {Map<String, dynamic> substitutionValues});
+  Future execute(String sql, {Map<String, dynamic>? substitutionValues});
 
   Future<dynamic> executeQuery(
       String formatString, Map<String, dynamic> values, int timeoutInSeconds,
-      {PersistentStoreQueryReturnType returnType});
+      {PersistentStoreQueryReturnType? returnType});
 
-  Future<T> transaction<T>(ManagedContext transactionContext,
-      Future<T> transactionBlock(ManagedContext transaction));
+  Future<T?> transaction<T>(ManagedContext transactionContext,
+      Future<T?> transactionBlock(ManagedContext transaction));
 
   /// Closes the underlying database connection.
   Future close();
@@ -48,7 +50,7 @@ abstract class PersistentStore {
   List<String> deleteTableUniqueColumnSet(SchemaTable table);
 
   List<String> addColumn(SchemaTable table, SchemaColumn column,
-      {String unencodedInitialValue});
+      {String? unencodedInitialValue});
 
   List<String> deleteColumn(SchemaTable table, SchemaColumn column);
 
@@ -56,7 +58,7 @@ abstract class PersistentStore {
       SchemaTable table, SchemaColumn column, String name);
 
   List<String> alterColumnNullability(
-      SchemaTable table, SchemaColumn column, String unencodedInitialValue);
+      SchemaTable table, SchemaColumn column, String? unencodedInitialValue);
 
   List<String> alterColumnUniqueness(SchemaTable table, SchemaColumn column);
 
@@ -73,6 +75,6 @@ abstract class PersistentStore {
 
   Future<int> get schemaVersion;
 
-  Future<Schema> upgrade(Schema fromSchema, List<Migration> withMigrations,
+  Future<Schema?> upgrade(Schema fromSchema, List<Migration> withMigrations,
       {bool temporary = false});
 }

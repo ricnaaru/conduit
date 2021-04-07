@@ -44,8 +44,8 @@ class ManagedEntity implements APIComponentDocumenter {
   ///
   /// If running in default mode (mirrors enabled), is a set of mirror operations. Otherwise,
   /// code generated.
-  ManagedEntityRuntime get runtime =>
-      RuntimeContext.current[instanceType] as ManagedEntityRuntime;
+  ManagedEntityRuntime? get runtime =>
+      RuntimeContext.current[instanceType] as ManagedEntityRuntime?;
 
   /// The name of type of persistent instances represented by this entity.
   ///
@@ -59,7 +59,7 @@ class ManagedEntity implements APIComponentDocumenter {
   /// transient property declared in the instance type.
   /// The keys are the case-sensitive name of the attribute. Values that represent a relationship to another object
   /// are not stored in [attributes].
-  Map<String, ManagedAttributeDescription> attributes;
+  late Map<String?, ManagedAttributeDescription?> attributes;
 
   /// All relationship values of this entity.
   ///
@@ -69,16 +69,16 @@ class ManagedEntity implements APIComponentDocumenter {
   /// for [ManagedRelationshipType.hasMany] or [ManagedRelationshipType.hasOne] properties, as those values are derived by the foreign key reference
   /// on the inverse relationship property.
   /// Keys are the case-sensitive name of the relationship.
-  Map<String, ManagedRelationshipDescription> relationships;
+  Map<String?, ManagedRelationshipDescription?>? relationships;
 
   /// All properties (relationships and attributes) of this entity.
   ///
   /// The string key is the name of the property, case-sensitive. Values will be instances of either [ManagedAttributeDescription]
   /// or [ManagedRelationshipDescription]. This is the concatenation of [attributes] and [relationships].
-  Map<String, ManagedPropertyDescription> get properties {
-    var all = Map<String, ManagedPropertyDescription>.from(attributes);
+  Map<String?, ManagedPropertyDescription?> get properties {
+    var all = Map<String?, ManagedPropertyDescription?>.from(attributes);
     if (relationships != null) {
-      all.addAll(relationships);
+      all.addAll(relationships!);
     }
     return all;
   }
@@ -92,12 +92,12 @@ class ManagedEntity implements APIComponentDocumenter {
   /// a unique value for that property.
   ///
   /// This value is set by adding [Table] to the table definition of a [ManagedObject].
-  List<ManagedPropertyDescription> uniquePropertySet;
+  List<ManagedPropertyDescription?>? uniquePropertySet;
 
   /// List of [ManagedValidator]s for attributes of this entity.
   ///
   /// All validators for all [attributes] in one, flat list. Order is undefined.
-  List<ManagedValidator> validators;
+  late List<ManagedValidator?> validators;
 
   /// The list of default property names of this object.
   ///
@@ -107,19 +107,19 @@ class ManagedEntity implements APIComponentDocumenter {
   /// set in their [Column] and all [ManagedRelationshipType.belongsTo] relationships.
   ///
   /// This list cannot be modified.
-  List<String> get defaultProperties {
+  List<String>? get defaultProperties {
     if (_defaultProperties == null) {
-      final elements = <String>[];
+      final elements = <String?>[];
       elements.addAll(attributes.values
-          .where((prop) => prop.isIncludedInDefaultResultSet)
-          .where((prop) => !prop.isTransient)
-          .map((prop) => prop.name));
+          .where((prop) => prop!.isIncludedInDefaultResultSet)
+          .where((prop) => !prop!.isTransient)
+          .map((prop) => prop!.name));
 
-      elements.addAll(relationships.values
+      elements.addAll(relationships!.values
           .where((prop) =>
-              prop.isIncludedInDefaultResultSet &&
+              prop!.isIncludedInDefaultResultSet &&
               prop.relationshipType == ManagedRelationshipType.belongsTo)
-          .map((prop) => prop.name));
+          .map((prop) => prop!.name));
       _defaultProperties = List.unmodifiable(elements);
     }
     return _defaultProperties;
@@ -128,16 +128,16 @@ class ManagedEntity implements APIComponentDocumenter {
   /// Name of primary key property.
   ///
   /// This is determined by the attribute with the [primaryKey] annotation.
-  String primaryKey;
+  String? primaryKey;
 
-  ManagedAttributeDescription get primaryKeyAttribute {
+  ManagedAttributeDescription? get primaryKeyAttribute {
     return attributes[primaryKey];
   }
 
   /// A map from accessor symbol name to property name.
   ///
   /// This map should not be modified.
-  Map<Symbol, String> symbolMap;
+  late Map<Symbol, String?> symbolMap;
 
   /// Name of table in database this entity maps to.
   ///
@@ -148,12 +148,12 @@ class ManagedEntity implements APIComponentDocumenter {
   ///
   /// You may implement the static method [tableName] on the table definition of a [ManagedObject] to return a [String] table
   /// name override this default.
-  String get tableName {
+  String? get tableName {
     return _tableName;
   }
 
-  String _tableName;
-  List<String> _defaultProperties;
+  String? _tableName;
+  List<String>? _defaultProperties;
 
   /// Derived from this' [tableName].
   @override
@@ -165,16 +165,15 @@ class ManagedEntity implements APIComponentDocumenter {
   ///
   /// By default, the returned object will use a normal value backing map.
   /// If [backing] is non-null, it will be the backing map of the returned object.
-  T instanceOf<T extends ManagedObject>({ManagedBacking backing}) {
+  T instanceOf<T extends ManagedObject>({ManagedBacking? backing}) {
     if (backing != null) {
-      return (runtime.instanceOfImplementation(backing: backing)..entity = this)
-          as T;
+      return (runtime!.instanceOfImplementation(backing: backing)..entity = this) as T;
     }
-    return (runtime.instanceOfImplementation()..entity = this) as T;
+    return (runtime!.instanceOfImplementation()..entity = this) as T;
   }
 
-  ManagedSet<T> setOf<T extends ManagedObject>(Iterable<dynamic> objects) {
-    return runtime.setOfImplementation(objects) as ManagedSet<T>;
+  ManagedSet<T>? setOf<T extends ManagedObject>(Iterable<dynamic> objects) {
+    return runtime!.setOfImplementation(objects) as ManagedSet<T>?;
   }
 
   /// Returns an attribute in this entity for a property selector.
@@ -183,7 +182,7 @@ class ManagedEntity implements APIComponentDocumenter {
   /// on this entity was selected. Returns that attribute.
   ManagedAttributeDescription identifyAttribute<T, U extends ManagedObject>(
       T propertyIdentifier(U x)) {
-    final keyPaths = identifyProperties(propertyIdentifier);
+    final keyPaths = identifyProperties(propertyIdentifier)!;
     if (keyPaths.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Cannot access more than one property for this operation.");
@@ -201,10 +200,10 @@ class ManagedEntity implements APIComponentDocumenter {
           "Invalid property selector. Cannot use relationships for this operation.");
     }
 
-    final propertyName = elements.first.name;
+    final propertyName = elements.first!.name;
     var attribute = attributes[propertyName];
     if (attribute == null) {
-      if (relationships.containsKey(propertyName)) {
+      if (relationships!.containsKey(propertyName)) {
         throw ArgumentError(
             "Invalid property selection. Property '$propertyName' on "
             "'$name' "
@@ -226,7 +225,7 @@ class ManagedEntity implements APIComponentDocumenter {
   ManagedRelationshipDescription
       identifyRelationship<T, U extends ManagedObject>(
           T propertyIdentifier(U x)) {
-    final keyPaths = identifyProperties(propertyIdentifier);
+    final keyPaths = identifyProperties(propertyIdentifier)!;
     if (keyPaths.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Cannot access more than one property for this operation.");
@@ -244,8 +243,8 @@ class ManagedEntity implements APIComponentDocumenter {
           "Invalid property selector. Cannot identify a nested relationship for this operation.");
     }
 
-    final propertyName = elements.first.name;
-    var desc = relationships[propertyName];
+    final propertyName = elements.first!.name;
+    var desc = relationships![propertyName];
     if (desc == null) {
       throw ArgumentError(
           "Invalid property selection. Relationship named '$propertyName' on table '$tableName' is not a relationship.");
@@ -259,8 +258,8 @@ class ManagedEntity implements APIComponentDocumenter {
   /// Invokes [identifyProperties] with [propertyIdentifier], and ensures that a single property
   /// on this entity was selected. Returns that property.
   KeyPath identifyProperty<T, U extends ManagedObject>(
-      T propertyIdentifier(U x)) {
-    final properties = identifyProperties(propertyIdentifier);
+      T propertyIdentifier(U? x)) {
+    final properties = identifyProperties(propertyIdentifier)!;
     if (properties.length != 1) {
       throw ArgumentError(
           "Invalid property selector. Must reference a single property only.");
@@ -273,7 +272,7 @@ class ManagedEntity implements APIComponentDocumenter {
   ///
   /// Each selected property in [propertiesIdentifier] is returned in a [KeyPath] object that fully identifies the
   /// property relative to this entity.
-  List<KeyPath> identifyProperties<T, U extends ManagedObject>(
+  List<KeyPath>? identifyProperties<T, U extends ManagedObject>(
       T propertiesIdentifier(U x)) {
     final tracker = ManagedAccessTrackingBacking();
     var obj = instanceOf<U>(backing: tracker);
@@ -283,12 +282,15 @@ class ManagedEntity implements APIComponentDocumenter {
   }
 
   APISchemaObject document(APIDocumentContext context) {
-    final schemaProperties = <String, APISchemaObject>{};
-    final obj = APISchemaObject.object(schemaProperties)..title = "$name";
+    final schemaProperties = <String?, APISchemaObject>{};
+    final obj = APISchemaObject.object(
+        schemaProperties as Map<String, APISchemaObject?>?)
+      ..title = "$name";
 
     final buffer = StringBuffer();
     if (uniquePropertySet != null) {
-      final propString = uniquePropertySet.map((s) => "'${s.name}'").join(", ");
+      final propString =
+          uniquePropertySet!.map((s) => "'${s!.name}'").join(", ");
       buffer.writeln(
           "No two objects may have the same value for all of: $propString.");
     }
@@ -302,7 +304,7 @@ class ManagedEntity implements APIComponentDocumenter {
         return;
       }
 
-      final schemaProperty = def.documentSchemaObject(context);
+      final schemaProperty = def!.documentSchemaObject(context);
       schemaProperties[name] = schemaProperty;
     });
 
@@ -326,7 +328,7 @@ class ManagedEntity implements APIComponentDocumenter {
     });
 
     buf.writeln("Relationships:");
-    relationships.forEach((name, rel) {
+    relationships!.forEach((name, rel) {
       buf.writeln("\t$rel");
     });
 
@@ -345,19 +347,19 @@ abstract class ManagedEntityRuntime {
 
   ManagedEntity get entity;
 
-  ManagedObject instanceOfImplementation({ManagedBacking backing});
+  ManagedObject instanceOfImplementation({ManagedBacking? backing});
 
   ManagedSet setOfImplementation(Iterable<dynamic> objects);
 
   void setTransientValueForKey(ManagedObject object, String key, dynamic value);
 
-  dynamic getTransientValueForKey(ManagedObject object, String key);
+  dynamic getTransientValueForKey(ManagedObject object, String? key);
 
   bool isValueInstanceOf(dynamic value);
 
   bool isValueListOf(dynamic value);
 
-  String getPropertyName(Invocation invocation, ManagedEntity entity);
+  String? getPropertyName(Invocation invocation, ManagedEntity entity);
 
   dynamic dynamicConvertFromPrimitiveValue(
       ManagedPropertyDescription property, dynamic value);

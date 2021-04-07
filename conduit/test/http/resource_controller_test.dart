@@ -10,7 +10,7 @@ import "package:test/test.dart";
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  HttpServer server;
+  HttpServer? server;
 
   setUpAll(() {
     ManagedContext(ManagedDataModel([TestModel]), DefaultPersistentStore());
@@ -124,7 +124,7 @@ void main() {
     res = await http.get(Uri.parse("http://localhost:4040/a?opt=x&q=1"));
     expect(res.body, "\"OK\"");
 
-    await server.close(force: true);
+    await server!.close(force: true);
 
     server = await enableController("/:id", () => QController());
 
@@ -150,7 +150,7 @@ void main() {
     res = await http.get(Uri.parse("http://localhost:4040/word"));
     expect(res.statusCode, 400);
 
-    await server.close(force: true);
+    await server!.close(force: true);
 
     server = await enableController("/:time", () => DateTimeController());
     res = await http
@@ -174,7 +174,7 @@ void main() {
     expect(res.statusCode, 200);
     expect(res.body, "\"null\"");
 
-    await server.close(force: true);
+    await server!.close(force: true);
 
     server = await enableController("/a", () => DateTimeController());
     res = await http.get(
@@ -273,9 +273,9 @@ void main() {
     server = await enableController("/a", () => TController());
     var resp = await http.get(Uri.parse("http://localhost:4040/a"));
     expect(resp.statusCode, 200);
-    expect(ContentType.parse(resp.headers["content-type"]).primaryType,
+    expect(ContentType.parse(resp.headers["content-type"]!).primaryType,
         "application");
-    expect(ContentType.parse(resp.headers["content-type"]).subType, "json");
+    expect(ContentType.parse(resp.headers["content-type"]!).subType, "json");
   });
 
   test("Content-Type can be set adjusting responseContentType", () async {
@@ -585,7 +585,7 @@ class TController extends ResourceController {
 
   @Operation.post()
   Future<Response> post() async {
-    Map<String, dynamic> body = request.body.as();
+    Map<String, dynamic> body = request!.body.as();
 
     return Response.ok(body);
   }
@@ -593,7 +593,7 @@ class TController extends ResourceController {
 
 class QController extends ResourceController {
   @Operation.get()
-  Future<Response> getAll({@Bind.query("opt") String opt}) async {
+  Future<Response> getAll({@Bind.query("opt") String? opt}) async {
     if (opt == null) {
       return Response.ok("NOT");
     }
@@ -603,7 +603,7 @@ class QController extends ResourceController {
 
   @Operation.get("id")
   Future<Response> getOne(@Bind.path("id") String id,
-      {@Bind.query("opt") String opt}) async {
+      {@Bind.query("opt") String? opt}) async {
     if (opt == null) {
       return Response.ok("NOT");
     }
@@ -624,12 +624,12 @@ class IntController extends ResourceController {
   }
 
   @Operation.get()
-  Future<Response> getAll({@Bind.query("opt") int opt}) async {
+  Future<Response> getAll({@Bind.query("opt") int? opt}) async {
     return Response.ok("$opt");
   }
 
   @Operation.post()
-  Future<Response> create({@Bind.query("opt") int opt}) async {
+  Future<Response> create({@Bind.query("opt") int? opt}) async {
     return Response.ok("$opt");
   }
 }
@@ -641,14 +641,14 @@ class DateTimeController extends ResourceController {
   }
 
   @Operation.get()
-  Future<Response> getAll({@Bind.query("opt") DateTime opt}) async {
+  Future<Response> getAll({@Bind.query("opt") DateTime? opt}) async {
     return Response.ok("$opt");
   }
 }
 
 class MultiQueryParamController extends ResourceController {
   @Operation.get()
-  Future<Response> get({@Bind.query("params") List<String> params}) async {
+  Future<Response> get({@Bind.query("params") required List<String> params}) async {
     return Response.ok(params.join(","));
   }
 }
@@ -663,20 +663,20 @@ class BooleanQueryParamController extends ResourceController {
 class HTTPParameterController extends ResourceController {
   @requiredBinding
   @Bind.header("X-Request-id")
-  String requestId;
+  String? requestId;
   @requiredBinding
   @Bind.query("Shaqs")
-  int numberOfShaqs;
+  int? numberOfShaqs;
   @Bind.header("Location")
-  String location;
+  String? location;
   @Bind.query("number")
-  int number;
+  int? number;
 
   @Operation.get()
   Future<Response> get(@Bind.header("Cookie") String cookieBrand,
       @Bind.query("Table") String tableBrand,
-      {@Bind.header("Milk") String milkBrand,
-      @Bind.query("table_legs") int numberOfTableLegs}) async {
+      {@Bind.header("Milk") String? milkBrand,
+      @Bind.query("table_legs") int? numberOfTableLegs}) async {
     return Response.ok({
       "location": location,
       "x-request-id": requestId,
@@ -770,7 +770,7 @@ class DecodeCallbackController extends ResourceController {
 class NoBindController extends ResourceController {
   @Operation.get("id")
   Future<Response> getOne() async {
-    return Response.ok({"id": request.path.variables["id"]});
+    return Response.ok({"id": request!.path.variables["id"]});
   }
 }
 
@@ -790,6 +790,6 @@ class TestModel extends ManagedObject<_TestModel> implements _TestModel {}
 
 class _TestModel {
   @primaryKey
-  int id;
-  String name;
+  int? id;
+  String? name;
 }

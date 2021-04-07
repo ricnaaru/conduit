@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:conduit/src/db/managed/managed.dart';
 import 'package:conduit_runtime/runtime.dart';
 import 'package:conduit/src/db/query/query.dart';
@@ -27,22 +28,22 @@ class ManagedDataModel extends Object
         .whereType<ManagedEntityRuntime>()
         .toList();
     final expectedRuntimes = instanceTypes
-        .map((t) => runtimes.firstWhere((e) => e.entity.instanceType == t,
-            orElse: () => null))
+        .map(
+            (t) => runtimes.firstWhereOrNull((e) => e.entity.instanceType == t))
         .toList();
 
     final notFound = expectedRuntimes.where((e) => e == null).toList();
     if (notFound.isNotEmpty) {
       throw ManagedDataModelError(
-          "Data model types were not found: ${notFound.map((e) => e.entity.name).join(", ")}");
+          "Data model types were not found: ${notFound.map((e) => e!.entity.name).join(", ")}");
     }
 
     expectedRuntimes.forEach((runtime) {
-      _entities[runtime.entity.instanceType] = runtime.entity;
+      _entities[runtime!.entity.instanceType] = runtime.entity;
       _tableDefinitionToEntityMap[runtime.entity.tableDefinition] =
           runtime.entity;
     });
-    expectedRuntimes.forEach((runtime) => runtime.finalize(this));
+    expectedRuntimes.forEach((runtime) => runtime!.finalize(this));
   }
 
   /// Creates an instance of a [ManagedDataModel] from all subclasses of [ManagedObject] in all libraries visible to the calling library.
@@ -68,7 +69,7 @@ class ManagedDataModel extends Object
 
   Iterable<ManagedEntity> get entities => _entities.values;
   Map<Type, ManagedEntity> _entities = {};
-  Map<String, ManagedEntity> _tableDefinitionToEntityMap = {};
+  Map<String, ManagedEntity?> _tableDefinitionToEntityMap = {};
 
   /// Returns a [ManagedEntity] for a [Type].
   ///
@@ -80,8 +81,29 @@ class ManagedDataModel extends Object
   ///           @primaryKey
   ///           int id;
   ///         }
+  /// If the [type] has no known [ManagedEntity] then a [StateError] is thrown.
+  /// Use [tryEntityForType] to test if an entity exists.
   ManagedEntity entityForType(Type type) {
-    return _entities[type] ?? _tableDefinitionToEntityMap[type.toString()];
+    var entity = tryEntityForType(type);
+
+    if (entity == null) {
+      throw StateError(
+          "No entity found for '$type. Did you forget to create a 'ManagedContext'?");
+    }
+
+    return entity;
+  }
+
+  ManagedEntity? tryEntityForType(Type type) {
+    var entity =
+        _entities[type] ?? _tableDefinitionToEntityMap[type.toString()];
+
+    if (entity == null) {
+      throw StateError(
+          "No entity found for '$type. Did you forget to create a 'ManagedContext'?");
+    }
+
+    return entity;
   }
 
   @override

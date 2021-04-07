@@ -10,7 +10,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
     implements Query<InstanceType> {
   PostgresQuery(this.context);
 
-  PostgresQuery.withEntity(this.context, ManagedEntity entity) {
+  PostgresQuery.withEntity(this.context, ManagedEntity? entity) {
     _entity = entity;
   }
 
@@ -18,10 +18,10 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
   ManagedContext context;
 
   @override
-  ManagedEntity get entity =>
-      _entity ?? context.dataModel.entityForType(InstanceType);
+  ManagedEntity? get entity =>
+      _entity ?? context.dataModel!.entityForType(InstanceType);
 
-  ManagedEntity _entity;
+  ManagedEntity? _entity;
 
   @override
   QueryReduceOperation<InstanceType> get reduce {
@@ -47,7 +47,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       buffer.write("RETURNING ${builder.sqlColumnsToReturn}");
     }
 
-    final results = await context.persistentStore
+    final results = await context.persistentStore!
         .executeQuery(buffer.toString(), builder.variables, timeoutInSeconds);
 
     return builder
@@ -56,14 +56,14 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
   }
 
   @override
-  Future<List<InstanceType>> insertMany(List<InstanceType> objects) async {
+  Future<List<InstanceType>> insertMany(List<InstanceType?> objects) async {
     if (objects.isEmpty) {
       return [];
     }
 
     var buffer = StringBuffer();
 
-    final allColumns = <String>{};
+    final allColumns = <String?>{};
     final builders = <PostgresQueryBuilder>[];
 
     for (int i = 0; i < objects.length; i++) {
@@ -97,7 +97,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       buffer.write("RETURNING ${builders.first.sqlColumnsToReturn}");
     }
 
-    final results = await context.persistentStore
+    final results = await context.persistentStore!
         .executeQuery(buffer.toString(), allVariables, timeoutInSeconds);
 
     return builders.first
@@ -124,14 +124,14 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       buffer.write("RETURNING ${builder.sqlColumnsToReturn}");
     }
 
-    final results = await context.persistentStore
+    final results = await context.persistentStore!
         .executeQuery(buffer.toString(), builder.variables, timeoutInSeconds);
 
     return builder.instancesForRows(results as List<List<dynamic>>);
   }
 
   @override
-  Future<InstanceType> updateOne() async {
+  Future<InstanceType?> updateOne() async {
     var results = await update();
     if (results.length == 1) {
       return results.first;
@@ -140,13 +140,13 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
     }
 
     throw StateError(
-        "Query error. 'updateOne' modified more than one row in '${entity.tableName}'. "
+        "Query error. 'updateOne' modified more than one row in '${entity!.tableName}'. "
         "This was likely unintended and may be indicativate of a more serious error. Query "
         "should add 'where' constraints on a unique column.");
   }
 
   @override
-  Future<int> delete() async {
+  Future<int?> delete() async {
     var builder = PostgresQueryBuilder(this);
 
     var buffer = StringBuffer();
@@ -158,14 +158,14 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       throw canModifyAllInstancesError;
     }
 
-    final result = await context.persistentStore.executeQuery(
+    final result = await context.persistentStore!.executeQuery(
         buffer.toString(), builder.variables, timeoutInSeconds,
         returnType: PersistentStoreQueryReturnType.rowCount);
-    return result as int;
+    return result as int?;
   }
 
   @override
-  Future<InstanceType> fetchOne() async {
+  Future<InstanceType?> fetchOne() async {
     var builder = createFetchBuilder();
 
     if (!builder.containsJoins) {
@@ -177,7 +177,7 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       return results.first;
     } else if (results.length > 1) {
       throw StateError(
-          "Query error. 'fetchOne' returned more than one row from '${entity.tableName}'. "
+          "Query error. 'fetchOne' returned more than one row from '${entity!.tableName}'. "
           "This was likely unintended and may be indicativate of a more serious error. Query "
           "should add 'where' constraints on a unique column.");
     }
@@ -230,23 +230,23 @@ class PostgresQuery<InstanceType extends ManagedObject> extends Object
       buffer.write("OFFSET $offset ");
     }
 
-    final results = await context.persistentStore
+    final results = await context.persistentStore!
         .executeQuery(buffer.toString(), builder.variables, timeoutInSeconds);
 
     return builder.instancesForRows(results as List<List<dynamic>>);
   }
 
   void validatePageDescriptor() {
-    var prop = entity.attributes[pageDescriptor.propertyName];
+    var prop = entity!.attributes[pageDescriptor!.propertyName];
     if (prop == null) {
       throw StateError(
-          "Invalid query page descriptor. Column '${pageDescriptor.propertyName}' does not exist for table '${entity.tableName}'");
+          "Invalid query page descriptor. Column '${pageDescriptor!.propertyName}' does not exist for table '${entity!.tableName}'");
     }
 
-    if (pageDescriptor.boundingValue != null &&
-        !prop.isAssignableWith(pageDescriptor.boundingValue)) {
+    if (pageDescriptor!.boundingValue != null &&
+        !prop.isAssignableWith(pageDescriptor!.boundingValue)) {
       throw StateError(
-          "Invalid query page descriptor. Bounding value for column '${pageDescriptor.propertyName}' has invalid type.");
+          "Invalid query page descriptor. Bounding value for column '${pageDescriptor!.propertyName}' has invalid type.");
     }
   }
 

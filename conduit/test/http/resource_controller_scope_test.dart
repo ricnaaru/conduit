@@ -2,6 +2,7 @@ import 'dart:async';
 import "dart:core";
 
 import 'package:conduit/conduit.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
@@ -9,7 +10,7 @@ import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   final app = Application<Channel>();
-  Agent client;
+  late Agent client;
 
   setUpAll(() async {
     await app.startOnCurrentIsolate();
@@ -94,7 +95,7 @@ void main() {
 }
 
 class Channel extends ApplicationChannel {
-  AuthServer authServer;
+  AuthServer? authServer;
 
   @override
   Controller get entryPoint {
@@ -105,15 +106,15 @@ class Channel extends ApplicationChannel {
     router.route("/no-authorizer").link(() => C1());
     router
         .route("/level1-authorizer")
-        .link(() => Authorizer.bearer(authServer, scopes: ["level1"]))
+        .link(() => Authorizer.bearer(authServer, scopes: ["level1"]))!
         .link(() => C1());
     router
         .route("/level1-subscope-authorizer")
-        .link(() => Authorizer.bearer(authServer, scopes: ["level1:subscope"]))
+        .link(() => Authorizer.bearer(authServer, scopes: ["level1:subscope"]))!
         .link(() => C1());
     router
         .route("/authorizer")
-        .link(() => Authorizer.bearer(authServer))
+        .link(() => Authorizer.bearer(authServer))!
         .link(() => C1());
 
     return router;

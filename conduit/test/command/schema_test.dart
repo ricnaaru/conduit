@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../not_tests/cli_helpers.dart';
 
 void main() {
-  CLIClient cli;
+  late CLIClient cli;
 
   // This group handles checking the tool itself,
   // not the behavior of creating the appropriate migration file given schemas

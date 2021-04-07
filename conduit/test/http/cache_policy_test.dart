@@ -10,7 +10,7 @@ import 'package:conduit/src/dev/helpers.dart';
 // Some CachePolicy fields are tested by file_controller_test.dart, this
 // file tests the combinations not tested there.
 void main() {
-  HttpServer server;
+  HttpServer? server;
 
   tearDown(() async {
     await server?.close(force: true);

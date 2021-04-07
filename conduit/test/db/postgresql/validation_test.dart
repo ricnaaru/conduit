@@ -3,7 +3,7 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  ManagedContext ctx;
+  late ManagedContext ctx;
   setUpAll(() async {
     ctx = await contextWithModels([T, U, V, W]);
   });
@@ -158,19 +158,19 @@ class T extends ManagedObject<_T> implements _T {}
 
 class _T {
   @primaryKey
-  int id;
+  int? id;
 
   @Validate.oneOf(["a", "b"])
   @Column(nullable: true)
-  String aOrb;
+  String? aOrb;
 
   @Validate.compare(equalTo: 1, onUpdate: false, onInsert: true)
   @Column(nullable: true)
-  int equalTo1OnInsert;
+  int? equalTo1OnInsert;
 
   @Validate.compare(equalTo: 2, onUpdate: true, onInsert: false)
   @Column(nullable: true)
-  int equalTo2OnUpdate;
+  int? equalTo2OnUpdate;
 }
 
 class U extends ManagedObject<_U> implements _U {
@@ -187,9 +187,9 @@ class U extends ManagedObject<_U> implements _U {
 
 class _U {
   @primaryKey
-  int id;
+  int? id;
 
-  String q;
+  String? q;
 }
 
 class V extends ManagedObject<_V> implements _V {
@@ -201,11 +201,11 @@ class V extends ManagedObject<_V> implements _V {
 
 class _V {
   @primaryKey
-  int id;
+  int? id;
 
   @Validate.oneOf(["a", "b"])
   @Column(nullable: true)
-  String f;
+  String? f;
 }
 
 class W extends ManagedObject<_W> implements _W {
@@ -217,9 +217,9 @@ class W extends ManagedObject<_W> implements _W {
 
 class _W {
   @primaryKey
-  int id;
+  int? id;
 
   @Validate.oneOf(["a", "b"])
   @Column(nullable: true)
-  String f;
+  String? f;
 }

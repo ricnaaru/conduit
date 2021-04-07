@@ -10,8 +10,8 @@ import 'package:test/test.dart';
 import '../not_tests/cli_helpers.dart';
 
 void main() {
-  CLIClient templateCli;
-  CLIClient projectUnderTestCli;
+  late CLIClient templateCli;
+  late CLIClient projectUnderTestCli;
 
   setUpAll(() async {
     await CLIClient.activateCLI();
@@ -48,7 +48,7 @@ void main() {
     expect(response.body, contains("redoc spec-url='openapi.json'"));
 
     // ignore: unawaited_futures
-    task.process.stop(0);
+    task.process!.stop(0);
     expect(await task.exitCode, 0);
     expect(
         Directory.fromUri(projectUnderTestCli.agent.workingDirectory.uri

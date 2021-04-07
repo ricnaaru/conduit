@@ -33,16 +33,16 @@ class Runner {
   }
 
   ArgResults options;
-  ReleaseConfig configuration;
+  late ReleaseConfig configuration;
   List<Function> _cleanup = [];
-  bool get isDryRun => options["dry-run"] as bool;
-  bool get docsOnly => options["docs-only"] as bool;
-  String get name => options["name"] as String;
+  bool? get isDryRun => options["dry-run"] as bool?;
+  bool? get docsOnly => options["docs-only"] as bool?;
+  String? get name => options["name"] as String?;
   Uri baseReferenceURL =
       Uri.parse("https://www.dartdocs.org/documentation/conduit/latest/");
 
   Future cleanup() async {
-    return Future.forEach(_cleanup, (f) => f());
+    return Future.forEach(_cleanup, (dynamic f) => f());
   }
 
   Future<int> run() async {
@@ -51,17 +51,17 @@ class Runner {
     // - pub
     // - mkdocs
 
-    if (name == null && !(isDryRun || docsOnly)) {
+    if (name == null && !(isDryRun! || docsOnly!)) {
       throw "--name is required.";
     }
 
     print(
-        "Preparing release: '$name'... ${isDryRun ? "(dry-run)" : ""} ${docsOnly ? "(docs-only)" : ""}");
+        "Preparing release: '$name'... ${isDryRun! ? "(dry-run)" : ""} ${docsOnly! ? "(docs-only)" : ""}");
 
     var master = await directoryWithBranch("master");
-    String upcomingVersion;
-    String changeset;
-    if (!docsOnly) {
+    String? upcomingVersion;
+    String? changeset;
+    if (!docsOnly!) {
       var previousVersion = await latestVersion();
       upcomingVersion = await versionFromDirectory(master);
       if (upcomingVersion == previousVersion) {
@@ -76,7 +76,7 @@ class Runner {
     var docsSource = await directoryWithBranch("docs/source");
     await publishDocs(docsSource, master);
 
-    if (!docsOnly) {
+    if (!docsOnly!) {
       await postGithubRelease(upcomingVersion, name, changeset);
       await publish(master);
     }
@@ -150,7 +150,7 @@ class Runner {
     }
 
     // Push gh-pages to remote
-    if (!isDryRun) {
+    if (!isDryRun!) {
       print("Pushing gh-pages to remote...");
       var process =
           await Process.start("git", ["push"], workingDirectory: docsLive.path);
@@ -204,7 +204,7 @@ class Runner {
       throw "latestVersion failed with status code ${response.statusCode}. Reason: ${response.body}";
     }
 
-    final tag = json.decode(response.body)["tag_name"] as String;
+    final tag = json.decode(response.body)["tag_name"] as String?;
     if (tag == null) {
       throw "latestVersion failed. Reason: no tag found";
     }
@@ -250,14 +250,14 @@ class Runner {
   }
 
   Future postGithubRelease(
-      String version, String name, String description) async {
+      String? version, String? name, String? description) async {
     var body =
         json.encode({"tag_name": version, "name": name, "body": description});
 
     print("Tagging GitHub release $version");
     print("- $name");
 
-    if (!isDryRun) {
+    if (!isDryRun!) {
       var response = await http.post(
         Uri.parse(
             "https://api.github.com/repos/stablekernel/conduit/releases"),
@@ -283,7 +283,7 @@ class Runner {
 
     print("Publishing to pub...");
     var args = ["publish"];
-    if (isDryRun) {
+    if (isDryRun!) {
       args.add("--dry-run");
     } else {
       args.add("-f");
@@ -302,7 +302,7 @@ class Runner {
     }
   }
 
-  Future<Map<String, Map<String, List<SymbolResolution>>>> generateSymbolMap(
+  Future<Map<String, Map<String?, List<SymbolResolution>>>> generateSymbolMap(
       Directory codeBranchDir) async {
     print("Generating API reference...");
     var process = await Process.start("dartdoc", [],
@@ -334,23 +334,23 @@ class Runner {
         .map((obj) => SymbolResolution.fromMap(obj.cast()))
         .toList();
 
-    var qualifiedMap = <String, List<SymbolResolution>>{};
-    var nameMap = <String, List<SymbolResolution>>{};
+    var qualifiedMap = <String?, List<SymbolResolution>>{};
+    var nameMap = <String?, List<SymbolResolution>>{};
     resolutions.forEach((resolution) {
       if (!nameMap.containsKey(resolution.name)) {
         nameMap[resolution.name] = [resolution];
       } else {
-        nameMap[resolution.name].add(resolution);
+        nameMap[resolution.name]!.add(resolution);
       }
 
       var qualifiedKey =
-          libraries.fold(resolution.qualifiedName, (String p, e) {
-        return p.replaceFirst("$e.", "");
+          libraries.fold(resolution.qualifiedName, (String? p, e) {
+        return p!.replaceFirst("$e.", "");
       });
       if (!qualifiedMap.containsKey(qualifiedKey)) {
         qualifiedMap[qualifiedKey] = [resolution];
       } else {
-        qualifiedMap[qualifiedKey].add(resolution);
+        qualifiedMap[qualifiedKey]!.add(resolution);
       }
     });
 
@@ -364,7 +364,7 @@ class Runner {
     for (var f in files) {
       var filename = f.uri.pathSegments.last;
 
-      List<int> contents;
+      List<int>? contents;
       for (var transformer in transformers) {
         if (!transformer.shouldIncludeItem(filename)) {
           break;
@@ -389,7 +389,7 @@ class Runner {
     for (var subdirectory in subdirectories) {
       var dirName = subdirectory
           .uri.pathSegments[subdirectory.uri.pathSegments.length - 2];
-      var destinationDir =
+      Directory? destinationDir =
           Directory.fromUri(destination.uri.resolve("$dirName"));
 
       for (var t in transformers) {
@@ -414,7 +414,7 @@ class Runner {
 class ReleaseConfig extends Configuration {
   ReleaseConfig(String filename) : super.fromFile(File(filename));
 
-  String githubToken;
+  String? githubToken;
 }
 
 //////
@@ -427,10 +427,10 @@ class SymbolResolution {
     type = map["type"];
   }
 
-  String name;
-  String qualifiedName;
-  String type;
-  String link;
+  String? name;
+  String? qualifiedName;
+  String? type;
+  String? link;
 
   @override
   String toString() => "$name: $qualifiedName $link $type";
@@ -471,7 +471,7 @@ class APIReferenceTransformer extends Transformer {
 
   Uri baseReferenceURL;
   final RegExp regex = RegExp("`([A-Za-z0-9_\\.\\<\\>@\\(\\)]+)`");
-  Map<String, Map<String, List<SymbolResolution>>> symbolMap;
+  Map<String, Map<String?, List<SymbolResolution>>> symbolMap;
 
   @override
   bool shouldTransformFile(String filename) {
@@ -488,9 +488,9 @@ class APIReferenceTransformer extends Transformer {
       var symbol = match.group(1);
       var resolution = bestGuessForSymbol(symbol);
       if (resolution != null) {
-        symbol = symbol.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        symbol = symbol!.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         var replacement = constructedReferenceURLFrom(
-            baseReferenceURL, resolution.link.split("/"));
+            baseReferenceURL, resolution.link!.split("/"));
         contents = contents.replaceRange(
             match.start, match.end, "<a href=\"$replacement\">$symbol</a>");
       } else {
@@ -501,18 +501,18 @@ class APIReferenceTransformer extends Transformer {
     return utf8.encode(contents);
   }
 
-  SymbolResolution bestGuessForSymbol(String inputSymbol) {
+  SymbolResolution? bestGuessForSymbol(String? inputSymbol) {
     if (symbolMap.isEmpty) {
       return null;
     }
 
-    final symbol = inputSymbol
+    final symbol = inputSymbol!
         .replaceAll("<T>", "")
         .replaceAll("@", "")
         .replaceAll("()", "");
 
-    var possible = symbolMap["qualified"][symbol];
-    possible ??= symbolMap["name"][symbol];
+    var possible = symbolMap["qualified"]![symbol];
+    possible ??= symbolMap["name"]![symbol];
 
     if (possible == null) {
       return null;
@@ -523,7 +523,7 @@ class APIReferenceTransformer extends Transformer {
     }
 
     return possible.firstWhere((r) => r.type == "class",
-        orElse: () => possible.first);
+        orElse: () => possible!.first);
   }
 }
 

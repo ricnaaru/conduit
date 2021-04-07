@@ -7,8 +7,8 @@ import 'package:test/test.dart';
 import '../not_tests/cli_helpers.dart';
 
 void main() {
-  CLIClient templateCli;
-  CLIClient projectUnderTestCli;
+  late CLIClient templateCli;
+  late CLIClient projectUnderTestCli;
 
   setUpAll(() async {
     templateCli = await CLIClient(

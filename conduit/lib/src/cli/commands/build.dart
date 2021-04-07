@@ -14,17 +14,17 @@ class CLIBuild extends CLICommand with CLIProject {
       help:
           "Whether or not the 'build' directory should be left intact after the application is compiled.",
       defaultsTo: false)
-  bool get retainBuildArtifacts => decode("retain-build-artifacts");
+  bool get retainBuildArtifacts => decode("retain-build-artifacts")!;
 
   @Option("build-directory",
       help:
           "The directory to store build artifacts during compilation. By default, this directory is deleted when this command completes. See 'retain-build-artifacts' flag.",
       defaultsTo: "build")
-  Directory get buildDirectory => Directory(decode("build-directory")).absolute;
+  Directory get buildDirectory => Directory(decode("build-directory")!).absolute;
 
   @override
   Future<int> handle() async {
-    final root = projectDirectory.uri;
+    final root = projectDirectory!.uri;
     final libraryUri = root.resolve("lib/").resolve("$libraryName.dart");
     final ctx = BuildContext(
         libraryUri,
@@ -69,7 +69,7 @@ import 'package:conduit/conduit.dart';
 import 'package:args/args.dart' as arg_package;
 import 'package:$packageName/$libraryName.dart';
 
-${method.source.replaceFirst("Application<ApplicationChannel>", "Application<$channelName>").replaceFirst("_runnerFunc", "main")}
+${method.source!.replaceFirst("Application<ApplicationChannel>", "Application<$channelName>").replaceFirst("_runnerFunc", "main")}
 """;
   }
 }
@@ -119,9 +119,9 @@ Future _runnerFunc(List<String> args, dynamic sendPort) async {
     ..port = int.parse(values['port'] as String)
     ..address = values['address']
     ..isIpv6Only = values['ipv6-only'] == true
-    ..configurationFilePath = values['config-path'] as String
-    ..certificateFilePath = values['ssl-certificate-path'] as String
-    ..privateKeyFilePath = values['ssl-key-path'] as String;
+    ..configurationFilePath = values['config-path'] as String?
+    ..certificateFilePath = values['ssl-certificate-path'] as String?
+    ..privateKeyFilePath = values['ssl-key-path'] as String?;
 
 
   final isolateCountString = values['isolates'];

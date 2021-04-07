@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  ManagedContext context;
+  late ManagedContext context;
 
   setUpAll(() {
     var ps = DefaultPersistentStore();
@@ -90,12 +90,12 @@ void main() {
 
     user.posts = ManagedSet<Post>.from(posts);
 
-    expect(user.posts.length, 3);
-    expect(user.posts.first.owner, user);
-    expect(user.posts.first.text, "A");
+    expect(user.posts!.length, 3);
+    expect(user.posts!.first.owner, user);
+    expect(user.posts!.first.text, "A");
 
     expect(posts.first.owner, user);
-    expect(posts.first.owner.name, "Bob");
+    expect(posts.first.owner!.name, "Bob");
   });
 
   test("Can assign null to relationships", () {
@@ -143,12 +143,14 @@ void main() {
     ];
 
     var user = User();
-    user.readFromMap(wash(map));
+    user.readFromMap(washMap(map));
 
     expect(user.id, 1);
     expect(user.name, "Bob");
 
-    var posts = postMap.map((e) => Post()..readFromMap(wash(e))).toList();
+    var posts = postMap
+        .map((e) => Post()..readFromMap(washMap(e)))
+        .toList();
     expect(posts[0].id, 1);
     expect(posts[1].id, 2);
     expect(posts[0].text, "hey");
@@ -160,7 +162,7 @@ void main() {
 
     var user = User();
     try {
-      user.readFromMap(wash(map));
+      user.readFromMap(washMap(map));
       expect(true, false);
     } on ValidationException catch (e) {
       expectError(e, contains("invalid input key 'bad_key'"));
@@ -169,7 +171,7 @@ void main() {
 
   test("Reading from map with non-assignable type fails", () {
     try {
-      User().readFromMap(wash({"id": "foo"}));
+      User().readFromMap(washMap({"id": "foo"}));
       expect(true, false);
     } on ValidationException catch (e) {
       expectError(e, contains("invalid input value for 'id'"));
@@ -180,10 +182,10 @@ void main() {
     var dateString = "2000-01-01T05:05:05.010Z";
     var map = {"id": 1, "name": "Bob", "dateCreated": dateString};
     var user = User();
-    user.readFromMap(wash(map));
+    user.readFromMap(washMap(map));
 
-    expect(
-        user.dateCreated.difference(DateTime.parse(dateString)), Duration.zero);
+    expect(user.dateCreated!.difference(DateTime.parse(dateString)),
+        Duration.zero);
 
     var remap = user.asMap();
     expect(remap["dateCreated"], dateString);
@@ -191,7 +193,7 @@ void main() {
     map = {"id": 1, "name": "Bob", "dateCreated": 123};
     user = User();
     try {
-      user.readFromMap(wash(map));
+      user.readFromMap(washMap(map));
       expect(true, false);
     } on ValidationException catch (e) {
       expectError(e, contains("invalid input value for 'dateCreated'"));
@@ -202,7 +204,7 @@ void main() {
       "Handles input of type num for double precision float properties of the model",
       () {
     var m = TransientTypeTest()
-      ..readFromMap(wash({
+      ..readFromMap(washMap({
         "transientDouble": 30,
       }));
 
@@ -216,11 +218,11 @@ void main() {
       "owner": {"name": "Alex", "id": 18}
     };
 
-    var post = Post()..readFromMap(wash(postMap));
+    var post = Post()..readFromMap(washMap(postMap));
     expect(post.text, "hey");
     expect(post.id, 1);
-    expect(post.owner.id, 18);
-    expect(post.owner.name, "Alex");
+    expect(post.owner!.id, 18);
+    expect(post.owner!.name, "Alex");
   });
 
   test("Trying to read embedded object that isnt an object fails", () {
@@ -228,7 +230,7 @@ void main() {
     var post = Post();
     var successful = false;
     try {
-      post.readFromMap(wash(postMap));
+      post.readFromMap(washMap(postMap));
       successful = true;
     } on ValidationException catch (e) {
       expectError(e, contains("invalid input type for 'owner'"));
@@ -267,29 +269,29 @@ void main() {
 
   test("Transient properties aren't stored in backing", () {
     var t = TransientTest();
-    t.readFromMap(wash({"inOut": 2}));
+    t.readFromMap(washMap({"inOut": 2}));
     expect(t.inOut, 2);
     expect(t["inOut"], isNull);
   });
 
   test("mappableInput properties are read in readMap", () {
     var t = TransientTest()
-      ..readFromMap(wash({"id": 1, "defaultedText": "bar foo"}));
+      ..readFromMap(washMap({"id": 1, "defaultedText": "bar foo"}));
     expect(t.id, 1);
     expect(t.text, "foo");
     expect(t.inputInt, isNull);
     expect(t.inOut, isNull);
 
-    t = TransientTest()..readFromMap(wash({"inputOnly": "foo"}));
+    t = TransientTest()..readFromMap(washMap({"inputOnly": "foo"}));
     expect(t.text, "foo");
 
-    t = TransientTest()..readFromMap(wash({"inputInt": 2}));
+    t = TransientTest()..readFromMap(washMap({"inputInt": 2}));
     expect(t.inputInt, 2);
 
-    t = TransientTest()..readFromMap(wash({"inOut": 2}));
+    t = TransientTest()..readFromMap(washMap({"inOut": 2}));
     expect(t.inOut, 2);
 
-    t = TransientTest()..readFromMap(wash({"bothOverQualified": "foo"}));
+    t = TransientTest()..readFromMap(washMap({"bothOverQualified": "foo"}));
     expect(t.text, "foo");
   });
 
@@ -310,14 +312,14 @@ void main() {
 
   test("Transient properties are type checked in readMap", () {
     try {
-      TransientTest().readFromMap(wash({"id": 1, "defaultedText": 2}));
+      TransientTest().readFromMap(washMap({"id": 1, "defaultedText": 2}));
 
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
 
     try {
-      TransientTest().readFromMap(wash({"id": 1, "inputInt": "foo"}));
+      TransientTest().readFromMap(washMap({"id": 1, "inputInt": "foo"}));
 
       throw 'Unreachable';
       // ignore: empty_catches
@@ -326,31 +328,31 @@ void main() {
 
   test("Properties that aren't mappableInput are not read in readMap", () {
     try {
-      TransientTest().readFromMap(wash({"outputOnly": "foo"}));
+      TransientTest().readFromMap(washMap({"outputOnly": "foo"}));
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
 
     try {
-      TransientTest().readFromMap(wash({"invalidOutput": "foo"}));
+      TransientTest().readFromMap(washMap({"invalidOutput": "foo"}));
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
 
     try {
-      TransientTest().readFromMap(wash({"invalidInput": "foo"}));
+      TransientTest().readFromMap(washMap({"invalidInput": "foo"}));
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
 
     try {
-      TransientTest().readFromMap(wash({"bothButOnlyOnOne": "foo"}));
+      TransientTest().readFromMap(washMap({"bothButOnlyOnOne": "foo"}));
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
 
     try {
-      TransientTest().readFromMap(wash({"outputInt": "foo"}));
+      TransientTest().readFromMap(washMap({"outputInt": "foo"}));
       throw 'Unreachable';
       // ignore: empty_catches
     } on ValidationException {}
@@ -458,14 +460,15 @@ void main() {
     expect(m.containsKey("dateCreated"), true);
   });
 
-  test("DeepMap Transient Properties of all types can be read and returned", () {
+  test("DeepMap Transient Properties of all types can be read and returned",
+      () {
     var m = (TransientTypeTest()
-      ..readFromMap(wash({
-        "deepMap": {
-          "ok": {"ik1": 1, "ik2": 2}
-        }
-      })))
-      .asMap();
+          ..readFromMap(washMap({
+            "deepMap": {
+              "ok": {"ik1": 1, "ik2": 2}
+            }
+          })))
+        .asMap();
 
     expect(m["deepMap"], {
       "ok": {"ik1": 1, "ik2": 2}
@@ -475,7 +478,7 @@ void main() {
   test("Transient Properties of all types can be read and returned", () {
     var dateString = "2016-10-31T15:40:45+00:00";
     var m = (TransientTypeTest()
-          ..readFromMap(wash({
+          ..readFromMap(washMap({
             "transientInt": 5,
             "transientBigInt": 123456789,
             "transientString": "lowercase string",
@@ -525,42 +528,39 @@ void main() {
   });
 
   test(
-    "If map type cannot be parsed into exact type, it fails with validation exception",
+      "If map type cannot be parsed into exact type, it fails with validation exception",
       () {
+    try {
+      TransientTypeTest().readFromMap({
+        "deepMap": wash({"str": 1})
+      });
+      fail('unreachable');
+      // ignore: empty_catches
+    } on ValidationException {}
 
-      try {
-        TransientTypeTest().readFromMap({
-          "deepMap": wash({"str": 1})
-        });
-        fail('unreachable');
-        // ignore: empty_catches
-      } on ValidationException {}
+    try {
+      TransientTypeTest().readFromMap({
+        "deepMap": wash({
+          "key": {"str": "val", "int": 2}
+        })
+      });
+      fail('unreachable');
+      // ignore: empty_catches
+    } on ValidationException {}
 
-      try {
-        TransientTypeTest().readFromMap({
-          "deepMap": wash({
-            "key": {"str": "val", "int": 2}
-          })
-        });
-        fail('unreachable');
-        // ignore: empty_catches
-      } on ValidationException {}
-
-      try {
-        TransientTypeTest().readFromMap({"deepMap": wash("str")});
-        fail('unreachable');
-        // ignore: empty_catches
-      } on ValidationException {}
-    });
+    try {
+      TransientTypeTest().readFromMap({"deepMap": wash("str")});
+      fail('unreachable');
+      // ignore: empty_catches
+    } on ValidationException {}
+  });
 
   test(
       "If complex type cannot be parsed into exact type, it fails with validation exception",
       () {
     try {
       TransientTypeTest().readFromMap({
-        "deepList": wash([
-          "string"
-        ])
+        "deepList": wash(["string"])
       });
       fail('unreachable');
       // ignore: empty_catches
@@ -580,16 +580,16 @@ void main() {
 
   test("Reading hasMany relationship from JSON succeeds", () {
     var u = User();
-    u.readFromMap(wash({
+    u.readFromMap(washMap({
       "name": "Bob",
       "id": 1,
       "posts": [
         {"text": "Hi", "id": 1}
       ]
     }));
-    expect(u.posts.length, 1);
-    expect(u.posts[0].id, 1);
-    expect(u.posts[0].text, "Hi");
+    expect(u.posts!.length, 1);
+    expect(u.posts![0].id, 1);
+    expect(u.posts![0].text, "Hi");
   });
 
   test(
@@ -597,7 +597,7 @@ void main() {
       () {
     var t = TransientTest();
     try {
-      t.readFromMap(wash({"notAnAttribute": true}));
+      t.readFromMap(washMap({"notAnAttribute": true}));
       expect(true, false);
       // ignore: empty_catches
     } on ValidationException {}
@@ -620,7 +620,7 @@ void main() {
 
   test("readFromMap correctly invoked for relationships of relationships", () {
     final t = Top()
-      ..readFromMap(wash({
+      ..readFromMap(washMap({
         "id": 1,
         "middles": [
           {
@@ -649,7 +649,7 @@ void main() {
     });
 
     test("Enum value in readMap is a matching string", () {
-      var e = EnumObject()..readFromMap(wash({"enumValues": "efgh"}));
+      var e = EnumObject()..readFromMap(washMap({"enumValues": "efgh"}));
       expect(e.enumValues, EnumValues.efgh);
     });
 
@@ -663,7 +663,7 @@ void main() {
         () {
       var e = EnumObject();
       try {
-        e.readFromMap(wash({"enumValues": "foobar"}));
+        e.readFromMap(washMap({"enumValues": "foobar"}));
         expect(true, false);
       } on ValidationException catch (e) {
         expectError(e, contains("invalid option for key 'enumValues'"));
@@ -680,7 +680,7 @@ void main() {
 
   group("Private fields", () {
     test("Private fields on entity", () {
-      var entity = context.dataModel.entityForType(PrivateField);
+      var entity = context.dataModel!.entityForType(PrivateField);
       expect(entity.attributes["_private"], isNotNull);
     });
 
@@ -707,7 +707,7 @@ void main() {
     test("Private fields cannot be set in readFromMap()", () {
       var p = PrivateField();
       try {
-        p.readFromMap(wash({"_private": "x"}));
+        p.readFromMap(washMap({"_private": "x"}));
         fail('unreachable');
       } on ValidationException catch (e) {
         expect(e.toString(), contains("invalid input"));
@@ -720,7 +720,7 @@ void main() {
   group("Document data type", () {
     test("Can read object into document data type from map", () {
       final o = DocumentTest();
-      o.readFromMap(wash({
+      o.readFromMap(washMap({
         "document": {"key": "value"}
       }));
 
@@ -729,7 +729,7 @@ void main() {
 
     test("Can read array into document data type from list", () {
       final o = DocumentTest();
-      o.readFromMap(wash({
+      o.readFromMap(washMap({
         "document": [
           {"key": "value"},
           1
@@ -775,36 +775,36 @@ void main() {
 
 class User extends ManagedObject<_User> implements _User {
   @Serialize()
-  String value;
+  String? value;
 }
 
 class _User {
   @Column(nullable: true)
-  String name;
+  String? name;
 
   @Column(primaryKey: true)
-  int id;
+  int? id;
 
-  DateTime dateCreated;
+  DateTime? dateCreated;
 
-  ManagedSet<Post> posts;
+  ManagedSet<Post>? posts;
 }
 
 class Post extends ManagedObject<_Post> implements _Post {}
 
 class _Post {
   @primaryKey
-  int id;
+  int? id;
 
-  String text;
+  String? text;
 
   @Relate(Symbol('posts'))
-  User owner;
+  User? owner;
 }
 
 class TransientTest extends ManagedObject<_TransientTest>
     implements _TransientTest {
-  String notAnAttribute;
+  String? notAnAttribute;
 
   @Serialize(input: false, output: true)
   String get defaultedText => "Mr. $text";
@@ -820,15 +820,15 @@ class TransientTest extends ManagedObject<_TransientTest>
   }
 
   @Serialize(input: false, output: true)
-  String get outputOnly => text;
+  String? get outputOnly => text;
 
-  set outputOnly(String s) {
+  set outputOnly(String? s) {
     text = s;
   }
 
   // This is intentionally invalid
   @Serialize(input: true, output: false)
-  String get invalidInput => text;
+  String? get invalidInput => text;
 
   // This is intentionally invalid
   @Serialize(input: false, output: true)
@@ -837,35 +837,35 @@ class TransientTest extends ManagedObject<_TransientTest>
   }
 
   @Serialize()
-  String get bothButOnlyOnOne => text;
+  String? get bothButOnlyOnOne => text;
 
-  set bothButOnlyOnOne(String s) {
+  set bothButOnlyOnOne(String? s) {
     text = s;
   }
 
   @Serialize(input: true, output: false)
-  int inputInt;
+  int? inputInt;
 
   @Serialize(input: false, output: true)
-  int outputInt;
+  int? outputInt;
 
   @Serialize()
-  int inOut;
+  int? inOut;
 
   @Serialize()
-  String get bothOverQualified => text;
+  String? get bothOverQualified => text;
 
   @Serialize()
-  set bothOverQualified(String s) {
+  set bothOverQualified(String? s) {
     text = s;
   }
 }
 
 class _TransientTest {
   @primaryKey
-  int id;
+  int? id;
 
-  String text;
+  String? text;
 }
 
 class TransientTypeTest extends ManagedObject<_TransientTypeTest>
@@ -935,7 +935,7 @@ class TransientTypeTest extends ManagedObject<_TransientTypeTest>
   @Serialize(input: true, output: false)
   set transientMap(Map<String, String> m) {
     var pairStrings = m.keys.map((key) {
-      String value = m[key];
+      String? value = m[key];
       return "$key:$value";
     });
 
@@ -953,66 +953,66 @@ class TransientTypeTest extends ManagedObject<_TransientTypeTest>
   }
 
   @Serialize()
-  List<Map<String, dynamic>> deepList;
+  List<Map<String, dynamic>>? deepList;
 
   @Serialize()
-  Map<String, Map<String, int>> deepMap;
+  Map<String, Map<String, int>>? deepMap;
 
   @Serialize()
-  Map<String, dynamic> defaultMap;
+  Map<String, dynamic>? defaultMap;
 
   @Serialize()
-  List<dynamic> defaultList;
+  List<dynamic>? defaultList;
 }
 
 class _TransientTypeTest {
   // All of the types - ManagedPropertyType
   @primaryKey
-  int id;
+  int? id;
 
-  int backingInt;
+  late int backingInt;
 
   @Column(databaseType: ManagedPropertyType.bigInteger)
-  int backingBigInt;
+  late int backingBigInt;
 
-  String backingString;
+  late String backingString;
 
-  DateTime backingDateTime;
+  late DateTime backingDateTime;
 
-  bool backingBool;
+  late bool backingBool;
 
-  double backingDouble;
+  late double backingDouble;
 
-  String backingMapString;
+  late String backingMapString;
 
-  String backingListString;
+  late String backingListString;
 }
 
 class PrivateField extends ManagedObject<_PrivateField>
     implements _PrivateField {
   @Serialize(input: true, output: false)
-  set public(String p) {
+  set public(String? p) {
     _private = p;
   }
 
   @Serialize(input: false, output: true)
-  String get public => _private;
+  String? get public => _private;
 }
 
 class _PrivateField {
   @primaryKey
-  int id;
+  int? id;
 
-  String _private;
+  String? _private;
 }
 
 class EnumObject extends ManagedObject<_EnumObject> implements _EnumObject {}
 
 class _EnumObject {
   @primaryKey
-  int id;
+  int? id;
 
-  EnumValues enumValues;
+  EnumValues? enumValues;
 }
 
 enum EnumValues { abcd, efgh, other18 }
@@ -1025,9 +1025,9 @@ class TransientOwner extends ManagedObject<_TransientOwner>
 
 class _TransientOwner {
   @primaryKey
-  int id;
+  int? id;
 
-  TransientBelongsTo t;
+  TransientBelongsTo? t;
 }
 
 class TransientBelongsTo extends ManagedObject<_TransientBelongsTo>
@@ -1035,10 +1035,10 @@ class TransientBelongsTo extends ManagedObject<_TransientBelongsTo>
 
 class _TransientBelongsTo {
   @primaryKey
-  int id;
+  int? id;
 
   @Relate(Symbol('t'))
-  TransientOwner owner;
+  TransientOwner? owner;
 }
 
 void expectError(ValidationException exception, Matcher matcher) {
@@ -1050,9 +1050,9 @@ class DocumentTest extends ManagedObject<_DocumentTest>
 
 class _DocumentTest {
   @primaryKey
-  int id;
+  int? id;
 
-  Document document;
+  late Document document;
 }
 
 class ConstructorOverride extends ManagedObject<_ConstructorOverride>
@@ -1064,70 +1064,74 @@ class ConstructorOverride extends ManagedObject<_ConstructorOverride>
 
 class _ConstructorOverride {
   @primaryKey
-  int id;
+  int? id;
 
-  String value;
+  String? value;
 }
 
 class DefaultConstructorHasOptionalArgs
     extends ManagedObject<_ConstructorTableDef> {
   // ignore: avoid_unused_constructor_parameters
-  DefaultConstructorHasOptionalArgs({int foo});
+  DefaultConstructorHasOptionalArgs({int? foo});
 }
 
 class _ConstructorTableDef {
   @primaryKey
-  int id;
+  int? id;
 }
 
 class Top extends ManagedObject<_Top> implements _Top {}
 
 class _Top {
   @Column(primaryKey: true)
-  int id;
+  int? id;
 
-  ManagedSet<Middle> middles;
+  late ManagedSet<Middle> middles;
 }
 
 class Middle extends ManagedObject<_Middle> implements _Middle {}
 
 class _Middle {
   @Column(primaryKey: true)
-  int id;
+  int? id;
 
   @Relate(#middles)
-  Top top;
+  Top? top;
 
-  Bottom bottom;
-  ManagedSet<Bottom> bottoms;
+  late Bottom bottom;
+  late ManagedSet<Bottom> bottoms;
 }
 
 class Bottom extends ManagedObject<_Bottom> implements _Bottom {}
 
 class _Bottom {
   @Column(primaryKey: true)
-  int id;
+  int? id;
 
   @Relate(#bottom)
-  Middle middle;
+  Middle? middle;
 
   @Relate(#bottoms)
-  Middle middles;
+  Middle? middles;
 }
 
 class OverrideField extends ManagedObject<_OverrideField>
     implements _OverrideField {
   @override
-  String field;
+  String? field;
 }
 
 class _OverrideField {
   @primaryKey
-  int id;
+  int? id;
 
-  String field;
+  String? field;
 }
 
-T wash<T>(dynamic data) {
-  return json.decode(json.encode(data)) as T;
+T? wash<T>(dynamic data) {
+  return json.decode(json.encode(data)) as T?;
+}
+
+Map<String, dynamic> washMap(dynamic data) {
+  return json.decode(json.encode(data)) as Map<String, dynamic>;
 }

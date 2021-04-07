@@ -3,16 +3,16 @@ import 'package:crypto/crypto.dart';
 
 class MigrationSource {
   MigrationSource(this.source, this.uri, int nameStartIndex, int nameEndIndex) {
-    originalName = source.substring(nameStartIndex, nameEndIndex);
-    name = "M${md5.convert(source.codeUnits).toString()}";
-    source = source.replaceRange(nameStartIndex, nameEndIndex, name);
+    originalName = source!.substring(nameStartIndex, nameEndIndex);
+    name = "M${md5.convert(source!.codeUnits).toString()}";
+    source = source!.replaceRange(nameStartIndex, nameEndIndex, name!);
   }
 
   MigrationSource.fromMap(Map<String, dynamic> map) {
-    originalName = map["originalName"] as String;
-    source = map["source"] as String;
-    name = map["name"] as String;
-    uri = map["uri"] as Uri;
+    originalName = map["originalName"] as String?;
+    source = map["source"] as String?;
+    name = map["name"] as String?;
+    uri = map["uri"] as Uri?;
   }
 
   factory MigrationSource.fromFile(Uri uri) {
@@ -48,13 +48,13 @@ class MigrationSource {
     return int.parse(migrationName.split("_").first);
   }
 
-  String source;
+  String? source;
 
-  String originalName;
+  String? originalName;
 
-  String name;
+  String? name;
 
-  Uri uri;
+  Uri? uri;
 
-  int get versionNumber => versionNumberFromUri(uri);
+  int get versionNumber => versionNumberFromUri(uri!);
 }

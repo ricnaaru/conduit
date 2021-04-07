@@ -47,7 +47,7 @@ class ManagedContext implements APIComponentDocumenter {
   /// A [Query] is sent to the database described by [persistentStore]. A [Query] may only be executed
   /// on this context if its type is in [dataModel].
   ManagedContext(this.dataModel, this.persistentStore) {
-    ManagedDataModelManager.add(dataModel);
+    ManagedDataModelManager.add(dataModel!);
     ServiceRegistry.defaultInstance
         .register<ManagedContext>(this, (o) => o.close());
   }
@@ -58,10 +58,10 @@ class ManagedContext implements APIComponentDocumenter {
         dataModel = parentContext.dataModel;
 
   /// The persistent store that [Query]s on this context are executed through.
-  PersistentStore persistentStore;
+  PersistentStore? persistentStore;
 
   /// The data model containing the [ManagedEntity]s that describe the [ManagedObject]s this instance works with.
-  final ManagedDataModel dataModel;
+  final ManagedDataModel? dataModel;
 
   /// Runs all [Query]s in [transactionBlock] within a database transaction.
   ///
@@ -78,7 +78,14 @@ class ManagedContext implements APIComponentDocumenter {
   ///
   /// You may manually rollback a query by throwing a [Rollback] object. This will exit the
   /// [transactionBlock], roll back any changes made in the transaction, but this method will not
-  /// throw. The parameter passed to [Rollback]'s constructor will be returned from this method
+  /// throw.
+  ///
+  /// TODO: the following statement is not true. Rollback takes a string but the transaction
+  /// returns <T>.  It would seem to be a better idea to still throw the manual Rollback
+  /// so the user has a consistent method of handling the rollback. We could add a property
+  /// to the Rollback class 'manual' which would be used to indicate a manual rollback.
+  /// For the moment I've changed the return type to Future<void> as 
+  /// The parameter passed to [Rollback]'s constructor will be returned from this method
   /// so that the caller can determine why the transaction was rolled back.
   ///
   /// Example usage:
@@ -89,10 +96,10 @@ class ManagedContext implements APIComponentDocumenter {
   ///            await q.insert();
   ///            ...
   ///         });
-  Future<T> transaction<T>(
-      Future<T> transactionBlock(ManagedContext transaction)) {
-    return persistentStore.transaction(
-        ManagedContext.childOf(this), transactionBlock);
+  Future<T?> transaction<T>(
+      Future<T?> transactionBlock(ManagedContext transaction)) {
+    return persistentStore!
+        .transaction(ManagedContext.childOf(this), transactionBlock);
   }
 
   /// Closes this context and release its underlying resources.
@@ -107,8 +114,8 @@ class ManagedContext implements APIComponentDocumenter {
   /// Returns an entity for a type from [dataModel].
   ///
   /// See [ManagedDataModel.entityForType].
-  ManagedEntity entityForType(Type type) {
-    return dataModel.entityForType(type);
+  ManagedEntity? entityForType(Type type) {
+    return dataModel!.entityForType(type);
   }
 
   /// Inserts a single [object] into this context.
@@ -133,16 +140,16 @@ class ManagedContext implements APIComponentDocumenter {
   ///
   /// If [T] cannot be inferred, an error is thrown. If [identifier] is not the same type as [T]'s primary key,
   /// null is returned.
-  Future<T> fetchObjectWithID<T extends ManagedObject>(
+  Future<T?> fetchObjectWithID<T extends ManagedObject>(
       dynamic identifier) async {
-    final entity = dataModel.entityForType(T);
+    final entity = dataModel!.tryEntityForType(T);
     if (entity == null) {
       throw ArgumentError("Unknown entity '$T' in fetchObjectWithID. "
           "Provide a type to this method and ensure it is in this context's data model.");
     }
 
-    final primaryKey = entity.primaryKeyAttribute;
-    if (!primaryKey.type.isAssignableWith(identifier)) {
+    final primaryKey = entity.primaryKeyAttribute!;
+    if (!primaryKey.type!.isAssignableWith(identifier)) {
       return null;
     }
 
@@ -153,7 +160,7 @@ class ManagedContext implements APIComponentDocumenter {
 
   @override
   void documentComponents(APIDocumentContext context) =>
-      dataModel.documentComponents(context);
+      dataModel!.documentComponents(context);
 }
 
 /// Throw this object to roll back a [ManagedContext.transaction].

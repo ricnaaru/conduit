@@ -3,16 +3,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:conduit/conduit.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  Application<TestChannel> application;
+  late Application<TestChannel> application;
   Agent client = Agent.onPort(8888);
 
-  final codeResponse = (Map<String, String> form) {
+  final codeResponse = (Map<String, String?> form) {
     final m = Map<String, String>.from(form);
     m.addAll({"response_type": "code"});
 
@@ -24,7 +25,7 @@ void main() {
     return req.post();
   };
 
-  final tokenResponse = (Map<String, String> form) {
+  final tokenResponse = (Map<String, String?> form) {
     final m = Map<String, String>.from(form);
     m.addAll({"response_type": "token"});
 
@@ -43,12 +44,12 @@ void main() {
   });
 
   tearDownAll(() async {
-    await application?.stop();
+    await application.stop();
   });
 
   setUp(() async {
-    (application.channel.authServer.delegate as InMemoryAuthStorage).reset();
-    (application.channel.authServer.delegate as InMemoryAuthStorage)
+    (application.channel!.authServer!.delegate as InMemoryAuthStorage).reset();
+    (application.channel!.authServer!.delegate as InMemoryAuthStorage)
         .createUsers(2);
   });
 
@@ -176,7 +177,8 @@ void main() {
       expect(resp, hasHeaders({"content-type": "text/html; charset=utf-8"}));
     });
 
-    test("Does not allow response_type of token if allowsImplicit is false", () async {
+    test("Does not allow response_type of token if allowsImplicit is false",
+        () async {
       final req = client.request("/auth/redirect")
         ..query = {
           "client_id": "com.stablekernel.redirect",
@@ -226,12 +228,12 @@ void main() {
       expectRedirect(resp, Uri.http("stablekernel.com", "/auth/scoped"),
           state: "Wisconsin@&");
 
-      final redirectURI = Uri.parse(resp.headers["location"].first);
+      final redirectURI = Uri.parse(resp.headers["location"]!.first);
       final codeParam = redirectURI.queryParameters["code"];
-      final token = await application.channel.authServer
+      final token = await application.channel!.authServer!
           .exchange(codeParam, "com.stablekernel.scoped", "kilimanjaro");
-      expect(token.scopes.length, 1);
-      expect(token.scopes.first.isExactly("user"), true);
+      expect(token.scopes!.length, 1);
+      expect(token.scopes!.first.isExactly("user"), true);
     });
 
     test("With multiple scopes", () async {
@@ -246,13 +248,13 @@ void main() {
       expectRedirect(resp, Uri.http("stablekernel.com", "/auth/scoped"),
           state: "Wisconsin@&");
 
-      final redirectURI = Uri.parse(resp.headers["location"].first);
+      final redirectURI = Uri.parse(resp.headers["location"]!.first);
       final codeParam = redirectURI.queryParameters["code"];
-      final token = await application.channel.authServer
+      final token = await application.channel!.authServer!
           .exchange(codeParam, "com.stablekernel.scoped", "kilimanjaro");
-      expect(token.scopes.length, 2);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
-      expect(token.scopes.any((s) => s.isExactly("other_scope")), true);
+      expect(token.scopes!.length, 2);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("other_scope")), true);
     });
   });
 
@@ -265,7 +267,8 @@ void main() {
         "password": InMemoryAuthStorage.defaultPassword
       });
 
-      expectTokenRedirect(resp, Uri.http("stablekernel.com", "/auth/public-redirect"),
+      expectTokenRedirect(
+          resp, Uri.http("stablekernel.com", "/auth/public-redirect"),
           state: "Wisconsin@&");
     });
 
@@ -278,10 +281,11 @@ void main() {
         "scope": "user"
       });
 
-      expectTokenRedirect(resp, Uri.http("stablekernel.com", "/auth/public-scoped"),
+      expectTokenRedirect(
+          resp, Uri.http("stablekernel.com", "/auth/public-scoped"),
           state: "Wisconsin@&");
 
-      final redirectURI = Uri.parse(resp.headers["location"].first);
+      final redirectURI = Uri.parse(resp.headers["location"]!.first);
       final fragmentParams = parametersFromFragment(redirectURI.fragment);
 
       expect(fragmentParams["scope"], "user");
@@ -296,12 +300,13 @@ void main() {
         "scope": "user other_scope"
       });
 
-      expectTokenRedirect(resp, Uri.http("stablekernel.com", "/auth/public-scoped"),
+      expectTokenRedirect(
+          resp, Uri.http("stablekernel.com", "/auth/public-scoped"),
           state: "Wisconsin@&");
 
-      final redirectURI = Uri.parse(resp.headers["location"].first);
+      final redirectURI = Uri.parse(resp.headers["location"]!.first);
       final fragmentParams = parametersFromFragment(redirectURI.fragment);
-      final scopes = fragmentParams["scope"].split(" ");
+      final scopes = fragmentParams["scope"]!.split(" ");
 
       expect(scopes, unorderedMatches(["user", "other_scope"]));
     });
@@ -346,8 +351,8 @@ void main() {
     test("Username is repeated returns 400", () async {
       // This isn't precisely to the OAuth 2.0 spec, but doing otherwise
       // would get a bit ugly.
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
       final encodedWrongUsername = Uri.encodeQueryComponent("!@#kjasd");
 
       var req = client.request("/auth/code")
@@ -377,7 +382,9 @@ void main() {
         "state": "a"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "a");
     });
 
@@ -389,7 +396,9 @@ void main() {
         "state": "a"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "a");
     });
 
@@ -399,7 +408,9 @@ void main() {
         "password": InMemoryAuthStorage.defaultPassword,
         "state": "a"
       });
-      expectTokenErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/public-redirect"),
+      expectTokenErrorRedirect(
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
           "invalid_request",
           state: "a");
     });
@@ -407,8 +418,8 @@ void main() {
     test("Username is repeated returns 400", () async {
       // This isn't precisely to the OAuth 2.0 spec, but doing otherwise
       // would get a bit ugly.
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
       final encodedWrongUsername = Uri.encodeQueryComponent("!@#kjasd");
 
       var req = client.request("/auth/redirect")
@@ -469,8 +480,8 @@ void main() {
       // This isn't precisely to the OAuth 2.0 spec, but doing otherwise
       // would get a bit ugly.
 
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
       final encodedWrongPassword = Uri.encodeQueryComponent("!@#kjasd");
 
       var req = client.request("/auth/code")
@@ -500,7 +511,9 @@ void main() {
         "state": "a"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "a");
     });
 
@@ -512,7 +525,9 @@ void main() {
         "state": "a"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "a");
     });
 
@@ -522,7 +537,9 @@ void main() {
         "username": user1["username"],
         "state": "a"
       });
-      expectTokenErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/public-redirect"),
+      expectTokenErrorRedirect(
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
           "invalid_request",
           state: "a");
     });
@@ -531,8 +548,8 @@ void main() {
       // This isn't precisely to the OAuth 2.0 spec, but doing otherwise
       // would get a bit ugly.
 
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
       final encodedWrongPassword = Uri.encodeQueryComponent("!@#kjasd");
 
       var req = client.request("/auth/redirect")
@@ -555,8 +572,8 @@ void main() {
 
   group("response_type failures", () {
     test("response_type is invalid returns 400 with error", () async {
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
 
       final req = client.request("/auth/redirect")
         ..encodeBody = false
@@ -570,8 +587,8 @@ void main() {
     test("response_type is duplicated returns 302 with error", () async {
       // This isn't precisely to the OAuth 2.0 spec, but doing otherwise
       // would get a bit ugly.
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
 
       var req = client.request("/auth/redirect")
         ..encodeBody = false
@@ -622,8 +639,8 @@ void main() {
     });
 
     test("client_id is duplicated returns 400", () async {
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
 
       var req = client.request("/auth/redirect")
         ..encodeBody = false
@@ -654,14 +671,19 @@ void main() {
   });
 
   group("Code Invalid requests and state", () {
-    test("public client with response type code redirects with error", () async {
+    test("public client with response type code redirects with error",
+        () async {
       final resp = await codeResponse({
         "client_id": "com.stablekernel.public.redirect",
         "username": user1["username"],
         "password": user1["password"],
         "state": "a"
       });
-      expectErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "unauthorized_client", state: "a");
+      expectErrorRedirect(
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "unauthorized_client",
+          state: "a");
     });
 
     test("Omit state is error", () async {
@@ -671,7 +693,8 @@ void main() {
         "password": InMemoryAuthStorage.defaultPassword
       });
 
-      expectErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/redirect"), "invalid_request");
+      expectErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/redirect"),
+          "invalid_request");
     });
 
     test("Failed username + state still returns state in error", () async {
@@ -700,9 +723,10 @@ void main() {
   });
 
   group("Token Invalid requests and state", () {
-    test("Does not allow response_type of token if allowsImplicit is false", () async {
-      final encodedUsername = Uri.encodeQueryComponent(user1["username"]);
-      final encodedPassword = Uri.encodeQueryComponent(user1["password"]);
+    test("Does not allow response_type of token if allowsImplicit is false",
+        () async {
+      final encodedUsername = Uri.encodeQueryComponent(user1["username"]!);
+      final encodedPassword = Uri.encodeQueryComponent(user1["password"]!);
 
       final req = client.request("/auth/code")
         ..encodeBody = false
@@ -721,7 +745,10 @@ void main() {
         "password": InMemoryAuthStorage.defaultPassword
       });
 
-      expectTokenErrorRedirect(resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "invalid_request");
+      expectTokenErrorRedirect(
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "invalid_request");
     });
 
     test("Failed username + state still returns state in error", () async {
@@ -732,7 +759,9 @@ void main() {
         "state": "xyz"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "xyz");
     });
 
@@ -744,7 +773,9 @@ void main() {
         "state": "xyz"
       });
       expectTokenErrorRedirect(
-          resp, Uri.http("stablekernel.com", "/auth/public-redirect"), "access_denied",
+          resp,
+          Uri.http("stablekernel.com", "/auth/public-redirect"),
+          "access_denied",
           state: "xyz");
     });
   });
@@ -778,13 +809,11 @@ void main() {
           state: "Wisconsin@&");
     });
   });
-
-
 }
 
 class TestChannel extends ApplicationChannel
     implements AuthRedirectControllerDelegate {
-  AuthServer authServer;
+  AuthServer? authServer;
   BadAuthRedirectDelegate badDelegate = BadAuthRedirectDelegate();
 
   @override
@@ -796,22 +825,23 @@ class TestChannel extends ApplicationChannel
   @override
   Controller get entryPoint {
     final router = Router();
-    router
-        .route("/auth/code")
-        .link(() => AuthRedirectController(authServer, delegate: this, allowsImplicit: false));
+    router.route("/auth/code").link(() => AuthRedirectController(authServer,
+        delegate: this, allowsImplicit: false));
 
     router
         .route("/auth/redirect")
         .link(() => AuthRedirectController(authServer, delegate: this));
 
-    router.route("/bad-delegate").link(() => AuthRedirectController(authServer, delegate: badDelegate));
+    router
+        .route("/bad-delegate")
+        .link(() => AuthRedirectController(authServer, delegate: badDelegate));
     router.route("/nopage").link(() => AuthRedirectController(authServer));
     return router;
   }
 
   @override
   Future<String> render(AuthRedirectController forController, Uri requestUri,
-      String responseType, String clientID, String state, String scope) async {
+      String? responseType, String? clientID, String? state, String? scope) async {
     return json.encode({
       "response_type": responseType,
       "path": requestUri.path,
@@ -824,16 +854,16 @@ class TestChannel extends ApplicationChannel
 
 class BadAuthRedirectDelegate implements AuthRedirectControllerDelegate {
   @override
-  Future<String> render(AuthRedirectController forController, Uri requestUri,
-      String responseType, String clientID, String state, String scope) async {
+  Future<String?> render(AuthRedirectController forController, Uri requestUri,
+      String? responseType, String? clientID, String? state, String? scope) async {
     return null;
   }
 }
 
-void expectRedirect(TestResponse resp, Uri requestURI, {String state}) {
+void expectRedirect(TestResponse resp, Uri requestURI, {String? state}) {
   expect(resp, hasStatus(HttpStatus.movedTemporarily));
 
-  final location = resp.headers.value(HttpHeaders.locationHeader);
+  final location = resp.headers.value(HttpHeaders.locationHeader)!;
   final uri = Uri.parse(location);
 
   expect(uri.queryParameters["code"], hasLength(greaterThan(0)));
@@ -841,17 +871,17 @@ void expectRedirect(TestResponse resp, Uri requestURI, {String state}) {
   expect(uri.authority, equals(requestURI.authority));
   expect(uri.path, equals(requestURI.path));
 
-  expect(uri.queryParametersAll["code"].length, 1);
+  expect(uri.queryParametersAll["code"]!.length, 1);
 
   if (state != null) {
-    expect(uri.queryParametersAll["state"].length, 1);
+    expect(uri.queryParametersAll["state"]!.length, 1);
   }
 }
 
-void expectTokenRedirect(TestResponse resp, Uri requestURI, {String state}) {
+void expectTokenRedirect(TestResponse resp, Uri requestURI, {String? state}) {
   expect(resp, hasStatus(HttpStatus.movedTemporarily));
 
-  final location = resp.headers.value(HttpHeaders.locationHeader);
+  final location = resp.headers.value(HttpHeaders.locationHeader)!;
   final uri = Uri.parse(location);
 
   final fragmentParams = parametersFromFragment(uri.fragment);
@@ -866,27 +896,28 @@ void expectTokenRedirect(TestResponse resp, Uri requestURI, {String state}) {
 }
 
 void expectErrorRedirect(TestResponse resp, Uri requestURI, String errorReason,
-    {String state}) {
+    {String? state}) {
   expect(resp, hasStatus(HttpStatus.movedTemporarily));
 
-  final location = resp.headers.value(HttpHeaders.locationHeader);
+  final location = resp.headers.value(HttpHeaders.locationHeader)!;
   final uri = Uri.parse(location);
   expect(uri.authority, requestURI.authority);
   expect(uri.path, requestURI.path);
   expect(uri.queryParameters["error"], errorReason);
   expect(uri.queryParameters["state"], state);
-  expect(uri.queryParametersAll["error"].length, 1);
+  expect(uri.queryParametersAll["error"]!.length, 1);
 
   if (state != null) {
-    expect(uri.queryParametersAll["state"].length, 1);
+    expect(uri.queryParametersAll["state"]!.length, 1);
   }
 }
 
-void expectTokenErrorRedirect(TestResponse resp, Uri requestURI, String errorReason,
-    {String state}) {
+void expectTokenErrorRedirect(
+    TestResponse resp, Uri requestURI, String errorReason,
+    {String? state}) {
   expect(resp, hasStatus(HttpStatus.movedTemporarily));
 
-  final location = resp.headers.value(HttpHeaders.locationHeader);
+  final location = resp.headers.value(HttpHeaders.locationHeader)!;
   final uri = Uri.parse(location);
 
   final fragmentParams = parametersFromFragment(uri.fragment);
@@ -898,7 +929,7 @@ void expectTokenErrorRedirect(TestResponse resp, Uri requestURI, String errorRea
 }
 
 Map<String, String> parametersFromFragment(String fragment) {
-  if (fragment == null || fragment.isEmpty) {
+  if (fragment.isEmpty) {
     return {};
   }
 

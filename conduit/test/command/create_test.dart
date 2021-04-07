@@ -12,7 +12,7 @@ import 'package:yaml/yaml.dart';
 import '../not_tests/cli_helpers.dart';
 
 void main() {
-  CLIClient cli;
+  late CLIClient cli;
 
   setUpAll(() async {
     await CLIClient.activateCLI();

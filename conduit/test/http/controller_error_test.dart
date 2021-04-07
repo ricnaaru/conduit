@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  HttpServer server;
+  HttpServer? server;
 
   tearDown(() async {
     await server?.close();

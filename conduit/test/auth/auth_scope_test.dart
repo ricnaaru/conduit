@@ -10,12 +10,6 @@ void main() {
     } on FormatException {}
 
     try {
-      AuthScope(null);
-      expect(true, false);
-      // ignore: empty_catches
-    } on FormatException {}
-
-    try {
       AuthScope("user.readonly:location");
       expect(true, false);
       // ignore: empty_catches
@@ -288,8 +282,8 @@ void main() {
     test("Client collapses redundant scope because of nesting", () {
       var c = AuthClient("a", "b", "c",
           allowedScopes: [AuthScope("abc"), AuthScope("abc:def")]);
-      expect(c.allowedScopes.length, 1);
-      expect(c.allowedScopes.first.isExactly("abc"), true);
+      expect(c.allowedScopes!.length, 1);
+      expect(c.allowedScopes!.first.isExactly("abc"), true);
 
       c = AuthClient("a", "b", "c", allowedScopes: [
         AuthScope("abc"),
@@ -298,9 +292,9 @@ void main() {
         AuthScope("cba"),
         AuthScope("cba:foo")
       ]);
-      expect(c.allowedScopes.length, 2);
-      expect(c.allowedScopes.any((s) => s.isExactly("abc")), true);
-      expect(c.allowedScopes.any((s) => s.isExactly("cba")), true);
+      expect(c.allowedScopes!.length, 2);
+      expect(c.allowedScopes!.any((s) => s.isExactly("abc")), true);
+      expect(c.allowedScopes!.any((s) => s.isExactly("cba")), true);
     });
 
     test("Client collapses redundant scope because of modifier", () {
@@ -310,8 +304,8 @@ void main() {
         AuthScope("abc.readonly"),
         AuthScope("abc:def.readonly")
       ]);
-      expect(c.allowedScopes.length, 1);
-      expect(c.allowedScopes.first.isExactly("abc"), true);
+      expect(c.allowedScopes!.length, 1);
+      expect(c.allowedScopes!.first.isExactly("abc"), true);
 
       c = AuthClient("a", "b", "c", allowedScopes: [
         AuthScope("abc"),
@@ -320,9 +314,9 @@ void main() {
         AuthScope("cba"),
         AuthScope("cba:foo.readonly")
       ]);
-      expect(c.allowedScopes.length, 2);
-      expect(c.allowedScopes.any((s) => s.isExactly("abc")), true);
-      expect(c.allowedScopes.any((s) => s.isExactly("cba")), true);
+      expect(c.allowedScopes!.length, 2);
+      expect(c.allowedScopes!.any((s) => s.isExactly("abc")), true);
+      expect(c.allowedScopes!.any((s) => s.isExactly("cba")), true);
     });
   });
 }

@@ -13,14 +13,14 @@ import 'package:test/test.dart';
 
 import '../not_tests/cli_helpers.dart';
 
-CLIClient cli;
+late CLIClient cli;
 DatabaseConfiguration connectInfo = DatabaseConfiguration.withConnectionInfo(
     "dart", "dart", "localhost", 5432, "dart_test");
 String connectString =
     "postgres://${connectInfo.username}:${connectInfo.password}@${connectInfo.host}:${connectInfo.port}/${connectInfo.databaseName}";
 
 void main() {
-  PostgreSQLPersistentStore store;
+  late PostgreSQLPersistentStore store;
 
   setUpAll(() async {
     final t =
@@ -54,7 +54,7 @@ void main() {
     await Future.wait(tables.map((t) {
       return store.execute("DROP TABLE IF EXISTS $t");
     }));
-    await store?.close();
+    await store.close();
   });
 
   tearDownAll(DartProjectAgent.tearDownAll);
@@ -228,7 +228,7 @@ Future<List<String>> columnsOfTable(
   return results.map((rows) => rows.first as String).toList();
 }
 
-Future<bool> tableExists(PersistentStore store, String tableName) async {
+Future<bool> tableExists(PersistentStore store, String? tableName) async {
   final exists = await store.execute(
     "SELECT to_regclass(@tableName:text)",
     substitutionValues: {"tableName": tableName},
@@ -251,7 +251,7 @@ MigrationSource migrationSourceFromClassDeclaration(ClassDeclaration cu) {
 }
 
 List<MigrationSource> getOrderedTestMigrations(
-  List<String> names, {
+  List<String?> names, {
   int fromVersion = 0,
 }) {
   final uri = Directory.current.uri
@@ -274,8 +274,8 @@ List<MigrationSource> getOrderedTestMigrations(
   return migrations;
 }
 
-Future runMigrationCases(List<String> migrationNames,
-    {int fromVersion = 0, StringSink log}) async {
+Future runMigrationCases(List<String?> migrationNames,
+    {int fromVersion = 0, StringSink? log}) async {
   final migs =
       getOrderedTestMigrations(migrationNames, fromVersion: fromVersion);
 
@@ -661,7 +661,7 @@ class Case7 extends Migration {
 
   @override
   Future seed() async {
-    await database.store
+    await database.store!
         .execute("INSERT INTO InvalidTable (foo) VALUES ('foo')");
   }
 }
@@ -690,7 +690,7 @@ class Case81 extends Migration {
 
   @override
   Future seed() async {
-    await store.execute("INSERT INTO _TestObject VALUES (default)");
+    await store!.execute("INSERT INTO _TestObject VALUES (default)");
   }
 }
 

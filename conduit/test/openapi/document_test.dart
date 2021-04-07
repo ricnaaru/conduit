@@ -14,10 +14,10 @@ will have their own tests. It does test Router, though.
 
 void main() {
   group("Default channel", () {
-    APIDocument doc;
-    DateTime controllerDocumented;
-    DateTime controllerPrepared;
-    DateTime appPrepared;
+    late APIDocument doc;
+    late DateTime controllerDocumented;
+    late DateTime controllerPrepared;
+    late DateTime appPrepared;
 
     setUpAll(() async {
       DefaultChannel.channelClosed = Completer();
@@ -26,13 +26,13 @@ void main() {
       DefaultChannel.appPrepared = Completer();
 
       // ignore: unawaited_futures
-      DefaultChannel.appPrepared.future
+      DefaultChannel.appPrepared!.future
           .then((_) => appPrepared = DateTime.now());
       // ignore: unawaited_futures
-      DefaultChannel.controllerPrepared.future
+      DefaultChannel.controllerPrepared!.future
           .then((_) => controllerPrepared = DateTime.now());
       // ignore: unawaited_futures
-      DefaultChannel.controllerDocumented.future
+      DefaultChannel.controllerDocumented!.future
           .then((_) => controllerDocumented = DateTime.now());
       doc = await Application.document(DefaultChannel, ApplicationOptions(), {
         "name": "test-title",
@@ -71,12 +71,12 @@ void main() {
     });
 
     test("Channel is closed after documenting", () async {
-      expect(DefaultChannel.channelClosed.future, completes);
+      expect(DefaultChannel.channelClosed!.future, completes);
     });
   });
 
   group("Defer behavior", () {
-    APIDocumentContext ctx;
+    late APIDocumentContext ctx;
 
     setUp(() async {
       ctx = APIDocumentContext(APIDocument()
@@ -152,7 +152,8 @@ void main() {
 
     test("Finalize throws error if contains unresolved uri reference",
         () async {
-      ctx.document.components.responses["test"] = APIResponse("desc", content: {
+      ctx.document.components!.responses["test"] =
+          APIResponse("desc", content: {
         "application/json": APIMediaType(schema: ctx.schema.getObject("foo"))
       });
 
@@ -176,7 +177,8 @@ void main() {
         })
       };
 
-      ctx.document.components.responses["test"] = APIResponse("desc", content: {
+      ctx.document.components!.responses["test"] =
+          APIResponse("desc", content: {
         "application/json": APIMediaType(schema: ctx.schema.getObject("foo"))
       });
 
@@ -199,7 +201,7 @@ void main() {
   });
 
   group("Happy path", () {
-    APIDocument doc;
+    late APIDocument doc;
 
     setUpAll(() async {
       doc = await Application.document(DefaultChannel, ApplicationOptions(), {
@@ -218,62 +220,62 @@ void main() {
 
     group("Operations", () {
       test("All paths in Router accounted for", () {
-        expect(doc.paths.length, 4);
-        expect(doc.paths.containsKey("/path"), true);
-        expect(doc.paths.containsKey("/path/{id}"), true);
-        expect(doc.paths.containsKey("/constant"), true);
-        expect(doc.paths.containsKey("/dynamic"), true);
+        expect(doc.paths!.length, 4);
+        expect(doc.paths!.containsKey("/path"), true);
+        expect(doc.paths!.containsKey("/path/{id}"), true);
+        expect(doc.paths!.containsKey("/constant"), true);
+        expect(doc.paths!.containsKey("/dynamic"), true);
       });
 
       test("Paths with path parameter are found in path-level parameters", () {
-        expect(doc.paths["/path"].parameters.length, 0);
-        expect(doc.paths["/constant"].parameters.length, 0);
-        expect(doc.paths["/dynamic"].parameters.length, 0);
+        expect(doc.paths!["/path"]!.parameters.length, 0);
+        expect(doc.paths!["/constant"]!.parameters.length, 0);
+        expect(doc.paths!["/dynamic"]!.parameters.length, 0);
 
-        expect(doc.paths["/path/{id}"].parameters.length, 1);
-        expect(doc.paths["/path/{id}"].parameters.first.location,
+        expect(doc.paths!["/path/{id}"]!.parameters.length, 1);
+        expect(doc.paths!["/path/{id}"]!.parameters.first!.location,
             APIParameterLocation.path);
-        expect(doc.paths["/path/{id}"].parameters.first.schema.type,
+        expect(doc.paths!["/path/{id}"]!.parameters.first!.schema!.type,
             APIType.string);
-        expect(doc.paths["/path/{id}"].parameters.first.name, "id");
+        expect(doc.paths!["/path/{id}"]!.parameters.first!.name, "id");
       });
 
       test("Paths have all expected operations", () {
-        expect(doc.paths["/dynamic"].operations, {});
+        expect(doc.paths!["/dynamic"]!.operations, {});
 
-        final getConstant = doc.paths["/constant"].operations["get"];
-        final postConstant = doc.paths["/constant"].operations["post"];
-        expect(getConstant.responses["200"].description, "get/0-200");
-        expect(postConstant.responses["200"].description, "post/0-200");
+        final getConstant = doc.paths!["/constant"]!.operations["get"]!;
+        final postConstant = doc.paths!["/constant"]!.operations["post"]!;
+        expect(getConstant.responses!["200"]!.description, "get/0-200");
+        expect(postConstant.responses!["200"]!.description, "post/0-200");
 
-        final getPath0 = doc.paths["/path"].operations["get"];
-        final postPath0 = doc.paths["/path"].operations["post"];
-        expect(getPath0.responses["200"].description, "get/0-200");
-        expect(postPath0.responses["200"].description, "post/0-200");
+        final getPath0 = doc.paths!["/path"]!.operations["get"]!;
+        final postPath0 = doc.paths!["/path"]!.operations["post"]!;
+        expect(getPath0.responses!["200"]!.description, "get/0-200");
+        expect(postPath0.responses!["200"]!.description, "post/0-200");
 
-        final getPath1 = doc.paths["/path/{id}"].operations["get"];
-        final putPath1 = doc.paths["/path/{id}"].operations["put"];
-        expect(getPath1.responses["200"].description, "get/1-200");
-        expect(getPath1.responses["400"].description, "get/1-400");
-        expect(getPath1.parameters.length, 2);
-        expect(putPath1.responses["200"].description, "put/1-200");
+        final getPath1 = doc.paths!["/path/{id}"]!.operations["get"]!;
+        final putPath1 = doc.paths!["/path/{id}"]!.operations["put"]!;
+        expect(getPath1.responses!["200"]!.description, "get/1-200");
+        expect(getPath1.responses!["400"]!.description, "get/1-400");
+        expect(getPath1.parameters!.length, 2);
+        expect(putPath1.responses!["200"]!.description, "put/1-200");
       });
 
       test("Middleware can provide additional parameters to operation", () {
         final opsWithMiddleware = [
-          doc.paths["/path/{id}"].operations.values,
-          doc.paths["/path"].operations.values,
-          doc.paths["/constant"].operations.values,
+          doc.paths!["/path/{id}"]!.operations.values,
+          doc.paths!["/path"]!.operations.values,
+          doc.paths!["/constant"]!.operations.values,
         ].expand((i) => i).toList();
 
         opsWithMiddleware.forEach((op) {
-          final middlewareParam = op.parameters
+          final middlewareParam = op!.parameters!
               .where((p) =>
-                  p.referenceURI?.path == "/components/parameters/x-api-key")
+                  p!.referenceURI?.path == "/components/parameters/x-api-key")
               .toList();
           expect(middlewareParam.length, 1);
 
-          expect(doc.components.resolve(middlewareParam.first).schema.type,
+          expect(doc.components!.resolve(middlewareParam.first!).schema!.type,
               APIType.string);
         });
       });
@@ -281,31 +283,31 @@ void main() {
 
     group("Components", () {
       test("Component created by a controller is automatically emitted", () {
-        expect(doc.components.parameters["x-api-key"], isNotNull);
+        expect(doc.components!.parameters["x-api-key"], isNotNull);
       });
 
       test(
           "APIComponentDocumenter properties in channel are automatically emitted in components",
           () {
-        expect(doc.components.schemas["someObject"], isNotNull);
-        expect(doc.components.schemas["named-component"], isNotNull);
-        expect(doc.components.schemas["ref-component"], isNotNull);
+        expect(doc.components!.schemas["someObject"], isNotNull);
+        expect(doc.components!.schemas["named-component"], isNotNull);
+        expect(doc.components!.schemas["ref-component"], isNotNull);
       });
 
       test(
           "Componentable getter/regular instance method in channel does not automatically emit components",
           () {
-        expect(doc.components.schemas["won't-show-up"], isNull);
+        expect(doc.components!.schemas["won't-show-up"], isNull);
       });
 
       test("Can resolve component by type", () {
         final ref =
-            doc.components.schemas["someObject"].properties["refByType"];
-        expect(ref.referenceURI.path, "/components/schemas/ref-component");
+            doc.components!.schemas["someObject"]!.properties!["refByType"]!;
+        expect(ref.referenceURI!.path, "/components/schemas/ref-component");
 
-        final resolved = doc.components.resolve(ref);
+        final resolved = doc.components!.resolve(ref);
         expect(resolved.type, APIType.object);
-        expect(resolved.properties["key"].type, APIType.string);
+        expect(resolved.properties!["key"]!.type, APIType.string);
       });
 
       test("Add component more than once does not replace it", () {
@@ -315,7 +317,7 @@ void main() {
             representation: String);
         ctx.schema.register("a", APISchemaObject.string(format: "replacement"));
 
-        expect(doc.components.schemas["a"].format, "original");
+        expect(doc.components!.schemas["a"]!.format, "original");
         expect(ctx.schema.getObjectWithType(String), isNotNull);
       });
 
@@ -333,10 +335,10 @@ void main() {
         final ref3 = ctx.schema.getObjectWithType(String);
         final ref4 = ctx.schema.getObject("a");
 
-        expect(ref1.referenceURI.path, "/components/schemas/a");
-        expect(ref2.referenceURI.path, "/components/schemas/a");
-        expect(ref3.referenceURI.path, "/components/schemas/a");
-        expect(ref4.referenceURI.path, "/components/schemas/a");
+        expect(ref1.referenceURI!.path, "/components/schemas/a");
+        expect(ref2.referenceURI!.path, "/components/schemas/a");
+        expect(ref3.referenceURI!.path, "/components/schemas/a");
+        expect(ref4.referenceURI!.path, "/components/schemas/a");
 
         expect(identical(ref1, original), false);
         expect(identical(ref1, ref2), false);
@@ -347,7 +349,7 @@ void main() {
   });
 
   group("Schema object documentation", () {
-    APIDocumentContext ctx;
+    late APIDocumentContext ctx;
     setUp(() {
       ctx = APIDocumentContext(APIDocument()
         ..info = APIInfo("x", "1.0.0")
@@ -364,7 +366,7 @@ void main() {
       final schema = (RuntimeContext.current.runtimes[InvalidMapKey]
               as SerializableRuntime)
           .documentSchema(ctx);
-      expect(schema.properties.isEmpty, true);
+      expect(schema.properties!.isEmpty, true);
       expect(schema.additionalPropertyPolicy,
           equals(APISchemaAdditionalPropertyPolicy.freeForm));
       expect(schema.description, contains("Failed to"));
@@ -375,7 +377,7 @@ void main() {
       final schema = (RuntimeContext.current.runtimes[InvalidListValue]
               as SerializableRuntime)
           .documentSchema(ctx);
-      expect(schema.properties.isEmpty, true);
+      expect(schema.properties!.isEmpty, true);
       expect(schema.additionalPropertyPolicy,
           equals(APISchemaAdditionalPropertyPolicy.freeForm));
       expect(schema.description, contains("Failed to"));
@@ -386,7 +388,7 @@ void main() {
       final schema = (RuntimeContext.current.runtimes[InvalidMapValue]
               as SerializableRuntime)
           .documentSchema(ctx);
-      expect(schema.properties.isEmpty, true);
+      expect(schema.properties!.isEmpty, true);
       expect(schema.additionalPropertyPolicy,
           equals(APISchemaAdditionalPropertyPolicy.freeForm));
       expect(schema.description, contains("Failed to"));
@@ -398,122 +400,122 @@ void main() {
           (RuntimeContext.current.runtimes[ComplexTypes] as SerializableRuntime)
               .documentSchema(ctx);
 
-      expect(schema.properties["a"].type, APIType.object);
-      expect(schema.properties["a"].additionalPropertySchema.type,
+      expect(schema.properties!["a"]!.type, APIType.object);
+      expect(schema.properties!["a"]!.additionalPropertySchema!.type,
           APIType.integer);
 
-      expect(schema.properties["b"].type, APIType.array);
-      expect(schema.properties["b"].items.type, APIType.integer);
+      expect(schema.properties!["b"]!.type, APIType.array);
+      expect(schema.properties!["b"]!.items!.type, APIType.integer);
 
-      expect(schema.properties["c"].type, APIType.array);
-      expect(schema.properties["c"].items.type, APIType.object);
-      expect(schema.properties["c"].items.additionalPropertySchema.type,
+      expect(schema.properties!["c"]!.type, APIType.array);
+      expect(schema.properties!["c"]!.items!.type, APIType.object);
+      expect(schema.properties!["c"]!.items!.additionalPropertySchema!.type,
           APIType.string);
 
-      expect(schema.properties["d"].type, APIType.array);
-      expect(schema.properties["d"].items.type, APIType.object);
-      expect(
-          schema.properties["d"].items.properties["x"].type, APIType.integer);
+      expect(schema.properties!["d"]!.type, APIType.array);
+      expect(schema.properties!["d"]!.items!.type, APIType.object);
+      expect(schema.properties!["d"]!.items!.properties!["x"]!.type,
+          APIType.integer);
 
-      expect(schema.properties["e"].type, APIType.object);
-      expect(schema.properties["e"].properties["x"].type, APIType.integer);
+      expect(schema.properties!["e"]!.type, APIType.object);
+      expect(schema.properties!["e"]!.properties!["x"]!.type, APIType.integer);
 
-      expect(schema.properties["f"].type, APIType.object);
-      expect(
-          schema.properties["f"].additionalPropertySchema.type, APIType.array);
-      expect(schema.properties["f"].additionalPropertySchema.items.type,
+      expect(schema.properties!["f"]!.type, APIType.object);
+      expect(schema.properties!["f"]!.additionalPropertySchema!.type,
+          APIType.array);
+      expect(schema.properties!["f"]!.additionalPropertySchema!.items!.type,
           APIType.string);
 
-      expect(schema.properties["integer"].type, APIType.integer);
-      expect(schema.properties["doublePrecision"].type, APIType.number);
-      expect(schema.properties["string"].type, APIType.string);
-      expect(schema.properties["boolean"].type, APIType.boolean);
-      expect(schema.properties["dateTime"].type, APIType.string);
-      expect(schema.properties["dateTime"].format, "date-time");
+      expect(schema.properties!["integer"]!.type, APIType.integer);
+      expect(schema.properties!["doublePrecision"]!.type, APIType.number);
+      expect(schema.properties!["string"]!.type, APIType.string);
+      expect(schema.properties!["boolean"]!.type, APIType.boolean);
+      expect(schema.properties!["dateTime"]!.type, APIType.string);
+      expect(schema.properties!["dateTime"]!.format, "date-time");
     });
   });
 }
 
 class ComplexTypes extends Serializable {
   /// title
-  Map<String, int> a;
+  Map<String, int>? a;
 
   /// title
   ///
   /// summary
-  List<int> b;
-  List<Map<String, String>> c;
-  List<Serial> d;
-  Serial e;
-  Map<String, List<String>> f;
+  List<int>? b;
+  List<Map<String, String>>? c;
+  List<Serial>? d;
+  Serial? e;
+  Map<String, List<String>>? f;
 
-  String string;
-  int integer;
-  DateTime dateTime;
-  double doublePrecision;
-  bool boolean;
+  String? string;
+  int? integer;
+  DateTime? dateTime;
+  double? doublePrecision;
+  bool? boolean;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class InvalidMapKey extends Serializable {
-  Map<int, String> x;
+  Map<int, String>? x;
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class InvalidListValue extends Serializable {
-  List<DefaultChannel> y;
+  List<DefaultChannel>? y;
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class InvalidMapValue extends Serializable {
-  Map<String, DefaultChannel> z;
+  Map<String, DefaultChannel>? z;
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class Serial extends Serializable {
-  int x;
+  int? x;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class DefaultChannel extends ApplicationChannel {
-  static Completer controllerPrepared;
-  static Completer controllerDocumented;
-  static Completer channelClosed;
-  static Completer appPrepared;
+  static Completer? controllerPrepared;
+  static Completer? controllerDocumented;
+  static Completer? channelClosed;
+  static Completer? appPrepared;
 
-  ComponentA a;
+  ComponentA? a;
 
   ComponentB b = ComponentB();
 
@@ -521,7 +523,7 @@ class DefaultChannel extends ApplicationChannel {
       get documentableButNotAutomaticGetter =>
           UnaccountedForControllerWithComponents();
 
-  String notDocumentable;
+  String? notDocumentable;
 
   Controller documentableButNotAutomaticMethod() {
     return UnaccountedForControllerWithComponents();
@@ -543,14 +545,14 @@ class DefaultChannel extends ApplicationChannel {
     router
         .route("/path/[:id]")
         .linkFunction((req) => req)
-        .link(() => Middleware())
+        .link(() => Middleware())!
         .link(() => Endpoint(null, null));
 
     final middleware = Middleware();
     router
         .route("/constant")
-        .link(() => UndocumentedMiddleware())
-        .link(() => middleware)
+        .link(() => UndocumentedMiddleware())!
+        .link(() => middleware)!
         .link(() => Endpoint(controllerPrepared, controllerDocumented));
 
     router.route("/dynamic").linkFunction((Request req) async {
@@ -589,7 +591,7 @@ class Middleware extends Controller {
 
     ops.values.forEach((op) {
       op.parameters ??= [];
-      op.parameters.add(components.parameters["x-api-key"]);
+      op.parameters!.add(components.parameters["x-api-key"]);
     });
 
     return ops;
@@ -604,8 +606,8 @@ class Middleware extends Controller {
 class Endpoint extends Controller {
   Endpoint(this.prepared, this.documented);
 
-  final Completer prepared;
-  final Completer documented;
+  final Completer? prepared;
+  final Completer? documented;
 
   @override
   Map<String, APIOperation> documentOperations(

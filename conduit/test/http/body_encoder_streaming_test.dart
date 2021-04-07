@@ -16,10 +16,10 @@ void main() {
   });
 
   group("Unencoded list of bytes", () {
-    HttpServer server;
+    late HttpServer server;
 
     tearDown(() async {
-      await server?.close(force: true);
+      await server.close(force: true);
     });
 
     test("Stream a list of bytes as a response", () async {
@@ -95,10 +95,10 @@ void main() {
   });
 
   group("Streaming codec", () {
-    HttpServer server;
+    late HttpServer server;
 
     tearDown(() async {
-      await server?.close(force: true);
+      await server.close(force: true);
     });
 
     test("Stream a string as a response (which uses a codec)", () async {
@@ -150,8 +150,8 @@ void main() {
   });
 
   group("Compression", () {
-    HttpServer server;
-    HttpClient client;
+    late HttpServer server;
+    late HttpClient client;
 
     setUp(() async {
       client = HttpClient();
@@ -275,7 +275,7 @@ void main() {
   });
 
   group("Client cancellation", () {
-    HttpServer server;
+    late HttpServer server;
 
     tearDown(() async {
       await server.close(force: true);
@@ -320,8 +320,8 @@ void main() {
   // and the error message is: SocketException: Write failed (OS Error: An existing connection was forcibly closed by the remote host.
   // 3317  , errno = 10054)
   final entityTooLarge = () {
-    HttpServer server;
-    HttpClient client;
+    late HttpServer server;
+    late HttpClient client;
 
     setUp(() async {
       client = HttpClient();
@@ -331,7 +331,7 @@ void main() {
 
     tearDown(() async {
       client.close(force: true);
-      await server?.close(force: true);
+      await server.close(force: true);
     });
 
     /*
@@ -465,11 +465,11 @@ Future<HttpServer> bindAndRespondWith(Response response) async {
   return server;
 }
 
-class CrashingCodec extends Codec<String, List<int>> {
+class CrashingCodec extends Codec<String?, List<int>?> {
   @override
   CrashingEncoder get encoder => CrashingEncoder();
   @override
-  Converter<List<int>, String> get decoder => null;
+  Converter<List<int>, String> get decoder => throw UnimplementedError();
 }
 
 class CrashingEncoder extends Converter<String, List<int>> {

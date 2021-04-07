@@ -9,11 +9,11 @@ import 'package:test/test.dart';
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  InMemoryAuthStorage delegate;
-  AuthServer authServer;
-  HttpServer server;
-  String accessToken;
-  String expiredErrorToken;
+  late InMemoryAuthStorage delegate;
+  late AuthServer authServer;
+  HttpServer? server;
+  String? accessToken;
+  String? expiredErrorToken;
 
   setUp(() async {
     delegate = InMemoryAuthStorage();
@@ -22,13 +22,13 @@ void main() {
     authServer = AuthServer(delegate);
 
     accessToken = (await authServer.authenticate(
-            delegate.users[1].username,
+            delegate.users[1]!.username,
             InMemoryAuthStorage.defaultPassword,
             "com.stablekernel.app1",
             "kilimanjaro"))
         .accessToken;
     expiredErrorToken = (await authServer.authenticate(
-            delegate.users[1].username,
+            delegate.users[1]!.username,
             InMemoryAuthStorage.defaultPassword,
             "com.stablekernel.app1",
             "kilimanjaro",
@@ -231,14 +231,14 @@ void main() {
   });
 
   group("Scoping", () {
-    String userScopedAccessToken;
-    String userAndOtherScopedAccessToken;
-    String userReadOnlyScopedAccessToken;
-    String userAndOtherReadOnlyScopedAccessToken;
+    String? userScopedAccessToken;
+    String? userAndOtherScopedAccessToken;
+    String? userReadOnlyScopedAccessToken;
+    String? userAndOtherReadOnlyScopedAccessToken;
 
     setUp(() async {
       userReadOnlyScopedAccessToken = (await authServer.authenticate(
-              delegate.users[1].username,
+              delegate.users[1]!.username,
               InMemoryAuthStorage.defaultPassword,
               "com.stablekernel.scoped",
               "kilimanjaro",
@@ -246,7 +246,7 @@ void main() {
           .accessToken;
 
       userScopedAccessToken = (await authServer.authenticate(
-              delegate.users[1].username,
+              delegate.users[1]!.username,
               InMemoryAuthStorage.defaultPassword,
               "com.stablekernel.scoped",
               "kilimanjaro",
@@ -254,7 +254,7 @@ void main() {
           .accessToken;
 
       userAndOtherScopedAccessToken = (await authServer.authenticate(
-              delegate.users[1].username,
+              delegate.users[1]!.username,
               InMemoryAuthStorage.defaultPassword,
               "com.stablekernel.scoped",
               "kilimanjaro",
@@ -262,7 +262,7 @@ void main() {
           .accessToken;
 
       userAndOtherReadOnlyScopedAccessToken = (await authServer.authenticate(
-              delegate.users[1].username,
+              delegate.users[1]!.username,
               InMemoryAuthStorage.defaultPassword,
               "com.stablekernel.scoped",
               "kilimanjaro",
@@ -462,7 +462,7 @@ void main() {
 
 Future<HttpServer> enableAuthorizer(Authorizer authorizer) async {
   var router = Router();
-  router.route("/").link(() => authorizer).linkFunction(respond);
+  router.route("/").link(() => authorizer)!.linkFunction(respond);
   router.didAddToChannel();
 
   var server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8000);
@@ -475,13 +475,13 @@ Future<HttpServer> enableAuthorizer(Authorizer authorizer) async {
 
 Future<RequestOrResponse> respond(Request req) async {
   var map = {
-    "clientID": req.authorization.clientID,
-    "resourceOwnerIdentifier": req.authorization.ownerID,
-    "credentials": req.authorization.credentials?.toString()
+    "clientID": req.authorization!.clientID,
+    "resourceOwnerIdentifier": req.authorization!.ownerID,
+    "credentials": req.authorization!.credentials?.toString()
   };
 
-  if ((req.authorization.scopes?.length ?? 0) > 0) {
-    map["scopes"] = req.authorization.scopes.map((s) => s.toString()).toList();
+  if ((req.authorization!.scopes?.length ?? 0) > 0) {
+    map["scopes"] = req.authorization!.scopes!.map((s) => s.toString()).toList();
   }
 
   return Response.ok(map);
@@ -490,12 +490,12 @@ Future<RequestOrResponse> respond(Request req) async {
 class CrashingStorage extends InMemoryAuthStorage {
   @override
   Future<AuthToken> getToken(AuthServer server,
-      {String byAccessToken, String byRefreshToken}) async {
+      {String? byAccessToken, String? byRefreshToken}) async {
     throw Response(504, null, "ok");
   }
 
   @override
-  Future<AuthClient> getClient(AuthServer server, String id) async {
+  Future<AuthClient> getClient(AuthServer server, String? id) async {
     throw Response(504, null, "ok");
   }
 }

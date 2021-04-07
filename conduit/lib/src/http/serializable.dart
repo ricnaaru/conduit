@@ -44,10 +44,10 @@ abstract class Serializable {
   ///     var user = User()
   ///       ..read(values, ignore: ["id"]);
   void read(Map<String, dynamic> object,
-      {Iterable<String> accept,
-      Iterable<String> ignore,
-      Iterable<String> reject,
-      Iterable<String> require}) {
+      {Iterable<String>? accept,
+      Iterable<String>? ignore,
+      Iterable<String>? reject,
+      Iterable<String>? require}) {
     if (accept == null && ignore == null && reject == null && require == null) {
       readFromMap(object);
       return;
@@ -68,7 +68,7 @@ abstract class Serializable {
 
     if (stillRequired?.isNotEmpty ?? false) {
       throw SerializableException(
-          ["missing required input key(s): '${stillRequired.join(", ")}'"]);
+          ["missing required input key(s): '${stillRequired!.join(", ")}'"]);
     }
 
     readFromMap(copy);
@@ -80,7 +80,7 @@ abstract class Serializable {
   /// If a [Response.body]'s type implements this interface, this method is invoked prior to any content-type encoding
   /// performed by the [Response].  A [Response.body] may also be a [List<Serializable>], for which this method is invoked on
   /// each element in the list.
-  Map<String, dynamic> asMap();
+  Map<String?, dynamic>? asMap();
 
   /// Whether a subclass will automatically be registered as a schema component automatically.
   ///
@@ -101,13 +101,13 @@ class SerializableException implements HandlerException {
   Response get response {
     return Response.badRequest(body: {
       "error": "entity validation failed",
-      "reasons": reasons ?? "undefined"
+      "reasons": reasons
     });
   }
 
   @override
   String toString() {
-    final errorString = response.body["error"] as String;
+    final errorString = response.body["error"] as String?;
     final reasons = (response.body["reasons"] as List).join(", ");
     return "$errorString $reasons";
   }

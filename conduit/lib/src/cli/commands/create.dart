@@ -17,14 +17,15 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
 
   @Option("template",
       abbr: "t", help: "Name of the template to use", defaultsTo: "default")
-  String get templateName => decode("template");
+  String get templateName => decode("template")!;
 
   @Flag("offline",
       negatable: false,
-      help: "Will fetch dependencies from a local cache if they exist.")
-  bool get offline => decode("offline");
+      help: "Will fetch dependencies from a local cache if they exist.",
+      defaultsTo: false)
+  bool get offline => decode("offline")!;
 
-  String get projectName =>
+  String? get projectName =>
       remainingArguments.isNotEmpty ? remainingArguments.first : null;
 
   @override
@@ -34,12 +35,12 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
       return 1;
     }
 
-    if (!isSnakeCase(projectName)) {
+    if (!isSnakeCase(projectName!)) {
       displayError("Invalid project name ($projectName is not snake_case).");
       return 1;
     }
 
-    var destDirectory = destinationDirectoryFromPath(projectName);
+    var destDirectory = destinationDirectoryFromPath(projectName!);
     if (destDirectory.existsSync()) {
       displayError("${destDirectory.path} already exists, stopping.");
       return 1;
@@ -59,8 +60,8 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     copyProjectFiles(destDirectory, templateSourceDirectory, projectName);
 
     createProjectSpecificFiles(destDirectory.path);
-    if (conduitPackageRef.sourceType == "path") {
-      final conduitLocation = conduitPackageRef.resolve().location;
+    if (conduitPackageRef!.sourceType == "path") {
+      final conduitLocation = conduitPackageRef!.resolve()!.location;
 
       addDependencyOverridesToPackage(destDirectory.path, {
         "conduit": conduitLocation.uri,
@@ -122,18 +123,18 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     return true;
   }
 
-  void interpretContentFile(String projectName, Directory destinationDirectory,
+  void interpretContentFile(String? projectName, Directory destinationDirectory,
       FileSystemEntity sourceFileEntity) {
     if (shouldIncludeItem(sourceFileEntity)) {
       if (sourceFileEntity is Directory) {
         copyDirectory(projectName, destinationDirectory, sourceFileEntity);
       } else if (sourceFileEntity is File) {
-        copyFile(projectName, destinationDirectory, sourceFileEntity);
+        copyFile(projectName!, destinationDirectory, sourceFileEntity);
       }
     }
   }
 
-  void copyDirectory(String projectName, Directory destinationParentDirectory,
+  void copyDirectory(String? projectName, Directory destinationParentDirectory,
       Directory sourceDirectory) {
     var sourceDirectoryName = sourceDirectory
         .uri.pathSegments[sourceDirectory.uri.pathSegments.length - 2];
@@ -204,7 +205,7 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
   }
 
   void copyProjectFiles(Directory destinationDirectory,
-      Directory sourceDirectory, String projectName) {
+      Directory sourceDirectory, String? projectName) {
     displayInfo(
         "Copying template files to new project directory (${destinationDirectory.path})...");
     try {
@@ -249,10 +250,10 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
           .timeout(const Duration(seconds: 60));
       process.stdout
           .transform(utf8.decoder)
-          .listen((output) => outputSink?.write(output));
+          .listen((output) => outputSink.write(output));
       process.stderr
           .transform(utf8.decoder)
-          .listen((output) => outputSink?.write(output));
+          .listen((output) => outputSink.write(output));
 
       final exitCode = await process.exitCode;
 
@@ -336,7 +337,7 @@ class CLITemplateList extends CLICommand with CLIConduitGlobal {
 class CLIConduitGlobal {
   PubCache pub = PubCache();
 
-  PackageRef get conduitPackageRef {
+  PackageRef? get conduitPackageRef {
     return pub
         .getGlobalApplications()
         .firstWhere((app) => app.name == "conduit")
@@ -344,7 +345,7 @@ class CLIConduitGlobal {
   }
 
   Uri get templateDirectory {
-    return conduitPackageRef.resolve().location.uri.resolve("templates/");
+    return conduitPackageRef!.resolve()!.location.uri.resolve("templates/");
   }
 
   Uri getTemplateLocation(String templateName) {

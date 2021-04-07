@@ -11,26 +11,26 @@ import 'package:conduit/src/cli/command.dart';
 abstract class CLIDatabaseConnectingCommand implements CLICommand, CLIProject {
   static const String flavorPostgreSQL = "postgres";
 
-  DatabaseConfiguration connectedDatabase;
+  late DatabaseConfiguration connectedDatabase;
 
   @Flag("use-ssl",
       help: "Whether or not the database connection should use SSL",
       defaultsTo: false)
-  bool get useSSL => decode("use-ssl");
+  bool get useSSL => decode("use-ssl")!;
 
   @Option("connect",
       abbr: "c",
       help:
           "A database connection URI string. If this option is set, database-config is ignored.",
       valueHelp: "postgres://user:password@localhost:port/databaseName")
-  String get databaseConnectionString => decode("connect");
+  String? get databaseConnectionString => decode("connect");
 
   @Option("flavor",
       abbr: "f",
       help: "The database driver flavor to use.",
       defaultsTo: "postgres",
       allowed: ["postgres"])
-  String get databaseFlavor => decode("flavor");
+  String get databaseFlavor => decode("flavor")!;
 
   @Option("database-config",
       help:
@@ -39,11 +39,11 @@ abstract class CLIDatabaseConnectingCommand implements CLICommand, CLIProject {
           "See 'conduit db -h' for details.",
       defaultsTo: "database.yaml")
   File get databaseConfigurationFile =>
-      fileInProjectDirectory(decode("database-config"));
+      fileInProjectDirectory(decode("database-config")!);
 
-  PersistentStore _persistentStore;
+  PersistentStore? _persistentStore;
 
-  PersistentStore get persistentStore {
+  PersistentStore? get persistentStore {
     if (_persistentStore != null) {
       return _persistentStore;
     }
@@ -98,7 +98,7 @@ abstract class CLIDatabaseConnectingCommand implements CLICommand, CLIProject {
   }
 
   @override
-  Future cleanup() async {
+  Future? cleanup() async {
     return _persistentStore?.close();
   }
 

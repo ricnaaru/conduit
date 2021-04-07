@@ -17,7 +17,7 @@ void main() {
   });
 
   tearDownAll(() async {
-    await app?.stop();
+    await app.stop();
   });
 
   group(
@@ -537,7 +537,7 @@ void main() {
 
   group("Generators and policies", () {
     test("Headers don't continue to pile up when using a generator", () async {
-      http.Response lastResponse;
+      late http.Response lastResponse;
 
       for (var i = 0; i < 10; i++) {
         lastResponse = await http.get(Uri.parse("http://localhost:8000/add"),
@@ -546,13 +546,13 @@ void main() {
       }
 
       expect(
-          lastResponse.headers["access-control-expose-headers"]
+          lastResponse.headers["access-control-expose-headers"]!
               .indexOf("X-Header"),
           greaterThanOrEqualTo(0));
       expect(
-          lastResponse.headers["access-control-expose-headers"]
+          lastResponse.headers["access-control-expose-headers"]!
               .indexOf("X-Header"),
-          lastResponse.headers["access-control-expose-headers"]
+          lastResponse.headers["access-control-expose-headers"]!
               .lastIndexOf("X-Header"));
     });
   });
@@ -582,13 +582,13 @@ class CORSChannel extends ApplicationChannel with AuthValidator {
 
     router
         .route("/opts")
-        .link(() => Authorizer(this))
+        .link(() => Authorizer(this))!
         .link(() => OptionsController());
     router.route("/restrictive").link(() => RestrictiveOriginController());
     router.route("/single_method").link(() => SingleMethodController());
     router
         .route("/restrictive_auth")
-        .link(() => Authorizer(this))
+        .link(() => Authorizer(this))!
         .link(() => RestrictiveOriginController());
     router
         .route("/restrictive_nocreds")
@@ -597,19 +597,19 @@ class CORSChannel extends ApplicationChannel with AuthValidator {
     router.route("/defaultpolicy").link(() => DefaultPolicyController());
     router
         .route("/nopolicyauth")
-        .link(() => Authorizer(this))
+        .link(() => Authorizer(this))!
         .link(() => NoPolicyController());
     router
         .route("/defaultpolicyauth")
-        .link(() => Authorizer(this))
+        .link(() => Authorizer(this))!
         .link(() => DefaultPolicyController());
     return router;
   }
 
   @override
-  FutureOr<Authorization> validate<T>(
+  FutureOr<Authorization>? validate<T>(
       AuthorizationParser<T> parser, T authorizationData,
-      {List<AuthScope> requiredScope}) {
+      {List<AuthScope>? requiredScope}) {
     if (authorizationData == "noauth") {
       return null;
     }
@@ -647,9 +647,9 @@ class DefaultPolicyController extends ResourceController {
 
 class RestrictiveNoCredsOriginController extends ResourceController {
   RestrictiveNoCredsOriginController() {
-    policy.allowedOrigins = ["http://exclusive.com"];
-    policy.allowCredentials = false;
-    policy.exposedResponseHeaders = ["foobar"];
+    policy!.allowedOrigins = ["http://exclusive.com"];
+    policy!.allowCredentials = false;
+    policy!.exposedResponseHeaders = ["foobar"];
   }
 
   @Operation.get()
@@ -665,8 +665,8 @@ class RestrictiveNoCredsOriginController extends ResourceController {
 
 class RestrictiveOriginController extends ResourceController {
   RestrictiveOriginController() {
-    policy.allowedOrigins = ["http://exclusive.com"];
-    policy.exposedResponseHeaders = ["foobar", "x-foo"];
+    policy!.allowedOrigins = ["http://exclusive.com"];
+    policy!.exposedResponseHeaders = ["foobar", "x-foo"];
   }
 
   @Operation.get()
@@ -693,13 +693,13 @@ class OptionsController extends ResourceController {
 
 class SingleMethodController extends ResourceController {
   SingleMethodController() {
-    policy.allowedMethods = ["GET"];
+    policy!.allowedMethods = ["GET"];
   }
 }
 
 class AdditiveController extends ResourceController {
   AdditiveController() {
-    policy.exposedResponseHeaders.add("X-Header");
+    policy!.exposedResponseHeaders.add("X-Header");
   }
 
   @Operation.get()

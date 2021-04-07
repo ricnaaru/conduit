@@ -10,7 +10,7 @@ import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   group("Linking", () {
-    HttpServer server;
+    HttpServer? server;
 
     tearDown(() async {
       await server?.close();
@@ -21,7 +21,7 @@ void main() {
       final root = PassthruController();
       root
           .linkFunction((req) async => req)
-          .link(() => Always200Controller())
+          .link(() => Always200Controller())!
           .link(() => PrepareTailController(completer));
       root.didAddToChannel();
       expect(completer.future, completes);
@@ -29,8 +29,8 @@ void main() {
   });
 
   group("Response modifiers", () {
-    HttpServer server;
-    Controller root;
+    late HttpServer server;
+    late Controller root;
 
     setUp(() async {
       server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4111);
@@ -114,8 +114,8 @@ void main() {
   });
 
   group("Can return null from request controller is valid", () {
-    HttpServer server;
-    Controller root;
+    late HttpServer server;
+    late Controller root;
 
     setUp(() async {
       server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4111);
@@ -150,7 +150,7 @@ void main() {
   });
 
   group("Outlier isolate behavior error cases", () {
-    Application app;
+    late Application app;
 
     setUp(() async {
       app = Application<OutlierChannel>()..options.port = 8000;
@@ -206,7 +206,7 @@ void main() {
   });
 
   group("Response error cases", () {
-    HttpServer server;
+    late HttpServer server;
     tearDown(() async {
       await server.close();
     });
@@ -373,7 +373,7 @@ void main() {
 }
 
 class SomeObject extends Serializable {
-  String name;
+  String? name;
 
   @override
   void readFromMap(dynamic any) {}
@@ -386,7 +386,7 @@ class SomeObject extends Serializable {
 
 class Always200Controller extends Controller {
   Always200Controller() {
-    policy.allowedOrigins = ["http://somewhere.com"];
+    policy!.allowedOrigins = ["http://somewhere.com"];
   }
 
   @override

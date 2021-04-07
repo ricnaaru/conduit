@@ -13,14 +13,14 @@ class ValidatorBuilder {
   final PropertyBuilder property;
   final Validate metadata;
   dynamic _state;
-  ManagedValidator _validator;
+  ManagedValidator? _validator;
 
-  ManagedValidator get managedValidator => _validator;
+  ManagedValidator? get managedValidator => _validator;
 
-  void compile(List<EntityBuilder> entityBuilders) {
+  void compile(List<EntityBuilder>? entityBuilders) {
   }
 
-  void validate(List<EntityBuilder> entityBuilders) {
+  void validate(List<EntityBuilder>? entityBuilders) {
     if (property.isRelationship) {
       if (property.relationshipType != ManagedRelationshipType.belongsTo) {
         throw ManagedDataModelError(
@@ -28,16 +28,16 @@ class ValidatorBuilder {
             .name}'. Validations cannot be performed on has-one or has-many relationships.");
       }
     }
-    Type type;
-    var prop = property;
+    Type? type;
+    PropertyBuilder? prop = property;
     if (property.isRelationship) {
       if (property.relationshipType != ManagedRelationshipType.belongsTo) {
         throw ManagedDataModelError(
             "Invalid '@Validate' on property '${property.parent.name}.${property.name}'. Validations cannot be performed on has-one or has-many relationships.");
       }
 
-      type = property.relatedProperty.parent.instanceType.reflectedType;
-      prop = property.relatedProperty.parent.primaryKeyProperty;
+      type = property.relatedProperty!.parent.instanceType.reflectedType;
+      prop = property.relatedProperty!.parent.primaryKeyProperty;
     }
 
     try {
@@ -47,7 +47,7 @@ class ValidatorBuilder {
     }
   }
 
-  void link(List<ManagedEntity> others) {
+  void link(List<ManagedEntity?> others) {
     _validator = ManagedValidator(metadata, _state);
   }
 }

@@ -26,14 +26,14 @@ abstract class Query<InstanceType extends ManagedObject> {
   /// For insert or update queries, you may provide [values] through this constructor
   /// or set the field of the same name later. If set in the constructor,
   /// [InstanceType] is inferred.
-  factory Query(ManagedContext context, {InstanceType values}) {
-    final entity = context.dataModel.entityForType(InstanceType);
+  factory Query(ManagedContext context, {InstanceType? values}) {
+    final entity = context.dataModel!.tryEntityForType(InstanceType);
     if (entity == null) {
       throw ArgumentError(
           "Invalid context. The data model of 'context' does not contain '$InstanceType'.");
     }
 
-    return context.persistentStore.newQuery<InstanceType>(
+    return context.persistentStore!.newQuery<InstanceType>(
       context,
       entity,
       values: values,
@@ -47,12 +47,12 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///
   /// If [entity] is not in [context]'s [ManagedContext.dataModel], throws a internal failure [QueryException].
   factory Query.forEntity(ManagedEntity entity, ManagedContext context) {
-    if (!context.dataModel.entities.any((e) => identical(entity, e))) {
+    if (!context.dataModel!.entities.any((e) => identical(entity, e))) {
       throw StateError(
           "Invalid query construction. Entity for '${entity.tableName}' is from different context than specified for query.");
     }
 
-    return context.persistentStore.newQuery<InstanceType>(context, entity);
+    return context.persistentStore!.newQuery<InstanceType>(context, entity);
   }
 
   /// Inserts a single [object] into the database managed by [context].
@@ -113,7 +113,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///
   /// This mechanism only works on [fetch] and [fetchOne] execution methods. You *must not* execute a subquery created by this method.
   Query<T> join<T extends ManagedObject>(
-      {T object(InstanceType x), ManagedSet<T> set(InstanceType x)});
+      {T? object(InstanceType x)?, ManagedSet<T>? set(InstanceType x)?});
 
   /// Configures this instance to fetch a section of a larger result set.
   ///
@@ -138,7 +138,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   /// Note that internally, [pageBy] adds a matcher to [where] and adds a high-priority [sortBy].
   /// Adding multiple [pageBy]s to an instance has undefined behavior.
   void pageBy<T>(T propertyIdentifier(InstanceType x), QuerySortOrder order,
-      {T boundingValue});
+      {T? boundingValue});
 
   /// Configures this instance to sort its results by some property and order.
   ///
@@ -152,7 +152,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   void sortBy<T>(T propertyIdentifier(InstanceType x), QuerySortOrder order);
 
   /// The [ManagedEntity] of the [InstanceType].
-  ManagedEntity get entity;
+  ManagedEntity? get entity;
 
   /// The [ManagedContext] this query will be executed on.
   ManagedContext get context;
@@ -198,30 +198,31 @@ abstract class Query<InstanceType extends ManagedObject> {
   /// This is a safety measure for update and delete queries to prevent accidentally updating or deleting every row.
   /// This flag defaults to false, meaning that if this query is either an update or a delete, but contains no predicate,
   /// it will fail. If a query is meant to update or delete every row on a table, you may set this to true to allow this query to proceed.
-  bool canModifyAllInstances;
+  bool canModifyAllInstances = false;
 
   /// Number of seconds before a Query times out.
   ///
   /// A Query will fail and throw a [QueryException] if [timeoutInSeconds] seconds elapse before the query completes.
-  int timeoutInSeconds;
+  /// Defaults to 30 seconds.
+  int timeoutInSeconds = 30;
 
   /// Limits the number of objects returned from the Query.
   ///
   /// Defaults to 0. When zero, there is no limit to the number of objects returned from the Query.
   /// This value should be set when using [pageBy] to limit the page size.
-  int fetchLimit;
+  int fetchLimit = 0;
 
   /// Offsets the rows returned.
   ///
   /// The set of rows returned will exclude the first [offset] number of rows selected in the query. Do not
   /// set this property when using [pageBy].
-  int offset;
+  int offset = 0;
 
   /// A predicate for filtering the result or operation set.
   ///
   /// A predicate will identify the rows being accessed, see [QueryPredicate] for more details. Prefer to use
   /// [where] instead of this property directly.
-  QueryPredicate predicate;
+  QueryPredicate? predicate;
 
   /// Values to be used when inserting or updating an object.
   ///
@@ -232,7 +233,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///
   /// Do not set this property and [values] on the same query. If both this property and [values] are set,
   /// the behavior is undefined.
-  Map<String, dynamic> valueMap;
+  Map<String, dynamic>? valueMap;
 
   /// Values to be sent to database during an [update] or [insert] query.
   ///
@@ -276,7 +277,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///         o.id = 2;
   ///         assert(q.values.id == 1); // true
   ///
-  InstanceType values;
+  late InstanceType values;
 
   /// Configures the list of properties to be fetched for [InstanceType].
   ///
@@ -307,6 +308,9 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///
   /// If the [InstanceType] has properties with [Validate] metadata, those validations
   /// will be executed prior to sending the query to the database.
+  ///
+  /// The method guaranties that exactly one row will be inserted and returned
+  /// or an exception will be thrown and the row will not be written to the database.
   Future<InstanceType> insert();
 
   /// Inserts an [InstanceType]s into the underlying database.
@@ -354,7 +358,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///
   /// If the [InstanceType] has properties with [Validate] metadata, those validations
   /// will be executed prior to sending the query to the database.
-  Future<InstanceType> updateOne();
+  Future<InstanceType?> updateOne();
 
   /// Fetches [InstanceType]s from the database.
   ///
@@ -368,7 +372,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   /// Fetches a single [InstanceType] from the database.
   ///
   /// This method behaves the same as [fetch], but limits the results to a single object.
-  Future<InstanceType> fetchOne();
+  Future<InstanceType?> fetchOne();
 
   /// Deletes [InstanceType]s from the underlying database.
   ///
@@ -382,7 +386,7 @@ abstract class Query<InstanceType extends ManagedObject> {
   ///       var q = Query<User>()
   ///           ..where.id = whereEqualTo(1);
   ///       var deletedCount = await q.delete();
-  Future<int> delete();
+  Future<int?> delete();
 }
 
 /// Order value for [Query.pageBy] and [Query.sortBy].

@@ -23,9 +23,9 @@ File get keyFile => File.fromUri(Directory.current.uri
     .resolve("conduit.key.pem"));
 
 void main() {
-  CLIClient templateCli;
-  CLIClient projectUnderTestCli;
-  CLITask task;
+  late CLIClient templateCli;
+  late CLIClient projectUnderTestCli;
+  late CLITask task;
 
   setUpAll(() async {
     templateCli = await CLIClient(
@@ -39,7 +39,7 @@ void main() {
   });
 
   tearDown(() async {
-    await task?.process?.stop(0);
+    await task.process?.stop(0);
   });
 
   tearDownAll(DartProjectAgent.tearDownAll);
@@ -66,7 +66,7 @@ void main() {
     expect(result.statusCode, 200);
 
     // ignore: unawaited_futures
-    task.process.stop(0);
+    task.process!.stop(0);
     expect(await task.exitCode, 0);
   });
 

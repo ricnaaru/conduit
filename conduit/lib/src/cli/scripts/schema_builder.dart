@@ -28,10 +28,10 @@ class SchemaBuilderExecutable extends Executable<Map<String, dynamic>> {
     PostgreSQLPersistentStore.logger.onRecord
         .listen((r) => log("${r.message}"));
     try {
-      var outputSchema = inputSchema;
+      Schema? outputSchema = inputSchema;
       for (var source in sources) {
         Migration instance = instanceOf(
-          source.name,
+          source.name!,
           positionalArguments: const [],
           namedArguments: const <Symbol, dynamic>{},
           constructorName: const Symbol(""),
@@ -40,7 +40,7 @@ class SchemaBuilderExecutable extends Executable<Map<String, dynamic>> {
         await instance.upgrade();
         outputSchema = instance.currentSchema;
       }
-      return outputSchema.asMap();
+      return outputSchema!.asMap();
     } on SchemaException catch (e) {
       return {
         "error":

@@ -12,45 +12,45 @@ import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 
 class OpenAPIBuilder extends Executable<Map<String, dynamic>> {
   OpenAPIBuilder(Map<String, dynamic> message)
-      : pubspecContents = message["pubspec"] as String,
-        configPath = message["configPath"] as String,
-        title = message["title"] as String,
-        description = message["description"] as String,
-        version = message["version"] as String,
+      : pubspecContents = message["pubspec"] as String?,
+        configPath = message["configPath"] as String?,
+        title = message["title"] as String?,
+        description = message["description"] as String?,
+        version = message["version"] as String?,
         termsOfServiceURL = message["termsOfServiceURL"] != null
             ? Uri.parse(message["termsOfServiceURL"] as String)
             : null,
-        contactEmail = message["contactEmail"] as String,
-        contactName = message["contactName"] as String,
+        contactEmail = message["contactEmail"] as String?,
+        contactName = message["contactName"] as String?,
         contactURL = message["contactURL"] != null
             ? Uri.parse(message["contactURL"] as String)
             : null,
         licenseURL = message["licenseURL"] != null
             ? Uri.parse(message["licenseURL"] as String)
             : null,
-        licenseName = message["licenseName"] as String,
-        hosts = (message["hosts"] as List<String>)
+        licenseName = message["licenseName"] as String?,
+        hosts = (message["hosts"] as List<String>?)
                 ?.map((uri) => APIServerDescription(Uri.parse(uri)))
-                ?.toList() ??
+                .toList() ??
             [],
-        resolveRelativeUrls = message["resolveRelativeUrls"] as bool,
+        resolveRelativeUrls = message["resolveRelativeUrls"] as bool?,
         super(message);
 
   OpenAPIBuilder.input(Map<String, dynamic> variables) : super(variables);
 
-  String pubspecContents;
-  String configPath;
-  String title;
-  String description;
-  String version;
-  Uri termsOfServiceURL;
-  String contactEmail;
-  String contactName;
-  Uri contactURL;
-  Uri licenseURL;
-  String licenseName;
-  List<APIServerDescription> hosts;
-  bool resolveRelativeUrls;
+  String? pubspecContents;
+  String? configPath;
+  String? title;
+  String? description;
+  String? version;
+  Uri? termsOfServiceURL;
+  String? contactEmail;
+  String? contactName;
+  Uri? contactURL;
+  Uri? licenseURL;
+  String? licenseName;
+  List<APIServerDescription>? hosts;
+  bool? resolveRelativeUrls;
 
   @override
   Future<Map<String, dynamic>> execute() async {
@@ -64,7 +64,7 @@ class OpenAPIBuilder extends Executable<Map<String, dynamic>> {
     try {
       var config = ApplicationOptions()..configurationFilePath = configPath;
 
-      final yaml = (loadYaml(pubspecContents) as Map<dynamic, dynamic>)
+      final yaml = (loadYaml(pubspecContents!) as Map<dynamic, dynamic>)
           .cast<String, dynamic>();
 
       var document =
@@ -72,61 +72,52 @@ class OpenAPIBuilder extends Executable<Map<String, dynamic>> {
 
       document.servers = hosts;
       if (title != null) {
-        document.info ??= APIInfo.empty();
         document.info.title = title;
       }
       if (description != null) {
-        document.info ??= APIInfo.empty();
         document.info.description = description;
       }
       if (version != null) {
-        document.info ??= APIInfo.empty();
         document.info.version = version;
       }
       if (termsOfServiceURL != null) {
-        document.info ??= APIInfo.empty();
         document.info.termsOfServiceURL = termsOfServiceURL;
       }
       if (contactEmail != null) {
-        document.info ??= APIInfo.empty();
         document.info.contact ??= APIContact.empty();
-        document.info.contact.email = contactEmail;
+        document.info.contact!.email = contactEmail;
       }
       if (contactName != null) {
-        document.info ??= APIInfo.empty();
         document.info.contact ??= APIContact.empty();
-        document.info.contact.name = contactName;
+        document.info.contact!.name = contactName;
       }
       if (contactURL != null) {
-        document.info ??= APIInfo.empty();
         document.info.contact ??= APIContact.empty();
-        document.info.contact.url = contactURL;
+        document.info.contact!.url = contactURL;
       }
       if (licenseURL != null) {
-        document.info ??= APIInfo.empty();
         document.info.license ??= APILicense.empty();
-        document.info.license.url = licenseURL;
+        document.info.license!.url = licenseURL;
       }
       if (licenseName != null) {
-        document.info ??= APIInfo.empty();
         document.info.license ??= APILicense.empty();
-        document.info.license.name = licenseName;
+        document.info.license!.name = licenseName;
       }
 
-      if (resolveRelativeUrls) {
+      if (resolveRelativeUrls!) {
         final baseUri =
             document.servers?.first?.url ?? Uri.parse("http://localhost:8888");
-        document.components.securitySchemes.values?.forEach((scheme) {
-          scheme.flows?.values?.forEach((flow) {
-            if (flow.refreshURL != null && !flow.refreshURL.isAbsolute) {
-              flow.refreshURL = baseUri.resolveUri(flow.refreshURL);
+        document.components!.securitySchemes.values.forEach((scheme) {
+          scheme.flows?.values.forEach((flow) {
+            if (flow!.refreshURL != null && !flow.refreshURL!.isAbsolute) {
+              flow.refreshURL = baseUri.resolveUri(flow.refreshURL!);
             }
             if (flow.authorizationURL != null &&
-                !flow.authorizationURL.isAbsolute) {
-              flow.authorizationURL = baseUri.resolveUri(flow.authorizationURL);
+                !flow.authorizationURL!.isAbsolute) {
+              flow.authorizationURL = baseUri.resolveUri(flow.authorizationURL!);
             }
-            if (flow.tokenURL != null && !flow.tokenURL.isAbsolute) {
-              flow.tokenURL = baseUri.resolveUri(flow.tokenURL);
+            if (flow.tokenURL != null && !flow.tokenURL!.isAbsolute) {
+              flow.tokenURL = baseUri.resolveUri(flow.tokenURL!);
             }
           });
         });
@@ -145,7 +136,7 @@ class OpenAPIBuilder extends Executable<Map<String, dynamic>> {
     }
   }
 
-  static List<String> importsForPackage(String packageName) => [
+  static List<String> importsForPackage(String? packageName) => [
         "package:conduit/conduit.dart",
         "package:$packageName/$packageName.dart",
         "package:yaml/yaml.dart",
@@ -159,7 +150,7 @@ Future<Map<String, dynamic>> documentProject(
     CLIProject project, CLIDocumentOptions options) async {
   final variables = <String, dynamic>{
     "pubspec": project.projectSpecificationFile.readAsStringSync(),
-    "hosts": options.hosts?.map((u) => u.toString())?.toList(),
+    "hosts": options.hosts.map((u) => u.toString()).toList(),
     "configPath": options.configurationPath,
     "title": options.title,
     "description": options.apiDescription,
@@ -178,7 +169,7 @@ Future<Map<String, dynamic>> documentProject(
       imports: OpenAPIBuilder.importsForPackage(project.libraryName));
 
   if (result.containsKey("error")) {
-    throw CLIException(result["error"] as String);
+    throw CLIException(result["error"] as String?);
   }
 
   return result;

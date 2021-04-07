@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 
 void main() {
-  APIDocumentContext ctx;
+  late APIDocumentContext ctx;
   setUp(() {
     ctx = APIDocumentContext(APIDocument()
       ..info = APIInfo("x", "1.0.0")
@@ -24,19 +24,19 @@ void main() {
     final doc = A().documentSchema(ctx);
     await ctx.finalize();
 
-    expect(doc.properties.length, 2);
+    expect(doc.properties!.length, 2);
 
-    expect(doc.properties["x"].type, APIType.integer);
-    expect(doc.properties["x"].title, "x");
+    expect(doc.properties!["x"]!.type, APIType.integer);
+    expect(doc.properties!["x"]!.title, "x");
 
-    expect(doc.properties["b"].type, APIType.object);
-    expect(doc.properties["b"].title, "b");
+    expect(doc.properties!["b"]!.type, APIType.object);
+    expect(doc.properties!["b"]!.title, "b");
   });
 
   test("Nested serializable is documented", () async {
     final doc = A().documentSchema(ctx);
-    expect(doc.properties["b"].properties.length, 1);
-    expect(doc.properties["b"].properties["y"].type, APIType.string);
+    expect(doc.properties!["b"]!.properties!.length, 1);
+    expect(doc.properties!["b"]!.properties!["y"]!.type, APIType.string);
   });
 
   test(
@@ -55,7 +55,7 @@ void main() {
     final doc = OverrideDocument().documentSchema(ctx);
     await ctx.finalize();
 
-    expect(doc.properties["k"], isNotNull);
+    expect(doc.properties!["k"], isNotNull);
   });
 
   test(
@@ -70,11 +70,11 @@ void main() {
     await ctx.finalize();
 
     expect(
-        op["post"]
-            .requestBody
-            .content["application/json"]
-            .schema
-            .referenceURI
+        op["post"]!
+            .requestBody!
+            .content!["application/json"]!
+            .schema!
+            .referenceURI!
             .pathSegments
             .last,
         "BoundBody");
@@ -82,36 +82,36 @@ void main() {
 }
 
 class A extends Serializable {
-  int x;
+  int? x;
 
-  B b;
+  B? b;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class B extends Serializable {
-  String y;
+  String? y;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
 
 class FailsToDocument extends Serializable {
-  HttpServer nonsenseProperty;
+  HttpServer? nonsenseProperty;
 
   @override
-  Map<String, dynamic> asMap() => null;
+  Map<String, dynamic>? asMap() => null;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
@@ -124,17 +124,17 @@ class OverrideDocument extends Serializable {
   }
 
   @override
-  Map<String, dynamic> asMap() => null;
+  Map<String, dynamic>? asMap() => null;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}
 }
 
 class BoundBody extends Serializable {
-  int x;
+  int? x;
 
   @override
-  Map<String, dynamic> asMap() => null;
+  Map<String, dynamic>? asMap() => null;
 
   @override
   void readFromMap(Map<String, dynamic> requestBody) {}

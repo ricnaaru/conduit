@@ -12,9 +12,9 @@ import 'package:path/path.dart' as path_lib;
 abstract class CLIProject implements CLICommand {
   @Option("directory",
       abbr: "d", help: "Project directory to execute command in")
-  Directory get projectDirectory {
+  Directory? get projectDirectory {
     if (_projectDirectory == null) {
-      String dir = decode("directory");
+      String? dir = decode("directory");
       if (dir == null) {
         _projectDirectory = Directory.current.absolute;
       } else {
@@ -24,15 +24,15 @@ abstract class CLIProject implements CLICommand {
     return _projectDirectory;
   }
 
-  Map<String, dynamic> get projectSpecification {
+  Map<String, dynamic>? get projectSpecification {
     if (_pubspec == null) {
       final file = projectSpecificationFile;
       if (!file.existsSync()) {
         throw CLIException(
-            "Failed to locate pubspec.yaml in project directory '${projectDirectory.path}'");
+            "Failed to locate pubspec.yaml in project directory '${projectDirectory!.path}'");
       }
       var yamlContents = file.readAsStringSync();
-      final yaml = loadYaml(yamlContents) as Map<dynamic, dynamic> ;
+      final yaml = loadYaml(yamlContents) as Map<dynamic, dynamic>;
       _pubspec = yaml.cast<String, dynamic>();
     }
 
@@ -40,17 +40,18 @@ abstract class CLIProject implements CLICommand {
   }
 
   File get projectSpecificationFile =>
-      File.fromUri(projectDirectory.uri.resolve("pubspec.yaml"));
+      File.fromUri(projectDirectory!.uri.resolve("pubspec.yaml"));
 
-  Uri get packageConfigUri => projectDirectory.uri.resolve(".packages");
+  Uri get packageConfigUri => projectDirectory!.uri.resolve(".packages");
 
-  String get libraryName => packageName;
+  String? get libraryName => packageName;
 
-  String get packageName => projectSpecification["name"] as String;
+  String? get packageName => projectSpecification!["name"] as String?;
 
-  Version get projectVersion {
+  Version? get projectVersion {
     if (_projectVersion == null) {
-      var lockFile = File.fromUri(projectDirectory.uri.resolve("pubspec.lock"));
+      var lockFile =
+          File.fromUri(projectDirectory!.uri.resolve("pubspec.lock"));
       if (!lockFile.existsSync()) {
         throw CLIException("No pubspec.lock file. Run `pub get`.");
       }
@@ -64,16 +65,16 @@ abstract class CLIProject implements CLICommand {
     return _projectVersion;
   }
 
-  Directory _projectDirectory;
-  Map<String, dynamic> _pubspec;
-  Version _projectVersion;
+  Directory? _projectDirectory;
+  Map<String, dynamic>? _pubspec;
+  Version? _projectVersion;
 
-  static File fileInDirectory(Directory directory, String name) {
+  static File fileInDirectory(Directory? directory, String name) {
     if (path_lib.isRelative(name)) {
-      return File.fromUri(directory.uri.resolve(name));
+      return File.fromUri(directory!.uri.resolve(name));
     }
 
-    return File.fromUri(directory.uri);
+    return File.fromUri(directory!.uri);
   }
 
   File fileInProjectDirectory(String name) {
@@ -87,7 +88,7 @@ abstract class CLIProject implements CLICommand {
         displayInfo("Conduit project version: $projectVersion");
       }
 
-      if (projectVersion?.major != toolVersion.major) {
+      if (projectVersion?.major != toolVersion!.major) {
         throw CLIException(
             "CLI version is incompatible with project conduit version.",
             instructions: [
@@ -100,16 +101,15 @@ abstract class CLIProject implements CLICommand {
   }
 
   Future<String> getChannelName() async {
-    final name = await IsolateExecutor.run(GetChannelExecutable({}),
-      packageConfigURI: packageConfigUri,
-      imports: GetChannelExecutable.importsForPackage(libraryName),
-      logHandler: displayProgress);
-    if (name == null) {
+    try {
+      final name = await IsolateExecutor.run(GetChannelExecutable({}),
+          packageConfigURI: packageConfigUri,
+          imports: GetChannelExecutable.importsForPackage(libraryName),
+          logHandler: displayProgress);
+      return name;
+    } on StateError catch (e) {
       throw CLIException(
-        "No ApplicationChannel subclass found in $packageName/$libraryName");
+          "No ApplicationChannel subclass found in $packageName/$libraryName : ${e.message}");
     }
-
-    return name;
   }
-
 }

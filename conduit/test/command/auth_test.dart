@@ -11,9 +11,9 @@ import '../not_tests/cli_helpers.dart';
 void main() {
   final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
   final schema = Schema.fromDataModel(dataModel);
-  ManagedContext context;
-  PersistentStore store;
-  CLIClient cli;
+  late ManagedContext context;
+  late PersistentStore store;
+  late CLIClient cli;
 
   setUpAll(() async {
     cli = CLIClient(DartProjectAgent("application_test", dependencies: {
@@ -69,7 +69,7 @@ void main() {
       expect(results.first.allowedScope, isNull);
       expect(results.first.redirectURI, isNull);
 
-      final salt = results.first.salt;
+      final salt = results.first.salt!;
       final secret = results.first.hashedSecret;
       expect(AuthUtility.generatePasswordHash("abc", salt), secret);
     });
@@ -95,7 +95,7 @@ void main() {
       expect(results.first.allowedScope, isNull);
       expect(results.first.redirectURI, "http://foobar.com");
 
-      final salt = results.first.salt;
+      final salt = results.first.salt!;
       final secret = results.first.hashedSecret;
       expect(AuthUtility.generatePasswordHash("abc", salt), secret);
     });

@@ -18,58 +18,58 @@ import 'package:conduit_open_api/v3.dart';
 class ChannelRuntimeImpl extends ChannelRuntime implements SourceCompiler {
   ChannelRuntimeImpl(this.type);
 
-  final ClassMirror type;
+  final ClassMirror? type;
 
   static const _globalStartSymbol = #initializeApplication;
 
   @override
-  String get name => MirrorSystem.getName(type.simpleName);
+  String get name => MirrorSystem.getName(type!.simpleName);
 
   @override
   IsolateEntryFunction get isolateEntryPoint => isolateServerEntryPoint;
 
   @override
-  Uri get libraryUri => (type.owner as LibraryMirror).uri;
+  Uri get libraryUri => (type!.owner as LibraryMirror).uri;
 
   bool get hasGlobalInitializationMethod {
-    return type.staticMembers[_globalStartSymbol] != null;
+    return type!.staticMembers[_globalStartSymbol] != null;
   }
 
   @override
-  Type get channelType => type.reflectedType;
+  Type get channelType => type!.reflectedType;
 
   @override
-  ApplicationChannel instantiateChannel() {
-    return type.newInstance(Symbol.empty, []).reflectee as ApplicationChannel;
+  ApplicationChannel? instantiateChannel() {
+    return type!.newInstance(Symbol.empty, []).reflectee as ApplicationChannel?;
   }
 
   @override
-  Future runGlobalInitialization(ApplicationOptions config) {
+  Future? runGlobalInitialization(ApplicationOptions config) {
     if (hasGlobalInitializationMethod) {
-      return type.invoke(_globalStartSymbol, [config]).reflectee as Future;
+      return type!.invoke(_globalStartSymbol, [config]).reflectee as Future?;
     }
 
     return null;
   }
 
   @override
-  Iterable<APIComponentDocumenter> getDocumentableChannelComponents(
+  Iterable<APIComponentDocumenter?> getDocumentableChannelComponents(
       ApplicationChannel channel) {
     final documenter = reflectType(APIComponentDocumenter);
-    return type.declarations.values
+    return type!.declarations.values
         .whereType<VariableMirror>()
         .where((member) =>
             !member.isStatic && member.type.isAssignableTo(documenter))
         .map((dm) {
       return reflect(channel).getField(dm.simpleName).reflectee
-          as APIComponentDocumenter;
+          as APIComponentDocumenter?;
     }).where((o) => o != null);
   }
 
   @override
   String compile(BuildContext ctx) {
-    final className = MirrorSystem.getName(type.simpleName);
-    final originalFileUri = type.location.sourceUri.toString();
+    final className = MirrorSystem.getName(type!.simpleName);
+    final originalFileUri = type!.location!.sourceUri.toString();
     final globalInitBody = hasGlobalInitializationMethod
         ? "await $className.initializeApplication(config);"
         : "";
@@ -127,9 +127,9 @@ class ChannelRuntimeImpl extends ChannelRuntime {
 
 void isolateServerEntryPoint(ApplicationInitialServerMessage params) {
   final channelSourceLibrary =
-      currentMirrorSystem().libraries[params.streamLibraryURI];
+      currentMirrorSystem().libraries[params.streamLibraryURI]!;
   final channelType = channelSourceLibrary
-      .declarations[Symbol(params.streamTypeName)] as ClassMirror;
+      .declarations[Symbol(params.streamTypeName)] as ClassMirror?;
 
   final runtime = ChannelRuntimeImpl(channelType);
 
@@ -157,7 +157,7 @@ class ControllerRuntimeImpl extends ControllerRuntime
   final ClassMirror type;
 
   @override
-  ResourceControllerRuntime resourceController;
+  ResourceControllerRuntime? resourceController;
 
   @override
   bool get isMutable {
@@ -166,18 +166,18 @@ class ControllerRuntimeImpl extends ControllerRuntime
     final members = type.instanceMembers;
     final fieldKeys = type.instanceMembers.keys
         .where((sym) => !whitelist.contains(MirrorSystem.getName(sym)));
-    return fieldKeys.any((key) => members[key].isSetter);
+    return fieldKeys.any((key) => members[key]!.isSetter);
   }
 
   @override
   String compile(BuildContext ctx) {
-    final originalFileUri = type.location.sourceUri.toString();
+    final originalFileUri = type.location!.sourceUri.toString();
 
     return """
 import 'dart:async';    
 import 'package:conduit/conduit.dart';
 import '$originalFileUri';
-${(resourceController as ResourceControllerRuntimeImpl)?.directives?.join("\n") ?? ""}
+${(resourceController as ResourceControllerRuntimeImpl?)?.directives.join("\n") ?? ""}
     
 final instance = ControllerRuntimeImpl();
     
@@ -193,7 +193,7 @@ class ControllerRuntimeImpl extends ControllerRuntime {
   ResourceControllerRuntime _resourceController;
 }
 
-${(resourceController as ResourceControllerRuntimeImpl)?.compile(ctx) ?? ""}
+${(resourceController as ResourceControllerRuntimeImpl?)?.compile(ctx) ?? ""}
     """;
   }
 }
@@ -213,7 +213,7 @@ class SerializableRuntimeImpl extends SerializableRuntime {
       for (final property
           in mirror.declarations.values.whereType<VariableMirror>()) {
         final propName = MirrorSystem.getName(property.simpleName);
-        obj.properties[propName] = documentVariable(context, property);
+        obj.properties![propName] = documentVariable(context, property);
       }
     } catch (e) {
       obj.additionalPropertyPolicy = APISchemaAdditionalPropertyPolicy.freeForm;

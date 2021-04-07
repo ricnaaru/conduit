@@ -20,7 +20,8 @@ class ApplicationServer {
   ///
   /// You should not need to invoke this method directly.
   ApplicationServer(this.channelType, this.options, this.identifier) {
-    channel = (RuntimeContext.current[channelType] as ChannelRuntime).instantiateChannel()
+    channel = (RuntimeContext.current[channelType] as ChannelRuntime)
+        .instantiateChannel()!
       ..server = this
       ..options = options;
   }
@@ -29,20 +30,20 @@ class ApplicationServer {
   ApplicationOptions options;
 
   /// The underlying [HttpServer].
-  HttpServer server;
+  late HttpServer server;
 
   /// The instance of [ApplicationChannel] serving requests.
-  ApplicationChannel channel;
+  ApplicationChannel? channel;
 
   /// The cached entrypoint of [channel].
-  Controller entryPoint;
+  late Controller entryPoint;
 
   final Type channelType;
 
   /// Target for sending messages to other [ApplicationChannel.messageHub]s.
   ///
   /// Events are added to this property by instances of [ApplicationMessageHub] and should not otherwise be used.
-  EventSink<dynamic> hubSink;
+  EventSink<dynamic>? hubSink;
 
   /// Whether or not this server requires an HTTPS listener.
   bool get requiresHTTPS => _requiresHTTPS;
@@ -63,13 +64,13 @@ class ApplicationServer {
   Future start({bool shareHttpServer = false}) async {
     logger.fine("ApplicationServer($identifier).start entry");
 
-    await channel.prepare();
+    await channel!.prepare();
 
-    entryPoint = channel.entryPoint;
+    entryPoint = channel!.entryPoint;
     entryPoint.didAddToChannel();
 
     logger.fine("ApplicationServer($identifier).start binding HTTP");
-    final securityContext = channel.securityContext;
+    final securityContext = channel!.securityContext;
     if (securityContext != null) {
       _requiresHTTPS = true;
 
@@ -92,7 +93,7 @@ class ApplicationServer {
   /// Closes this HTTP server and channel.
   Future close() async {
     logger.fine("ApplicationServer($identifier).close Closing HTTP listener");
-    await server?.close(force: true);
+    await server.close(force: true);
     logger.fine("ApplicationServer($identifier).close Closing channel");
     await channel?.close();
 
@@ -110,7 +111,7 @@ class ApplicationServer {
     logger.fine("ApplicationServer($identifier).didOpen start listening");
     server.map((baseReq) => Request(baseReq)).listen(entryPoint.receive);
 
-    channel.willStartReceivingRequests();
+    channel!.willStartReceivingRequests();
     logger.info("Server conduit/$identifier started.");
   }
 

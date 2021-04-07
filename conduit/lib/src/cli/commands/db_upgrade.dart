@@ -25,7 +25,7 @@ class CLIDatabaseUpgrade extends CLICommand
     }
 
     try {
-      final currentVersion = await persistentStore.schemaVersion;
+      final currentVersion = await persistentStore!.schemaVersion;
       final appliedMigrations = migrations
           .where((mig) => mig.versionNumber <= currentVersion)
           .toList();
@@ -78,7 +78,7 @@ class CLIDatabaseUpgrade extends CLICommand
       Schema fromSchema, int fromVersion) async {
     final schemaMap = await IsolateExecutor.run(
         RunUpgradeExecutable.input(
-            fromSchema, _storeConnectionInfo, migrations, fromVersion),
+            fromSchema, _storeConnectionInfo!, migrations, fromVersion),
         packageConfigURI: packageConfigUri,
         imports: RunUpgradeExecutable.imports,
         additionalContents: MigrationSource.combine(migrations),
@@ -86,13 +86,13 @@ class CLIDatabaseUpgrade extends CLICommand
         logHandler: displayProgress);
 
     if (schemaMap.containsKey("error")) {
-      throw CLIException(schemaMap["error"] as String);
+      throw CLIException(schemaMap["error"] as String?);
     }
 
     return Schema.fromMap(schemaMap);
   }
 
-  DBInfo get _storeConnectionInfo {
+  DBInfo? get _storeConnectionInfo {
     var s = persistentStore;
     if (s is PostgreSQLPersistentStore) {
       return DBInfo("postgres", s.username, s.password, s.host, s.port,

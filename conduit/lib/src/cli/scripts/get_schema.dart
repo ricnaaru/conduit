@@ -21,7 +21,7 @@ class GetSchemaExecutable extends Executable<Map<String, dynamic>> {
     }
   }
 
-  static List<String> importsForPackage(String packageName) => [
+  static List<String> importsForPackage(String? packageName) => [
         "package:conduit/conduit.dart",
         "package:$packageName/$packageName.dart",
         "package:conduit_runtime/runtime.dart"
@@ -35,7 +35,7 @@ Future<Schema> getProjectSchema(CLIProject project) async {
       logHandler: project.displayProgress);
 
   if (response.containsKey("error")) {
-    throw CLIException(response["error"] as String);
+    throw CLIException(response["error"] as String?);
   }
 
   return Schema.fromMap(response);

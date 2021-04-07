@@ -11,7 +11,7 @@ import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   group("Router basics", () {
-    HttpServer server;
+    HttpServer? server;
 
     tearDown(() async {
       await server?.close(force: true);
@@ -139,7 +139,7 @@ void main() {
   });
 
   group("Router ordering", () {
-    HttpServer server;
+    HttpServer? server;
     var router = Router();
     setUpAll(() async {
       router.route("/").linkFunction((req) async {
@@ -227,7 +227,7 @@ void main() {
   });
 
   group("Disambiguate *", () {
-    HttpServer server;
+    HttpServer? server;
     var router = Router();
     setUpAll(() async {
       router.route("/*").linkFunction((req) async => Response.ok("*${req.path.remainingPath}"));
@@ -256,10 +256,10 @@ void main() {
   });
 
   group("Controller linking", () {
-    HttpServer server;
+    late HttpServer server;
 
     tearDown(() async {
-      await server?.close();
+      await server.close();
     });
 
     test("Router can be linked to", () async {

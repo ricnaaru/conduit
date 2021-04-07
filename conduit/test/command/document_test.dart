@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 import '../not_tests/cli_helpers.dart';
 
 void main() {
-  CLIClient terminal;
+  late CLIClient terminal;
 
   setUpAll(() async {
     await CLIClient.activateCLI();

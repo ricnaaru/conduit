@@ -7,11 +7,11 @@ import 'package:test/test.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
-  ServerRoot server;
+  late ServerRoot server;
 
   setUp(() async {
-    DefaultRecyclable.stateCount = 0;
-    MiddlewareRecyclable.stateCount = 0;
+    DefaultRecyclable._stateCount = 0;
+    MiddlewareRecyclable._stateCount = 0;
 
     server = ServerRoot();
     await server.open();
@@ -118,14 +118,14 @@ void main() {
           .then((r) => json.decode(r.body)["state"]),
     ]);
 
-    expect(DefaultRecyclable.stateCount, 1);
+    expect(DefaultRecyclable._stateCount, 1);
   });
 
   test(
       "A recycled controller always sends unhandled requests to the next linked controller",
       () async {
     server.root
-        .link(() => MiddlewareRecyclable())
+        .link(() => MiddlewareRecyclable())!
         .link(() => DefaultController());
     server.root.didAddToChannel();
 
@@ -161,14 +161,14 @@ void main() {
             1),
         true);
 
-    expect(MiddlewareRecyclable.stateCount, 1);
+    expect(MiddlewareRecyclable._stateCount, 1);
   });
 
   test(
       "A recycled controller sends unhandled request to the next linked recyclable",
       () async {
     server.root
-        .link(() => MiddlewareRecyclable())
+        .link(() => MiddlewareRecyclable())!
         .link(() => DefaultRecyclable());
     server.root.didAddToChannel();
 
@@ -206,15 +206,15 @@ void main() {
             1),
         true);
 
-    expect(DefaultRecyclable.stateCount, 1);
-    expect(MiddlewareRecyclable.stateCount, 1);
+    expect(DefaultRecyclable._stateCount, 1);
+    expect(MiddlewareRecyclable._stateCount, 1);
   });
 }
 
 class ServerRoot {
   ServerRoot();
 
-  HttpServer server;
+  late HttpServer server;
   Controller root = ClosureController((req) => req);
 
   Future open() async {
@@ -235,8 +235,8 @@ class DefaultController extends Controller {
 }
 
 class DefaultRecyclable extends Controller implements Recyclable<String> {
-  static int stateCount;
-  String state;
+  static int _stateCount = 0;
+  String? state;
 
   @override
   FutureOr<RequestOrResponse> handle(Request req) {
@@ -250,14 +250,14 @@ class DefaultRecyclable extends Controller implements Recyclable<String> {
 
   @override
   String get recycledState {
-    stateCount++;
+    _stateCount++;
     return "state";
   }
 }
 
 class MiddlewareRecyclable extends Controller implements Recyclable<String> {
-  static int stateCount;
-  String state;
+  static int _stateCount = 0;
+  String? state;
 
   @override
   FutureOr<RequestOrResponse> handle(Request req) {
@@ -276,7 +276,7 @@ class MiddlewareRecyclable extends Controller implements Recyclable<String> {
 
   @override
   String get recycledState {
-    stateCount++;
+    _stateCount++;
     return "state";
   }
 }

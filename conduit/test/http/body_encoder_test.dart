@@ -9,8 +9,8 @@ import 'package:test/test.dart';
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  HttpServer server;
-  HttpClient client;
+  HttpServer? server;
+  late HttpClient client;
 
   setUp(() async {
     client = HttpClient();
@@ -39,7 +39,7 @@ void main() {
     server = await bindAndRespondWith(response);
 
     var resp = await http.get(Uri.parse("http://localhost:8888"));
-    var contentType = ContentType.parse(resp.headers["content-type"]);
+    var contentType = ContentType.parse(resp.headers["content-type"]!);
     expect(resp.statusCode, 200);
     expect(contentType.primaryType, "foo");
     expect(contentType.subType, "bar");
@@ -54,7 +54,7 @@ void main() {
     server = await bindAndRespondWith(response);
 
     var resp = await http.get(Uri.parse("http://localhost:8888"));
-    var contentType = ContentType.parse(resp.headers["content-type"]);
+    var contentType = ContentType.parse(resp.headers["content-type"]!);
     expect(resp.statusCode, 200);
     expect(contentType.primaryType, "text");
     expect(contentType.subType, "bar");
@@ -127,14 +127,18 @@ void main() {
   });
 
   test("Encode with x-www-form-urlencoded", () {
-    final codec = CodecRegistry
-      .defaultInstance
-      .codecForContentType(ContentType("application", "x-www-form-urlencoded"));
+    final codec = CodecRegistry.defaultInstance.codecForContentType(
+        ContentType("application", "x-www-form-urlencoded"))!;
 
     expect(codec.encode(<String, dynamic>{"k": "v"}), "k=v".codeUnits);
     expect(codec.encode(<String, dynamic>{"k": "v!v"}), "k=v%21v".codeUnits);
-    expect(codec.encode(<String, dynamic>{"k1": "v1", "k2": "v2"}), "k1=v1&k2=v2".codeUnits);
-    expect(codec.encode(<String, dynamic>{"k": ["v1", "v!"]}), "k=v1&k=v%21".codeUnits);
+    expect(codec.encode(<String, dynamic>{"k1": "v1", "k2": "v2"}),
+        "k1=v1&k2=v2".codeUnits);
+    expect(
+        codec.encode(<String, dynamic>{
+          "k": ["v1", "v!"]
+        }),
+        "k=v1&k=v%21".codeUnits);
   });
 
   group("Compression", () {
@@ -266,11 +270,11 @@ Future<HttpServer> bindAndRespondWith(Response response) async {
   return server;
 }
 
-class ByteCodec extends Codec<dynamic, List<int>> {
+class ByteCodec extends Codec<dynamic, List<int>?> {
   @override
   Converter<dynamic, List<int>> get encoder => const ByteEncoder();
   @override
-  Converter<List<int>, dynamic> get decoder => null;
+  Converter<List<int>, dynamic> get decoder => throw UnimplementedError();
 }
 
 class ByteEncoder extends Converter<String, List<int>> {
@@ -283,7 +287,7 @@ class CrashingCodec extends Codec {
   @override
   Converter get encoder => const CrashingEncoder();
   @override
-  Converter get decoder => null;
+  Converter get decoder => throw UnimplementedError();
 }
 
 class CrashingEncoder extends Converter<String, List<int>> {
@@ -296,7 +300,7 @@ class BadDataCodec extends Codec {
   @override
   Converter get encoder => const BadDataEncoder();
   @override
-  Converter get decoder => null;
+  Converter get decoder => throw UnimplementedError();
 }
 
 class BadDataEncoder extends Converter<String, String> {

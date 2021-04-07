@@ -9,29 +9,29 @@ class DataModelCompiler {
     final m = <String, dynamic>{};
 
     final instanceTypes = context.types
-      .where(_isTypeManagedObjectSubclass)
-      .map((c) => c.reflectedType);
+        .where(_isTypeManagedObjectSubclass)
+        .map((c) => c.reflectedType);
 
     _builders = instanceTypes.map((t) => EntityBuilder(t)).toList();
-    _builders.forEach((b) {
+    _builders!.forEach((b) {
       b.compile(_builders);
     });
     _validate();
 
-    _builders.forEach((b) {
-      b.link(_builders.map((eb) => eb.entity).toList());
+    _builders!.forEach((b) {
+      b.link(_builders!.map((eb) => eb.entity).toList());
       m[b.entity.instanceType.toString()] = b.runtime;
     });
 
     return m;
   }
 
-  List<EntityBuilder> _builders;
+  List<EntityBuilder>? _builders;
 
   void _validate() {
     // Check for dupe tables
-    _builders.forEach((builder) {
-      final withSameName = _builders
+    _builders!.forEach((builder) {
+      final withSameName = _builders!
           .where((eb) => eb.name == builder.name)
           .map((eb) => eb.instanceTypeName)
           .toList();
@@ -41,7 +41,7 @@ class DataModelCompiler {
       }
     });
 
-    _builders.forEach((b) => b.validate(_builders));
+    _builders!.forEach((b) => b.validate(_builders));
   }
 
   static bool _isTypeManagedObjectSubclass(ClassMirror mirror) {
@@ -108,7 +108,7 @@ class ManagedDataModelErrorImpl extends ManagedDataModelError {
       String instanceName,
       Symbol property,
       String destinationTableName,
-      Symbol expectedProperty) {
+      Symbol? expectedProperty) {
     var expectedString = "Some property";
     if (expectedProperty != null) {
       expectedString = "'${_getName(expectedProperty)}'";
@@ -133,7 +133,7 @@ class ManagedDataModelErrorImpl extends ManagedDataModelError {
   }
 
   factory ManagedDataModelErrorImpl.dualMetadata(String tableName,
-      Symbol property, String destinationTableName, String inverseProperty) {
+      Symbol property, String destinationTableName, String? inverseProperty) {
     return ManagedDataModelErrorImpl("Relationship '${_getName(property)}' "
         "on '${tableName}' "
         "and '${inverseProperty}' "
@@ -144,7 +144,7 @@ class ManagedDataModelErrorImpl extends ManagedDataModelError {
   }
 
   factory ManagedDataModelErrorImpl.duplicateInverse(
-      String tableName, String inverseName, List<String> conflictingNames) {
+      String tableName, String? inverseName, List<String?> conflictingNames) {
     return ManagedDataModelErrorImpl(
         "Entity '${tableName}' has multiple relationship "
         "properties that claim to be the inverse of '$inverseName'. A property may "
@@ -191,7 +191,7 @@ class ManagedDataModelErrorImpl extends ManagedDataModelError {
   }
 
   factory ManagedDataModelErrorImpl.duplicateTables(
-      String tableName, List<String> instanceTypes) {
+      String? tableName, List<String> instanceTypes) {
     return ManagedDataModelErrorImpl(
         "Entities ${instanceTypes.map((i) => "'$i'").join(",")} "
         "have the same table name: '$tableName'. Rename these "
@@ -242,30 +242,25 @@ class ManagedDataModelErrorImpl extends ManagedDataModelError {
         "in this way.");
   }
 
-  static String _getPersistentClassName(ManagedEntity entity) {
-    if (entity == null) {
-      return null;
-    }
+  static String? _getPersistentClassName(ManagedEntity entity) {
+    // if (entity == null) {
+    //   return null;
+    // }
 
-    if (entity.tableDefinition == null) {
-      return null;
-    }
+    // if (entity.tableDefinition == null) {
+    //   return null;
+    // }
 
     return entity.tableDefinition;
   }
 
   static String _getInstanceClassName(ManagedEntity entity) {
-    if (entity == null) {
-      return null;
-    }
-
-    if (entity.instanceType == null) {
-      return null;
-    }
+    // if (entity.instanceType == null) {
+    //   return null;
+    // }
 
     return _getName(reflectType(entity.instanceType).simpleName);
   }
 
-  static String _getName(Symbol s) =>
-      s != null ? MirrorSystem.getName(s) : null;
+  static String _getName(Symbol s) => MirrorSystem.getName(s);
 }

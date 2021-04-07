@@ -14,8 +14,8 @@ abstract class CLIDatabaseManagingCommand implements CLICommand, CLIProject {
       help:
           "The directory where migration files are stored. Relative paths are relative to the application-directory.",
       defaultsTo: "migrations")
-  Directory get migrationDirectory {
-    final dir = Directory(decode("migration-directory")).absolute;
+  Directory? get migrationDirectory {
+    final dir = Directory(decode("migration-directory")!).absolute;
 
     if (!dir.existsSync()) {
       dir.createSync();
@@ -26,7 +26,7 @@ abstract class CLIDatabaseManagingCommand implements CLICommand, CLIProject {
   List<MigrationSource> get projectMigrations {
     try {
       final pattern = RegExp(r"^[0-9]+[_a-zA-Z0-9]*\.migration\.dart$");
-      final sources = migrationDirectory
+      final sources = migrationDirectory!
           .listSync()
           .where((fse) =>
               fse is File && pattern.hasMatch(fse.uri.pathSegments.last))
@@ -42,7 +42,7 @@ abstract class CLIDatabaseManagingCommand implements CLICommand, CLIProject {
   }
 
   Future<Schema> schemaByApplyingMigrationSources(List<MigrationSource> sources,
-      {Schema fromSchema}) async {
+      {Schema? fromSchema}) async {
     fromSchema ??= Schema.empty();
 
     if (sources.isNotEmpty) {
@@ -58,7 +58,7 @@ abstract class CLIDatabaseManagingCommand implements CLICommand, CLIProject {
         logHandler: displayProgress);
 
     if (schemaMap.containsKey("error")) {
-      throw CLIException(schemaMap["error"] as String);
+      throw CLIException(schemaMap["error"] as String?);
     }
 
     return Schema.fromMap(schemaMap);

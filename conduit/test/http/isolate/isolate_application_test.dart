@@ -10,7 +10,7 @@ import 'package:test/test.dart';
 
 void main() {
   group("Lifecycle", () {
-    Application<TestChannel> app;
+    late Application<TestChannel> app;
 
     setUp(() async {
       app = Application<TestChannel>();
@@ -20,7 +20,7 @@ void main() {
 
     tearDown(() async {
       print("stopping");
-      await app?.stop();
+      await app.stop();
       print("stopped");
     });
 
@@ -95,10 +95,10 @@ void main() {
   });
 
   group("App launch status", () {
-    Application<TestChannel> app;
+    late Application<TestChannel> app;
 
     tearDown(() async {
-      await app?.stop();
+      await app.stop();
     });
 
     test(
@@ -120,7 +120,7 @@ void main() {
 
 class TestChannel extends ApplicationChannel {
   static Future initializeApplication(ApplicationOptions config) async {
-    final v = config.context["startup"] as List<int> ?? [];
+    final v = config.context["startup"] as List<int>? ?? [];
     v.add(1);
     config.context["startup"] = v;
   }
@@ -131,7 +131,7 @@ class TestChannel extends ApplicationChannel {
     router.route("/t").linkFunction((req) async => Response.ok("t_ok"));
     router.route("/r").linkFunction((req) async => Response.ok("r_ok"));
     router.route("startup").linkFunction((r) async {
-      var total = options.context["startup"].fold(0, (a, b) => a + b);
+      var total = options!.context["startup"].fold(0, (a, b) => a + b);
       return Response.ok("$total");
     });
     return router;

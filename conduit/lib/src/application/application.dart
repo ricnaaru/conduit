@@ -22,20 +22,20 @@ export 'service_registry.dart';
 /// An application object opens HTTP listeners that forward requests to instances of your [ApplicationChannel].
 /// It is unlikely that you need to use this class directly - the `conduit serve` command creates an application object
 /// on your behalf.
-class Application<T extends ApplicationChannel> {
+class Application<T extends ApplicationChannel?> {
   /// A list of isolates that this application supervises.
   List<ApplicationIsolateSupervisor> supervisors = [];
 
   /// The [ApplicationServer] listening for HTTP requests while under test.
   ///
   /// This property is only valid when an application is started via [startOnCurrentIsolate].
-  ApplicationServer server;
+  ApplicationServer? server;
 
   /// The [ApplicationChannel] handling requests while under test.
   ///
   /// This property is only valid when an application is started via [startOnCurrentIsolate]. You use
   /// this value to access elements of your application channel during testing.
-  T get channel => server?.channel as T;
+  T? get channel => server?.channel as T?;
 
   /// The logger that this application will write messages to.
   ///
@@ -61,7 +61,7 @@ class Application<T extends ApplicationChannel> {
   /// This value will return to false after [stop] has completed.
   bool get isRunning => _hasFinishedLaunching;
   bool _hasFinishedLaunching = false;
-  ChannelRuntime get _runtime => RuntimeContext.current[T] as ChannelRuntime;
+  ChannelRuntime? get _runtime => RuntimeContext.current[T] as ChannelRuntime?;
 
   /// Starts this application, allowing it to handle HTTP requests.
   ///
@@ -90,7 +90,7 @@ class Application<T extends ApplicationChannel> {
     }
 
     try {
-      await _runtime.runGlobalInitialization(options);
+      await _runtime!.runGlobalInitialization(options);
 
       for (var i = 0; i < numberOfInstances; i++) {
         final supervisor = await _spawn(
@@ -121,11 +121,11 @@ class Application<T extends ApplicationChannel> {
     options.address ??= InternetAddress.loopbackIPv4;
 
     try {
-      await _runtime.runGlobalInitialization(options);
+      await _runtime!.runGlobalInitialization(options);
 
-      server = ApplicationServer(_runtime.channelType, options, 1);
+      server = ApplicationServer(_runtime!.channelType, options, 1);
 
-      await server.start();
+      await server!.start();
       _hasFinishedLaunching = true;
     } catch (e, st) {
       logger.severe("$e", this, st);
@@ -141,7 +141,7 @@ class Application<T extends ApplicationChannel> {
   Future stop() async {
     _hasFinishedLaunching = false;
     await Future.wait(supervisors.map((s) => s.stop()));
-    await server?.server?.close(force: true);
+    await server?.server.close(force: true);
 
     await ServiceRegistry.defaultInstance.close();
     _hasFinishedLaunching = false;
@@ -162,11 +162,11 @@ class Application<T extends ApplicationChannel> {
 
     final server = ApplicationServer(runtime.channelType, config, 1);
 
-    await server.channel.prepare();
+    await server.channel!.prepare();
 
-    final doc = await server.channel.documentAPI(projectSpec);
+    final doc = await server.channel!.documentAPI(projectSpec);
 
-    await server.channel.close();
+    await server.channel!.close();
 
     return doc;
   }
@@ -180,9 +180,9 @@ class Application<T extends ApplicationChannel> {
       {bool logToConsole = false}) async {
     final receivePort = ReceivePort();
 
-    final libraryUri = _runtime.libraryUri;
-    final typeName = _runtime.name;
-    final entryPoint = _runtime.isolateEntryPoint;
+    final libraryUri = _runtime!.libraryUri;
+    final typeName = _runtime!.name;
+    final entryPoint = _runtime!.isolateEntryPoint;
 
     final initialMessage = ApplicationInitialServerMessage(
         typeName, libraryUri, config, identifier, receivePort.sendPort,

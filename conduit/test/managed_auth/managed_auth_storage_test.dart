@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
@@ -11,8 +12,8 @@ import 'package:conduit/src/dev/context_helpers.dart';
 // These tests mostly duplicate authenticate_test.dart, but also add a few more
 // to manage long-term storage/cleanup of tokens and related items.
 void main() {
-  ManagedAuthDelegate<User> storage;
-  ManagedContext context;
+  late ManagedAuthDelegate<User> storage;
+  ManagedContext? context;
 
   setUp(() async {
     context =
@@ -44,7 +45,7 @@ void main() {
           ..hashedSecret = ac.hashedSecret
           ..redirectURI = ac.redirectURI)
         .map((mc) {
-      var q = Query<ManagedAuthClient>(context)..values = mc;
+      var q = Query<ManagedAuthClient>(context!)..values = mc;
       return q.insert();
     }));
 
@@ -57,7 +58,7 @@ void main() {
   });
 
   group("Client behavior", () {
-    AuthServer auth;
+    late AuthServer auth;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -69,8 +70,7 @@ void main() {
     });
 
     test("Revoked client can no longer be accessed", () async {
-      expect(
-          await auth.getClient("com.stablekernel.app1") is AuthClient, true);
+      expect(await auth.getClient("com.stablekernel.app1") is AuthClient, true);
       await auth.removeClient("com.stablekernel.app1");
       expect(await auth.getClient("com.stablekernel.app1"), isNull);
     });
@@ -82,13 +82,13 @@ void main() {
         // ignore: empty_catches
       } on AuthServerException {}
 
-      var q = Query<ManagedAuthClient>(context);
+      var q = Query<ManagedAuthClient>(context!);
       expect(await q.fetch(), hasLength(5));
     });
 
     test("Revoking unknown client has no impact", () async {
       await auth.removeClient("nonsense");
-      var q = Query<ManagedAuthClient>(context);
+      var q = Query<ManagedAuthClient>(context!);
       expect(await q.fetch(), hasLength(5));
     });
 
@@ -99,9 +99,12 @@ void main() {
           hashFunction: auth.hashFunction);
       await auth.addClient(client);
 
-      final q = Query<ManagedAuthClient>(context)
+      final q = Query<ManagedAuthClient>(context!)
         ..where((o) => o.id).equalTo("pub-id");
-      final result = (await q.fetchOne()).asClient();
+      final _result = await q.fetchOne();
+      expect(_result, isNotNull);
+
+      var result = _result!.asClient();
       expect(result.id, "pub-id");
       expect(result.hashedSecret, isNull);
       expect(result.salt, isNull);
@@ -161,9 +164,9 @@ void main() {
         ..allowedScopes = ["scope"].map((s) => AuthScope(s)).toList();
       await auth.addClient(client);
 
-      final q = Query<ManagedAuthClient>(context)
+      final q = Query<ManagedAuthClient>(context!)
         ..where((o) => o.id).equalTo("confidential-id");
-      final result = (await q.fetchOne()).asClient();
+      final result = (await q.fetchOne())!.asClient();
       expect(result.id, "confidential-id");
       expect(result.hashedSecret, isNotNull);
       expect(result.salt, isNotNull);
@@ -175,8 +178,8 @@ void main() {
   });
 
   group("Token behavior via authenticate", () {
-    AuthServer auth;
-    User createdUser;
+    late AuthServer auth;
+    late User createdUser;
     setUp(() async {
       auth = AuthServer(storage);
       createdUser = (await createUsers(context, 1)).first;
@@ -195,10 +198,10 @@ void main() {
 
       final now = DateTime.now().toUtc();
       expect(
-          token.issueDate.isBefore(now) ||
-              token.issueDate.isAtSameMomentAs(now),
+          token.issueDate!.isBefore(now) ||
+              token.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(token.expirationDate.isAfter(now), true);
+      expect(token.expirationDate!.isAfter(now), true);
     });
 
     test(
@@ -214,10 +217,10 @@ void main() {
 
       var now = DateTime.now().toUtc();
       expect(
-          token.issueDate.isBefore(now) ||
-              token.issueDate.isAtSameMomentAs(now),
+          token.issueDate!.isBefore(now) ||
+              token.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(token.expirationDate.isAfter(now), true);
+      expect(token.expirationDate!.isAfter(now), true);
 
       token = await auth.authenticate(createdUser.username,
           User.defaultPassword, "com.stablekernel.public", null);
@@ -229,10 +232,10 @@ void main() {
 
       now = DateTime.now().toUtc();
       expect(
-          token.issueDate.isBefore(now) ||
-              token.issueDate.isAtSameMomentAs(now),
+          token.issueDate!.isBefore(now) ||
+              token.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(token.expirationDate.isAfter(now), true);
+      expect(token.expirationDate!.isAfter(now), true);
     });
 
     test("Can create token if client has redirect uri", () async {
@@ -263,8 +266,8 @@ void main() {
 
     test("Create token fails with wildcard password", () async {
       try {
-        await auth.authenticate(createdUser.username, "%",
-            "com.stablekernel.app1", "kilimanjaro");
+        await auth.authenticate(
+            createdUser.username, "%", "com.stablekernel.app1", "kilimanjaro");
         expect(true, false);
         // ignore: empty_catches
       } on AuthServerException {}
@@ -341,8 +344,8 @@ void main() {
     });
 
     test("Cannot verify wildcard token", () async {
-      await auth.authenticate(createdUser.username,
-        User.defaultPassword, "com.stablekernel.app1", "kilimanjaro");
+      await auth.authenticate(createdUser.username, User.defaultPassword,
+          "com.stablekernel.app1", "kilimanjaro");
 
       try {
         await auth.verify("%");
@@ -382,9 +385,9 @@ void main() {
   });
 
   group("Refreshing token", () {
-    AuthServer auth;
-    User createdUser;
-    AuthToken initialToken;
+    late AuthServer auth;
+    late User createdUser;
+    late AuthToken initialToken;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -408,14 +411,14 @@ void main() {
 
       var now = DateTime.now().toUtc();
       expect(
-          token.issueDate.isBefore(now) ||
-              token.issueDate.isAtSameMomentAs(now),
+          token.issueDate!.isBefore(now) ||
+              token.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(token.expirationDate.isAfter(now), true);
+      expect(token.expirationDate!.isAfter(now), true);
 
-      expect(token.issueDate.isAfter(initialToken.issueDate), true);
-      expect(token.issueDate.difference(token.expirationDate),
-          initialToken.issueDate.difference(initialToken.expirationDate));
+      expect(token.issueDate!.isAfter(initialToken.issueDate!), true);
+      expect(token.issueDate!.difference(token.expirationDate!),
+          initialToken.issueDate!.difference(initialToken.expirationDate!));
 
       var authorization = await auth.verify(token.accessToken);
       expect(authorization.clientID, "com.stablekernel.app1");
@@ -444,7 +447,7 @@ void main() {
       }
 
       // Make sure we don't have duplicates in the db
-      var q = Query<ManagedAuthToken>(context);
+      var q = Query<ManagedAuthToken>(context!);
       expect(await q.fetch(), hasLength(1));
     });
 
@@ -523,8 +526,8 @@ void main() {
   });
 
   group("Generating auth code", () {
-    AuthServer auth;
-    User createdUser;
+    late AuthServer auth;
+    late User createdUser;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -535,16 +538,16 @@ void main() {
       var authCode = await auth.authenticateForCode(createdUser.username,
           User.defaultPassword, "com.stablekernel.redirect");
 
-      expect(authCode.code.length, greaterThan(0));
+      expect(authCode.code!.length, greaterThan(0));
       expect(authCode.resourceOwnerIdentifier, createdUser.id);
       expect(authCode.clientID, "com.stablekernel.redirect");
 
       final now = DateTime.now().toUtc();
       expect(
-          authCode.issueDate.isBefore(now) ||
-              authCode.issueDate.isAtSameMomentAs(now),
+          authCode.issueDate!.isBefore(now) ||
+              authCode.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(authCode.expirationDate.isAfter(now), true);
+      expect(authCode.expirationDate!.isAfter(now), true);
 
       var token = await auth.exchange(
           authCode.code, "com.stablekernel.redirect", "mckinley");
@@ -553,9 +556,10 @@ void main() {
       expect(token.refreshToken, isString);
       expect(token.resourceOwnerIdentifier, createdUser.id);
       expect(token.type, "bearer");
-      expect(token.expirationDate.difference(DateTime.now().toUtc()).inSeconds,
+      expect(token.expirationDate!.difference(DateTime.now().toUtc()).inSeconds,
           greaterThan(3500));
-      expect(token.issueDate.difference(DateTime.now().toUtc()).inSeconds.abs(),
+      expect(
+          token.issueDate!.difference(DateTime.now().toUtc()).inSeconds.abs(),
           lessThan(2));
     });
 
@@ -565,7 +569,7 @@ void main() {
             "bob+0@stable", User.defaultPassword, "com.stablekernel.redirect");
         expect(true, false);
       } on AuthServerException catch (e) {
-        expect(e.client.id, "com.stablekernel.redirect");
+        expect(e.client!.id, "com.stablekernel.redirect");
         expect(e.reason, AuthRequestError.accessDenied);
       }
     });
@@ -576,7 +580,7 @@ void main() {
             createdUser.username, "foobaraxegri%", "com.stablekernel.redirect");
         expect(true, false);
       } on AuthServerException catch (e) {
-        expect(e.client.id, "com.stablekernel.redirect");
+        expect(e.client!.id, "com.stablekernel.redirect");
         expect(e.reason, AuthRequestError.accessDenied);
       }
     });
@@ -587,7 +591,7 @@ void main() {
             createdUser.username, "%", "com.stablekernel.redirect");
         expect(true, false);
       } on AuthServerException catch (e) {
-        expect(e.client.id, "com.stablekernel.redirect");
+        expect(e.client!.id, "com.stablekernel.redirect");
         expect(e.reason, AuthRequestError.accessDenied);
       }
     });
@@ -609,7 +613,7 @@ void main() {
             User.defaultPassword, "com.stablekernel.app1");
         expect(true, false);
       } on AuthServerException catch (e) {
-        expect(e.client.id, "com.stablekernel.app1");
+        expect(e.client!.id, "com.stablekernel.app1");
         expect(e.reason, AuthRequestError.unauthorizedClient);
       }
     });
@@ -641,9 +645,9 @@ void main() {
   });
 
   group("Exchanging auth code", () {
-    AuthServer auth;
-    User createdUser;
-    AuthCode code;
+    late AuthServer auth;
+    late User createdUser;
+    late AuthCode code;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -663,10 +667,10 @@ void main() {
 
       final now = DateTime.now().toUtc();
       expect(
-          token.issueDate.isBefore(now) ||
-              token.issueDate.isAtSameMomentAs(now),
+          token.issueDate!.isBefore(now) ||
+              token.issueDate!.isAtSameMomentAs(now),
           true);
-      expect(token.expirationDate.isAfter(now), true);
+      expect(token.expirationDate!.isAfter(now), true);
     });
 
     test("Null code fails", () async {
@@ -710,7 +714,7 @@ void main() {
         // ignore: empty_catches
       } on AuthServerException {}
 
-      var q = Query<ManagedAuthToken>(context)
+      var q = Query<ManagedAuthToken>(context!)
         ..where((o) => o.code).equalTo(code.code);
       expect(await q.fetch(), isEmpty);
     });
@@ -736,7 +740,7 @@ void main() {
       }
 
       // Ensure that the associated auth code is also destroyed
-      var authCodeQuery = Query<ManagedAuthToken>(context);
+      var authCodeQuery = Query<ManagedAuthToken>(context!);
       expect(await authCodeQuery.fetch(), isEmpty);
     });
 
@@ -772,7 +776,7 @@ void main() {
       }
 
       // Ensure that the associated auth code is also destroyed
-      var authCodeQuery = Query<ManagedAuthToken>(context);
+      var authCodeQuery = Query<ManagedAuthToken>(context!);
       expect(await authCodeQuery.fetch(), isEmpty);
     });
 
@@ -825,9 +829,9 @@ void main() {
   });
 
   group("Cleanup/friendly fire scenarios from client", () {
-    List<User> createdUsers;
+    late List<User> createdUsers;
 
-    AuthServer auth;
+    late AuthServer auth;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -872,7 +876,7 @@ void main() {
         expect(e.reason, AuthRequestError.invalidGrant);
       }
 
-      var tokenQuery = Query<ManagedAuthToken>(context);
+      var tokenQuery = Query<ManagedAuthToken>(context!);
       expect(await tokenQuery.fetch(), isEmpty);
     });
 
@@ -914,7 +918,7 @@ void main() {
       expect(await auth.verify(issuedTokenKeep.accessToken),
           const TypeMatcher<Authorization>());
 
-      var tokenQuery = Query<ManagedAuthToken>(context);
+      var tokenQuery = Query<ManagedAuthToken>(context!);
       expect(await tokenQuery.fetch(), hasLength(3));
     });
 
@@ -943,9 +947,9 @@ void main() {
   });
 
   group("Cleanup/friendly fire on Authenticatable", () {
-    List<User> createdUsers;
+    late List<User> createdUsers;
 
-    AuthServer auth;
+    late AuthServer auth;
 
     setUp(() async {
       auth = AuthServer(storage);
@@ -992,15 +996,15 @@ void main() {
         expect(e.reason, AuthRequestError.invalidGrant);
       }
 
-      var tokenQuery = Query<ManagedAuthToken>(context);
+      var tokenQuery = Query<ManagedAuthToken>(context!);
       expect(await tokenQuery.fetch(), isEmpty);
     });
   });
 
   group("Code friendly fire/cleanup", () {
-    List<User> createdUsers;
+    late List<User> createdUsers;
 
-    AuthServer auth;
+    late AuthServer auth;
 
     setUp(() async {
       var limitedStorage = ManagedAuthDelegate<User>(context, tokenLimit: 3);
@@ -1017,11 +1021,11 @@ void main() {
       var exchangedToken = await auth.exchange(
           exchangedCode.code, "com.stablekernel.redirect", "mckinley");
 
-      var codeQuery = Query<ManagedAuthToken>(context)
+      var codeQuery = Query<ManagedAuthToken>(context!)
         ..where((o) => o.code).equalTo(exchangedCode.code);
       expect(await codeQuery.fetch(), hasLength(1));
 
-      var tokenQuery = Query<ManagedAuthToken>(context)
+      var tokenQuery = Query<ManagedAuthToken>(context!)
         ..where((o) => o.accessToken).equalTo(exchangedToken.accessToken);
       await tokenQuery.delete();
 
@@ -1036,7 +1040,8 @@ void main() {
       var manualCode = ManagedAuthToken()
         ..code = "ASDFGHJ"
         ..issueDate = DateTime.now().toUtc()
-        ..expirationDate = DateTime.now().add(const Duration(seconds: 60)).toUtc()
+        ..expirationDate =
+            DateTime.now().add(const Duration(seconds: 60)).toUtc()
         ..client = (ManagedAuthClient()..id = "com.stablekernel.redirect")
         ..resourceOwner = (User()..id = createdUsers.first.id);
 
@@ -1056,7 +1061,7 @@ void main() {
       }
 
       // Insert the 'race condition' code
-      var manualInsertQuery = Query<ManagedAuthToken>(context)
+      var manualInsertQuery = Query<ManagedAuthToken>(context!)
         ..values = manualCode;
       manualCode = await manualInsertQuery.insert();
 
@@ -1064,7 +1069,7 @@ void main() {
       // Other user codes remain
       var newCode = await auth.authenticateForCode(createdUsers.first.username,
           User.defaultPassword, "com.stablekernel.redirect");
-      var codeQuery = Query<ManagedAuthToken>(context);
+      var codeQuery = Query<ManagedAuthToken>(context!);
       var codesInDB = (await codeQuery.fetch()).map((ac) => ac.code).toList();
 
       // These codes are in chronological order
@@ -1092,9 +1097,9 @@ void main() {
   });
 
   group("Token friendly fire/cleanup", () {
-    List<User> createdUsers;
+    late List<User> createdUsers;
 
-    AuthServer auth;
+    late AuthServer auth;
 
     setUp(() async {
       var limitedStorage = ManagedAuthDelegate<User>(context, tokenLimit: 3);
@@ -1111,7 +1116,8 @@ void main() {
         ..accessToken = "ASDFGHJ"
         ..refreshToken = "ABCHASDS"
         ..issueDate = DateTime.now().toUtc()
-        ..expirationDate = DateTime.now().add(const Duration(seconds: 60)).toUtc()
+        ..expirationDate =
+            DateTime.now().add(const Duration(seconds: 60)).toUtc()
         ..client = (ManagedAuthClient()..id = "com.stablekernel.app1")
         ..resourceOwner = (User()..id = createdUsers.first.id);
 
@@ -1129,7 +1135,7 @@ void main() {
       }
 
       // Insert the 'race condition' token
-      var manualInsertQuery = Query<ManagedAuthToken>(context)
+      var manualInsertQuery = Query<ManagedAuthToken>(context!)
         ..values = manualToken;
       manualToken = await manualInsertQuery.insert();
 
@@ -1137,7 +1143,7 @@ void main() {
       // Other user token remain
       var newToken = await auth.authenticate(createdUsers.first.username,
           User.defaultPassword, "com.stablekernel.app1", "kilimanjaro");
-      var tokenQuery = Query<ManagedAuthToken>(context);
+      var tokenQuery = Query<ManagedAuthToken>(context!);
       var tokensInDB =
           (await tokenQuery.fetch()).map((ac) => ac.accessToken).toList();
 
@@ -1201,8 +1207,8 @@ void main() {
   });
 
   group("Scoping cases", () {
-    AuthServer auth;
-    User createdUser;
+    late AuthServer auth;
+    late User createdUser;
     setUp(() async {
       auth = AuthServer(storage);
       createdUser = (await createUsers(context, 1)).first;
@@ -1240,11 +1246,12 @@ void main() {
           .map((ac) => ManagedAuthClient()
             ..id = ac.id
             ..salt = ac.salt
-            ..allowedScope = ac.allowedScopes.map((a) => a.toString()).join(" ")
+            ..allowedScope =
+                ac.allowedScopes!.map((a) => a.toString()).join(" ")
             ..hashedSecret = ac.hashedSecret
             ..redirectURI = ac.redirectURI)
           .map((mc) {
-        var q = Query<ManagedAuthClient>(context)..values = mc;
+        var q = Query<ManagedAuthClient>(context!)..values = mc;
         return q.insert();
       }));
     });
@@ -1258,17 +1265,17 @@ void main() {
           createdUser.username, User.defaultPassword, "all", null,
           requestedScopes: [AuthScope("user")]);
 
-      expect(token1.scopes.length, 1);
+      expect(token1.scopes!.length, 1);
       expect(token1.accessToken, isNotNull);
-      expect(token1.scopes.first.isExactly("user"), true);
+      expect(token1.scopes!.first.isExactly("user"), true);
 
       var token2 = await auth.authenticate(
           createdUser.username, User.defaultPassword, "all", null,
           requestedScopes: [AuthScope("user:sub")]);
 
-      expect(token2.scopes.length, 1);
+      expect(token2.scopes!.length, 1);
       expect(token2.accessToken, isNotNull);
-      expect(token2.scopes.first.isExactly("user:sub"), true);
+      expect(token2.scopes!.first.isExactly("user:sub"), true);
     });
 
     test(
@@ -1278,10 +1285,10 @@ void main() {
           createdUser.username, User.defaultPassword, "all", null,
           requestedScopes: [AuthScope("user"), AuthScope("location:add")]);
 
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
-      expect(token.scopes.any((s) => s.isExactly("location:add")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("location:add")), true);
     });
 
     test(
@@ -1291,9 +1298,9 @@ void main() {
           createdUser.username, User.defaultPassword, "all", null,
           requestedScopes: [AuthScope("user"), AuthScope("unknown")]);
 
-      expect(token.scopes.length, 1);
+      expect(token.scopes!.length, 1);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
     });
 
     test(
@@ -1306,10 +1313,10 @@ void main() {
             AuthScope("location:add:sub")
           ]);
 
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user:sub")), true);
-      expect(token.scopes.any((s) => s.isExactly("location:add:sub")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user:sub")), true);
+      expect(token.scopes!.any((s) => s.isExactly("location:add:sub")), true);
     });
 
     test("Client that requests allowed nested scope gets token", () async {
@@ -1318,18 +1325,18 @@ void main() {
           requestedScopes: [
             AuthScope("user:a"),
           ]);
-      expect(token.scopes.length, 1);
+      expect(token.scopes!.length, 1);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user:a")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user:a")), true);
 
       token = await auth.authenticate(
           createdUser.username, User.defaultPassword, "subset.multiple", null,
           requestedScopes: [
             AuthScope("user:b"),
           ]);
-      expect(token.scopes.length, 1);
+      expect(token.scopes!.length, 1);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user:b")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user:b")), true);
 
       try {
         var _ = await auth.authenticate(
@@ -1391,10 +1398,10 @@ void main() {
           requestedScopes: [AuthScope("user"), AuthScope("location:add")]);
 
       token = await auth.refresh(token.refreshToken, "all.redirect", "a");
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
-      expect(token.scopes.any((s) => s.isExactly("location:add")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("location:add")), true);
     });
 
     test("Refresh token with lesser scope specified returns specified scope",
@@ -1408,19 +1415,19 @@ void main() {
             AuthScope("user"),
             AuthScope("location:add.modifier")
           ]);
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
       expect(
-          token.scopes.any((s) => s.isExactly("location:add.modifier")), true);
+          token.scopes!.any((s) => s.isExactly("location:add.modifier")), true);
 
       token = await auth
           .refresh(token.refreshToken, "all.redirect", "a", requestedScopes: [
         AuthScope("user:under"),
       ]);
-      expect(token.scopes.length, 1);
+      expect(token.scopes!.length, 1);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user:under")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user:under")), true);
     });
 
     test(
@@ -1472,7 +1479,7 @@ void main() {
           createdUser.username, User.defaultPassword, "all.redirect", "a",
           requestedScopes: [AuthScope("user"), AuthScope("location:add")]);
 
-      var q = Query<ManagedAuthClient>(context)
+      var q = Query<ManagedAuthClient>(context!)
         ..where((o) => o.id).equalTo("all.redirect")
         ..values.allowedScope = "user location:add.readonly";
       await q.updateOne();
@@ -1501,18 +1508,18 @@ void main() {
           requestedScopes: [AuthScope("user")]);
       var token1 = await auth.exchange(code1.code, "all.redirect", "a");
 
-      expect(token1.scopes.length, 1);
+      expect(token1.scopes!.length, 1);
       expect(token1.accessToken, isNotNull);
-      expect(token1.scopes.first.isExactly("user"), true);
+      expect(token1.scopes!.first.isExactly("user"), true);
 
       var code2 = await auth.authenticateForCode(
           createdUser.username, User.defaultPassword, "all.redirect",
           requestedScopes: [AuthScope("user:sub")]);
       var token2 = await auth.exchange(code2.code, "all.redirect", "a");
 
-      expect(token2.scopes.length, 1);
+      expect(token2.scopes!.length, 1);
       expect(token2.accessToken, isNotNull);
-      expect(token2.scopes.first.isExactly("user:sub"), true);
+      expect(token2.scopes!.first.isExactly("user:sub"), true);
     });
 
     test(
@@ -1526,10 +1533,10 @@ void main() {
           ]);
       var token = await auth.exchange(code.code, "all.redirect", "a");
 
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user:sub")), true);
-      expect(token.scopes.any((s) => s.isExactly("location:add:sub")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user:sub")), true);
+      expect(token.scopes!.any((s) => s.isExactly("location:add:sub")), true);
     });
 
     test(
@@ -1541,10 +1548,10 @@ void main() {
 
       var token = await auth.exchange(code.code, "all.redirect", "a");
 
-      expect(token.scopes.length, 2);
+      expect(token.scopes!.length, 2);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
-      expect(token.scopes.any((s) => s.isExactly("location:add")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("location:add")), true);
     });
 
     test(
@@ -1555,9 +1562,9 @@ void main() {
           requestedScopes: [AuthScope("user"), AuthScope("unknown")]);
 
       var token = await auth.exchange(code.code, "all.redirect", "a");
-      expect(token.scopes.length, 1);
+      expect(token.scopes!.length, 1);
       expect(token.accessToken, isNotNull);
-      expect(token.scopes.any((s) => s.isExactly("user")), true);
+      expect(token.scopes!.any((s) => s.isExactly("user")), true);
     });
 
     test("Client will reject auth code request for unknown scope", () async {
@@ -1609,7 +1616,7 @@ class User extends ManagedObject<_User>
 
 class _User extends ResourceOwnerTableDefinition {}
 
-Future<List<User>> createUsers(ManagedContext ctx, int count) async {
+Future<List<User>> createUsers(ManagedContext? ctx, int count) async {
   var list = <User>[];
   for (int i = 0; i < count; i++) {
     var salt = AuthUtility.generateRandomSalt();
@@ -1619,7 +1626,7 @@ Future<List<User>> createUsers(ManagedContext ctx, int count) async {
       ..hashedPassword =
           AuthUtility.generatePasswordHash(User.defaultPassword, salt);
 
-    var q = Query<User>(ctx)..values = u;
+    var q = Query<User>(ctx!)..values = u;
 
     list.add(await q.insert());
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
@@ -16,7 +17,7 @@ void main() {
 
       var now = DateTime.now().toUtc();
       for (var i = 0; i < 5; i++) {
-        var q = Query<TestModel>(app.channel.context)
+        var q = Query<TestModel>(app.channel!.context)
           ..values.createdAt = now
           ..values.name = "$i";
         allObjects.add(await q.insert());
@@ -26,7 +27,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -103,7 +104,7 @@ void main() {
 }
 
 class TestChannel extends ApplicationChannel {
-  ManagedContext context;
+  late ManagedContext context;
 
   @override
   Future prepare() async {
@@ -112,14 +113,14 @@ class TestChannel extends ApplicationChannel {
         "dart", "dart", "localhost", 5432, "dart_test");
     context = ManagedContext(dataModel, persistentStore);
 
-    var targetSchema = Schema.fromDataModel(context.dataModel);
+    var targetSchema = Schema.fromDataModel(context.dataModel!);
     var schemaBuilder = SchemaBuilder.toSchema(
         context.persistentStore, targetSchema,
         isTemporary: true);
 
     var commands = schemaBuilder.commands;
     for (var cmd in commands) {
-      await context.persistentStore.execute(cmd);
+      await context.persistentStore!.execute(cmd);
     }
   }
 
@@ -135,19 +136,19 @@ class TestModel extends ManagedObject<_TestModel> implements _TestModel {}
 
 class _TestModel {
   @primaryKey
-  int id;
+  int? id;
 
-  String name;
-  DateTime createdAt;
+  String? name;
+  late DateTime createdAt;
 }
 
 class Subclass extends ManagedObjectController<TestModel> {
   Subclass(ManagedContext context) : super(context);
 
   @override
-  Future<Query<TestModel>> willFindObjectWithQuery(
-      Query<TestModel> query) async {
-    query.where((o) => o.name).oneOf(["1", "2", "3"]);
+  Future<Query<TestModel>?> willFindObjectWithQuery(
+      Query<TestModel>? query) async {
+    query!.where((o) => o.name).oneOf(["1", "2", "3"]);
     return query;
   }
 
@@ -162,9 +163,9 @@ class Subclass extends ManagedObjectController<TestModel> {
   }
 
   @override
-  Future<Query<TestModel>> willInsertObjectWithQuery(
-      Query<TestModel> query) async {
-    query.values.name = "Mr. ${query.values.name}";
+  Future<Query<TestModel>?> willInsertObjectWithQuery(
+      Query<TestModel>? query) async {
+    query!.values.name = "Mr. ${query.values.name}";
     return query;
   }
 
@@ -174,9 +175,9 @@ class Subclass extends ManagedObjectController<TestModel> {
   }
 
   @override
-  Future<Query<TestModel>> willDeleteObjectWithQuery(
-      Query<TestModel> query) async {
-    if (request.path.variables["id"] == "3") {
+  Future<Query<TestModel>?> willDeleteObjectWithQuery(
+      Query<TestModel>? query) async {
+    if (request!.path.variables["id"] == "3") {
       throw Response(301, null, {"error": "invalid"});
     }
     return query;
@@ -193,9 +194,9 @@ class Subclass extends ManagedObjectController<TestModel> {
   }
 
   @override
-  Future<Query<TestModel>> willUpdateObjectWithQuery(
-      Query<TestModel> query) async {
-    query.values.name = "Mr. ${query.values.name}";
+  Future<Query<TestModel>?> willUpdateObjectWithQuery(
+      Query<TestModel>? query) async {
+    query!.values.name = "Mr. ${query.values.name}";
     return query;
   }
 
@@ -210,9 +211,9 @@ class Subclass extends ManagedObjectController<TestModel> {
   }
 
   @override
-  Future<Query<TestModel>> willFindObjectsWithQuery(
-      Query<TestModel> query) async {
-    query.where((o) => o.id).greaterThan(1);
+  Future<Query<TestModel>?> willFindObjectsWithQuery(
+      Query<TestModel>? query) async {
+    query!.where((o) => o.id).greaterThan(1);
     return query;
   }
 

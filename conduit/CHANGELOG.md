@@ -1,3 +1,10 @@
+## conduit 2.0.0
+
+Breaking changes
+Query.values can no longer be null as such to check if the set of values are empty you need to call Query.hasValues;
+
+You can no longer set Query.values to null, instead use Query.clearValues().
+
 ## 3.3.0-b1
 
 - Adds 'aqueduct build' command that generates an executable binary of an Aqueduct app, with some known issues

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
@@ -16,7 +17,7 @@ void main() {
 
       var now = DateTime.now().toUtc();
       for (var i = 0; i < 5; i++) {
-        var q = Query<TestModel>(app.channel.context)
+        var q = Query<TestModel>(app.channel!.context)
           ..values.createdAt = now
           ..values.name = "$i";
         allObjects.add(await q.insert());
@@ -26,7 +27,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -91,7 +92,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -124,7 +125,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -160,7 +161,7 @@ void main() {
 
       var now = DateTime.now().toUtc();
       for (var i = 0; i < 10; i++) {
-        var q = Query<TestModel>(app.channel.context)
+        var q = Query<TestModel>(app.channel!.context)
           ..values.createdAt = now
           ..values.name = "${9 - i}";
         allObjects.add(await q.insert());
@@ -170,7 +171,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -276,7 +277,7 @@ void main() {
 
       var now = DateTime.now().toUtc();
       for (var i = 0; i < 10; i++) {
-        var q = Query<TestModel>(app.channel.context)
+        var q = Query<TestModel>(app.channel!.context)
           ..values.createdAt = now
           ..values.name = "${9 - i}";
         allObjects.add(await q.insert());
@@ -286,7 +287,7 @@ void main() {
     });
 
     tearDownAll(() async {
-      await app.channel.context.close();
+      await app.channel!.context.close();
       await app.stop();
     });
 
@@ -304,7 +305,7 @@ void main() {
 }
 
 class TestChannel extends ApplicationChannel {
-  ManagedContext context;
+  late ManagedContext context;
 
   @override
   Future prepare() async {
@@ -313,14 +314,14 @@ class TestChannel extends ApplicationChannel {
         "dart", "dart", "localhost", 5432, "dart_test");
     context = ManagedContext(dataModel, persistentStore);
 
-    var targetSchema = Schema.fromDataModel(context.dataModel);
+    var targetSchema = Schema.fromDataModel(context.dataModel!);
     var schemaBuilder = SchemaBuilder.toSchema(
         context.persistentStore, targetSchema,
         isTemporary: true);
 
     var commands = schemaBuilder.commands;
     for (var cmd in commands) {
-      await context.persistentStore.execute(cmd);
+      await context.persistentStore!.execute(cmd);
     }
   }
 
@@ -332,7 +333,7 @@ class TestChannel extends ApplicationChannel {
         .link(() => ManagedObjectController<TestModel>(context));
 
     router.route("/dynamic/[:id]").link(() => ManagedObjectController.forEntity(
-        context.dataModel.entityForType(TestModel), context));
+        context.dataModel!.entityForType(TestModel), context));
     return router;
   }
 }
@@ -341,8 +342,8 @@ class TestModel extends ManagedObject<_TestModel> implements _TestModel {}
 
 class _TestModel {
   @primaryKey
-  int id;
+  int? id;
 
-  String name;
-  DateTime createdAt;
+  String? name;
+  late DateTime createdAt;
 }

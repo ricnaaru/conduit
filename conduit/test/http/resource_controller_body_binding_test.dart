@@ -10,7 +10,7 @@ import "package:test/test.dart";
 import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
-  HttpServer server;
+  HttpServer? server;
 
   setUpAll(() {
     ManagedContext(ManagedDataModel([TestModel]), DefaultPersistentStore());
@@ -155,7 +155,7 @@ void main() {
 
       final response = await http.post(Uri.parse("http://localhost:4040"),
           headers: {"Content-Type": "application/octet-stream"},
-          body: [1, 2, 3]).catchError((err) => null);
+          body: [1, 2, 3]).catchError((err) {});
 
       expect(response.statusCode, 200);
       expect(response.bodyBytes, [1, 2, 3]);
@@ -232,26 +232,26 @@ Future<http.Response> postJSON(dynamic body) {
   if (body == null) {
     return http.post(Uri.parse("http://localhost:4040"), headers: {
       "Content-Type": "application/json"
-    }).catchError((err) => null);
+    }).catchError((err) {});
   }
   return http
       .post(Uri.parse("http://localhost:4040"),
           headers: {"Content-Type": "application/json"},
           body: json.encode(body))
-      .catchError((err) => null);
+      .catchError((err) {});
 }
 
 class TestModel extends ManagedObject<_TestModel> implements _TestModel {}
 
 class _TestModel {
   @primaryKey
-  int id;
+  int? id;
 
-  String name;
+  String? name;
 }
 
 class TestSerializable extends Serializable {
-  Map<String, dynamic> contents;
+  Map<String, dynamic>? contents;
 
   @override
   void readFromMap(Map<String, dynamic> object) {
@@ -259,7 +259,7 @@ class TestSerializable extends Serializable {
   }
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return contents;
   }
 }
@@ -271,7 +271,7 @@ class CrashModel extends Serializable {
   }
 
   @override
-  Map<String, dynamic> asMap() {
+  Map<String, dynamic>? asMap() {
     return null;
   }
 }
@@ -292,14 +292,14 @@ class ListTestController extends ResourceController {
 
 class OptionalTestController extends ResourceController {
   @Operation.post()
-  Future<Response> create({@Bind.body() TestModel tm}) async {
+  Future<Response> create({@Bind.body() TestModel? tm}) async {
     return Response.ok(tm);
   }
 }
 
 class PropertyTestController extends ResourceController {
   @Bind.body()
-  TestModel tm;
+  TestModel? tm;
 
   @Operation.post()
   Future<Response> create() async {

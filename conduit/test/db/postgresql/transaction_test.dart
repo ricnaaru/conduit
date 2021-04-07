@@ -4,7 +4,7 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit/src/dev/context_helpers.dart';
 
 void main() {
-  ManagedContext context;
+  late ManagedContext context;
   setUp(() async {
     context = await contextWithModels([Model]);
   });
@@ -14,7 +14,7 @@ void main() {
   });
 
   test("Transaction returns value of closure", () async {
-    String v = await context.transaction((t) async {
+    String? v = await context.transaction((t) async {
       final o = await Query.insertObject(t, Model()..name = "Bob");
       return o.name;
     });
@@ -38,7 +38,7 @@ void main() {
   });
 
   test("A transaction returns null if it completes successfully", () async {
-    final result = await context.transaction((t) async {
+    final dynamic result = await context.transaction((t) async {
       await Query.insertObject(t, Model()..name = "Bob");
     });
 
@@ -69,7 +69,6 @@ void main() {
         await Query.insertObject(t, Model());
         fail('unreachable');
       });
-      fail('unreachable');
     } on QueryException catch (e) {
       expect(e.toString(), contains("not-null"));
     }
@@ -85,7 +84,6 @@ void main() {
         await Query.insertObject(t, Model()..name = "1");
         throw StateError("hello");
       });
-      fail('unreachable');
     } on StateError catch (e) {
       expect(e.toString(), contains("hello"));
     }
@@ -118,7 +116,7 @@ void main() {
       () async {
     await context.transaction((t) async {
       await Query.insertObject(t, Model()..name = "1");
-      await t.persistentStore.execute("INSERT INTO _Model (name) VALUES ('2')");
+      await t.persistentStore!.execute("INSERT INTO _Model (name) VALUES ('2')");
       await Query.insertObject(t, Model()..name = "3");
     });
 
@@ -149,9 +147,9 @@ void main() {
 
 class _Model {
   @primaryKey
-  int id;
+  int? id;
 
-  String name;
+  String? name;
 }
 
 class Model extends ManagedObject<_Model> implements _Model {}
