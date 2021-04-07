@@ -120,7 +120,7 @@ class Column {
   /// [defaultValue] is sent as-is to the database, therefore, if the default value is the integer value 2,
   /// pass the string "2". If the default value is a string, it must also be wrapped in single quotes: "'defaultValue'".
   const Column(
-      {required ManagedPropertyType databaseType,
+      {ManagedPropertyType? databaseType,
       bool primaryKey = false,
       bool nullable = false,
       String? defaultValue,
@@ -148,7 +148,7 @@ class Column {
   ///
   /// By default, the database column type is inferred from the Dart type of the property, e.g. a Dart [String] is a PostgreSQL text type.
   /// This allows you to override the default type mapping for the annotated property.
-  final ManagedPropertyType databaseType;
+  final ManagedPropertyType? databaseType;
 
   /// Indicates whether or not the property can be null or not.
   ///
