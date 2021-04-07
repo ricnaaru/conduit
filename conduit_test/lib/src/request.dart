@@ -11,7 +11,7 @@ class TestRequest {
   TestRequest._(this._client);
 
   final HttpClient _client;
-  Uri _baseUrl;
+  late Uri _baseUrl;
 
   /// The base URL of the request.
   ///
@@ -26,7 +26,7 @@ class TestRequest {
   String get baseURL => _baseUrl.toString();
 
   /// The path of the request; will be appended to [baseURL].
-  String path;
+  String? path;
 
   /// The Content-Type that [body] should be encoded in.
   ///
@@ -65,17 +65,17 @@ class TestRequest {
   ///
   /// This value is derived from [baseURL], [path], and [query].
   String get requestURL {
-    if (path == null || baseURL == null) {
+    if (path == null) {
       throw StateError("TestRequest must have non-null path and baseURL.");
     }
 
-    var actualPath = path;
+    var actualPath = path!;
     while (actualPath.startsWith("/")) {
       actualPath = actualPath.substring(1);
     }
 
     var url = _baseUrl.resolve(actualPath).toString();
-    if ((query?.length ?? 0) > 0) {
+    if (query.isNotEmpty) {
       final pairs = <String>[];
 
       query.forEach((key, val) {
@@ -175,12 +175,12 @@ class TestRequest {
 
     final request = await _client.openUrl(method.toUpperCase(), uri);
 
-    headers?.forEach((headerKey, headerValue) {
-      request.headers.add(headerKey, headerValue);
+    headers.forEach((headerKey, headerValue) {
+      request.headers.add(headerKey, headerValue as Object);
     });
 
     if (body != null) {
-      final bytes = _bodyBytes;
+      final bytes = _bodyBytes!;
       request.headers.contentType = contentType;
       request.headers.contentLength = bytes.length;
       request.add(bytes);
@@ -195,13 +195,13 @@ class TestRequest {
     return response;
   }
 
-  List<int> get _bodyBytes {
+  List<int>? get _bodyBytes {
     if (body == null) {
       return null;
     }
 
     if (!encodeBody) {
-      return body as List<int>;
+      return body as List<int>?;
     }
 
     final codec =
@@ -214,7 +214,7 @@ class TestRequest {
         throw StateError("No codec for content type '$contentType'.");
       }
 
-      return body as List<int>;
+      return body as List<int>?;
     }
 
     return codec.encode(body);

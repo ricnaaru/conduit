@@ -6,7 +6,7 @@ import 'package:conduit_test/src/response_matcher.dart';
 import 'package:test/test.dart';
 
 void main() {
-  MockHTTPServer server;
+  late MockHTTPServer server;
   final agent = Agent.onPort(8000);
 
   setUp(() async {

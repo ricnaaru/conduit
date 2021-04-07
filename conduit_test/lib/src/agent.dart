@@ -36,7 +36,7 @@ part 'response.dart';
 ///         }
 class Agent {
   /// Configures a new agent that sends requests to [app].
-  Agent(Application app)
+  Agent(Application? app)
       : _application = app,
         _host = null,
         _port = null,
@@ -62,13 +62,13 @@ class Agent {
         _port = original._port,
         contentType = original.contentType,
         _application = original._application {
-    headers.addAll(original?.headers ?? {});
+    headers.addAll(original.headers);
   }
 
-  final String _scheme;
-  final String _host;
-  final int _port;
-  final Application _application;
+  final String? _scheme;
+  final String? _host;
+  final int? _port;
+  final Application? _application;
   final HttpClient _client = HttpClient();
 
   /// Default headers to be added to requests made by this agent.
@@ -93,10 +93,10 @@ class Agent {
   /// The base URL that this agent's requests will be made against.
   String get baseURL {
     if (_application != null) {
-      if (!_application.isRunning) {
+      if (!_application!.isRunning) {
         throw StateError("Application under test is not running.");
       }
-      return "${_application.server.requiresHTTPS ? "https" : "http"}://localhost:${_application.channel.server.server.port}";
+      return "${_application!.server!.requiresHTTPS ? "https" : "http"}://localhost:${_application!.channel!.server.server.port}";
     }
 
     return "$_scheme://$_host:$_port";
@@ -108,7 +108,7 @@ class Agent {
   /// for the key 'authorization' in [headers].
   void setBasicAuthorization(String username, String password) {
     headers["authorization"] =
-        "Basic ${base64.encode("$username:${password ?? ""}".codeUnits)}";
+        "Basic ${base64.encode("$username:${password}".codeUnits)}";
   }
 
   /// Adds bearer authorization to requests from this agent.
@@ -150,7 +150,7 @@ class Agent {
   ///
   /// Calls [execute] with "GET" method.
   Future<TestResponse> get(String path,
-      {Map<String, dynamic> headers, Map<String, dynamic> query}) {
+      {Map<String, dynamic>? headers, Map<String, Object>? query}) {
     return execute("GET", path, headers: headers, query: query);
   }
 
@@ -159,8 +159,8 @@ class Agent {
   /// Calls [execute] with "POST" method.
   Future<TestResponse> post(String path,
       {dynamic body,
-      Map<String, dynamic> headers,
-      Map<String, dynamic> query}) {
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? query}) {
     return execute("POST", path, body: body, headers: headers, query: query);
   }
 
@@ -169,8 +169,8 @@ class Agent {
   /// Calls [execute] with "DELETE" method.
   Future<TestResponse> delete(String path,
       {dynamic body,
-      Map<String, dynamic> headers,
-      Map<String, dynamic> query}) {
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? query}) {
     return execute("DELETE", path, body: body, headers: headers, query: query);
   }
 
@@ -179,8 +179,8 @@ class Agent {
   /// Calls [execute] with "PUT" method.
   Future<TestResponse> put(String path,
       {dynamic body,
-      Map<String, dynamic> headers,
-      Map<String, dynamic> query}) {
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? query}) {
     return execute("PUT", path, body: body, headers: headers, query: query);
   }
 
@@ -199,11 +199,11 @@ class Agent {
   /// If [query] is non-null, each value is URI-encoded and then the map is encoding as the request URI's  query string.
   Future<TestResponse> execute(String method, String path,
       {dynamic body,
-      Map<String, dynamic> headers,
-      Map<String, dynamic> query}) {
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? query}) {
     final req = request(path)
       ..body = body
-      ..query = query;
+      ..query = query ?? {};
 
     if (headers != null) {
       req.headers.addAll(headers);
