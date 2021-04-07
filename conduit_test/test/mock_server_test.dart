@@ -155,7 +155,8 @@ void main() {
     test("Can provide a single outage", () async {
       server.queueOutage();
       server.queueResponse(Response.ok(null));
-      final outageResponseFuture = testClient.request("/outage").get();
+      final Future<TestResponse?> outageResponseFuture =
+          testClient.request("/outage").get();
 
       // Introduce a delay to ensure that the /outage request gets there before /success
       await Future.delayed(const Duration(seconds: 1));
@@ -206,4 +207,8 @@ Future spawnFunc(List pair) async {
   final testClient = Agent.onPort(4000);
   sleep(Duration(seconds: delay));
   await testClient.request(path).get().catchError((_) {});
+}
+
+Future<TestResponse?> tttt() {
+  return Future.value(null);
 }
