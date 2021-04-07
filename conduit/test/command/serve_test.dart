@@ -65,8 +65,7 @@ void main() {
     var result = await http.get(Uri.parse("http://localhost:8888/example"));
     expect(result.statusCode, 200);
 
-    // ignore: unawaited_futures
-    task.process!.stop(0);
+    await task.process!.stop(0);
     expect(await task.exitCode, 0);
   });
 
@@ -78,7 +77,7 @@ void main() {
 
     task = projectUnderTestCli.start("serve", ["-n", "1"]);
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
     expect(
       projectUnderTestCli.output,
@@ -99,7 +98,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
     task = projectUnderTestCli.start("serve", ["-n", "1"]);
 
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
     expect(projectUnderTestCli.output, contains("Application failed to start"));
 
@@ -172,13 +171,13 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
     task = projectUnderTestCli
         .start("serve", ["--ssl-key-path", "server.key", "-n", "1"]);
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
 
     task = projectUnderTestCli
         .start("serve", ["--ssl-certificate-path", "server.crt", "-n", "1"]);
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
   });
 
@@ -204,7 +203,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
       ],
     );
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
   });
 
@@ -225,7 +224,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
       ],
     );
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
     expect(await task.exitCode, isNonZero);
   });
 
@@ -239,7 +238,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
 
     task = projectUnderTestCli.start("serve", ["-n", "1"]);
     // ignore: unawaited_futures
-    task.hasStarted.catchError((_) => null);
+    task.hasStarted.catchError((_) => false);
 
     expect(await task.exitCode, isNonZero);
     expect(
@@ -255,7 +254,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
       (c) {
         var newContents = c.replaceAll(
             'return new Response.ok({"key": "value"});',
-            "return new Response.ok(new File(options.configurationFilePath).readAsStringSync())..contentType = ContentType.TEXT;");
+            "return new Response.ok(File(options!.configurationFilePath!).readAsStringSync())..contentType = ContentType.TEXT;");
         return "import 'dart:io';\n$newContents";
       },
     );
@@ -275,7 +274,7 @@ static Future initializeApplication(ApplicationOptions x) async { throw new Exce
       (c) {
         var newContents = c.replaceAll(
             'return new Response.ok({"key": "value"});',
-            "return new Response.ok(new File(options.configurationFilePath).readAsStringSync())..contentType = ContentType.TEXT;");
+            "return new Response.ok(File(options!.configurationFilePath!).readAsStringSync())..contentType = ContentType.TEXT;");
         return "import 'dart:io';\n$newContents";
       },
     );
