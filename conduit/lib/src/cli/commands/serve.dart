@@ -48,7 +48,8 @@ class CLIServer extends CLICommand with CLIProject {
       abbr: "a",
       help:
           "The address to listen on. See HttpServer.bind for more details; this value is used as the String passed to InternetAddress.lookup."
-          " Using the default will listen on any address.")
+          " Using the default will listen on any address.",
+      defaultsTo: '0.0.0.0')
   String get address => decode("address")!;
 
   @Option("channel",
