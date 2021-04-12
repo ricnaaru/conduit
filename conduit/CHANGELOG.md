@@ -1,4 +1,6 @@
-## conduit 2.0.0
+## conduit 2.0.0-a1
+
+Alpha release for Conduit NNBD included
 
 Breaking changes
 Query.values can no longer be null as such to check if the set of values are empty you need to call Query.hasValues;
