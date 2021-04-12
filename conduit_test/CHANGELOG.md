@@ -1,3 +1,9 @@
+## 2.0.0-a1
+
+- Alpha release for Conduit NNBD included
+
+# Aqueduct
+
 ## 1.0.1
 
 - Fixes analysis warnings for Dart 2.1.1
