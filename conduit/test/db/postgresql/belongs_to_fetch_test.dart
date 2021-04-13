@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 import 'package:conduit/src/dev/model_graph.dart';
 
-import 'postgres_test_config.dart';
+import '../../not_tests/postgres_test_config.dart';
 
 /*
   The more rigid tests on joining are covered by tiered_where, has_many and has_one tests.

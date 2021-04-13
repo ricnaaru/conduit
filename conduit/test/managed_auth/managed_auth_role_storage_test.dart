@@ -4,8 +4,7 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
 import 'package:test/test.dart';
 
-
-import '../db/postgresql/postgres_test_config.dart';
+import '../not_tests/postgres_test_config.dart';
 
 // These tests are similar to managed_auth_storage_test, but handle the cases where authenticatables
 // have scope rules.
@@ -16,8 +15,8 @@ void main() {
   late List<User> createdUsers;
 
   setUpAll(() async {
-    context =
-        await PostgresTestConfig().contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
+    context = await PostgresTestConfig()
+        .contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
     storage = RoleBasedAuthStorage(context);
     auth = AuthServer(storage);
     createdUsers = await createUsers(context, 5);

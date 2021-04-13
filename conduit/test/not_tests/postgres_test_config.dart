@@ -1,6 +1,11 @@
 import 'dart:io';
 
-import 'package:conduit/conduit.dart';
+import 'package:conduit/src/db/managed/context.dart';
+import 'package:conduit/src/db/managed/data_model.dart';
+import 'package:conduit/src/db/persistent_store/persistent_store.dart';
+import 'package:conduit/src/db/postgresql/postgresql_persistent_store.dart';
+import 'package:conduit/src/db/schema/schema.dart';
+import 'package:conduit_config/conduit_config.dart';
 
 /// This class is used to define the default configuration use
 /// by Unit Tests to connect to the postgres db.

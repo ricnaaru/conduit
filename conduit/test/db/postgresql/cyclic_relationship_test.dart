@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 
-import 'postgres_test_config.dart';
+import '../../not_tests/postgres_test_config.dart';
 
 void main() {
   ManagedContext? context;

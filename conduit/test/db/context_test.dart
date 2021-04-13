@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:conduit/conduit.dart';
 import 'package:test/test.dart';
 
-import 'postgresql/postgres_test_config.dart';
+import '../not_tests/postgres_test_config.dart';
 
 void main() {
   group("Multiple contexts, same data model", () {

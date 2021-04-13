@@ -1,12 +1,13 @@
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 
-import 'postgresql/postgres_test_config.dart';
+import '../not_tests/postgres_test_config.dart';
 
 void main() {
   ManagedContext? context;
   setUp(() async {
-    context = await PostgresTestConfig().contextWithModels([Parent, Child, Grandchild]);
+    context = await PostgresTestConfig()
+        .contextWithModels([Parent, Child, Grandchild]);
   });
 
   tearDown(() async {
@@ -26,7 +27,9 @@ void main() {
 
     test("Cannot select relationship", () {
       try {
-        context!.entityForType(Child)!.identifyAttribute((Child? p) => p!.parent);
+        context!
+            .entityForType(Child)!
+            .identifyAttribute((Child? p) => p!.parent);
         fail("unreachable");
       } on ArgumentError catch (e) {
         expect(e.toString(), contains("cannot be selected"));
@@ -142,9 +145,8 @@ void main() {
 
   group("KeyPath identification", () {
     test("Identify multiple properties", () {
-      final props = context!
-          .entityForType(Parent)!
-          .identifyProperties((Parent? x) => [x!.document, x.field, x.children])!;
+      final props = context!.entityForType(Parent)!.identifyProperties(
+          (Parent? x) => [x!.document, x.field, x.children])!;
       expect(props.length, 3);
       expect(props.any((k) => k.path.first!.name == "document"), true);
       expect(props.any((k) => k.path.first!.name == "field"), true);

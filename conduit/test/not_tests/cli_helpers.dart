@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:conduit/conduit.dart';
 import 'package:conduit/src/cli/runner.dart';
 import 'package:conduit/src/cli/running_process.dart';
 
@@ -135,30 +134,6 @@ class TestChannel extends ApplicationChannel {
       print("executeMigrations failed: $output");
     }
     return res;
-  }
-
-  Future<List<File>> writeMigrations(List<Schema> schemas) async {
-    try {
-      defaultMigrationDirectory.createSync();
-    } catch (_) {}
-
-    final currentNumberOfMigrations = defaultMigrationDirectory
-        .listSync()
-        .where((e) => e.path.endsWith("migration.dart"))
-        .length;
-
-    final files = <File>[];
-    for (var i = 1; i < schemas.length; i++) {
-      var source =
-          Migration.sourceForSchemaUpgrade(schemas[i - 1], schemas[i], i);
-
-      var file = File.fromUri(defaultMigrationDirectory.uri
-          .resolve("${i + currentNumberOfMigrations}.migration.dart"));
-      file.writeAsStringSync(source);
-      files.add(file);
-    }
-
-    return files;
   }
 
   Future<int> run(String command, [List<String>? args]) async {

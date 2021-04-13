@@ -7,8 +7,7 @@ import 'package:conduit/managed_auth.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
-
-import '../db/postgresql/postgres_test_config.dart';
+import '../not_tests/postgres_test_config.dart';
 
 // These tests mostly duplicate authenticate_test.dart, but also add a few more
 // to manage long-term storage/cleanup of tokens and related items.
@@ -17,8 +16,8 @@ void main() {
   ManagedContext? context;
 
   setUp(() async {
-    context =
-        await PostgresTestConfig().contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
+    context = await PostgresTestConfig()
+        .contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
 
     var salt = "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
     var clients = [

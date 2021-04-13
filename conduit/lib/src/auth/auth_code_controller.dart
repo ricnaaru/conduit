@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:conduit/src/http/resource_controller.dart';
+import 'package:conduit/src/http/resource_controller_bindings.dart';
+import 'package:conduit/src/http/response.dart';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_open_api/v3.dart';
 
-import '../http/http.dart';
 import 'auth.dart';
 
 /// Provides [AuthCodeController] with application-specific behavior.

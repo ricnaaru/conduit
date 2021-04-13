@@ -1,13 +1,13 @@
 import 'package:conduit/conduit.dart';
 import 'package:test/test.dart';
 
-
-import 'postgresql/postgres_test_config.dart';
+import '../not_tests/postgres_test_config.dart';
 
 void main() {
   late ManagedContext ctx;
   setUpAll(() async {
-    ctx = await PostgresTestConfig().contextWithModels([Root, Child, Constructor]);
+    ctx = await PostgresTestConfig()
+        .contextWithModels([Root, Child, Constructor]);
   });
   tearDownAll(() async {
     await ctx.close();

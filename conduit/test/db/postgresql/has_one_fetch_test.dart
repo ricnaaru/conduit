@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:conduit/conduit.dart';
 import 'package:test/test.dart';
 
-
-import 'postgres_test_config.dart';
+import '../../not_tests/postgres_test_config.dart';
 
 /*
   The test data is like so:

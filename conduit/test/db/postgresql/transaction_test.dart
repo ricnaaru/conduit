@@ -1,8 +1,7 @@
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 
-
-import 'postgres_test_config.dart';
+import '../../not_tests/postgres_test_config.dart';
 
 void main() {
   late ManagedContext context;
@@ -117,7 +116,8 @@ void main() {
       () async {
     await context.transaction((t) async {
       await Query.insertObject(t, Model()..name = "1");
-      await t.persistentStore!.execute("INSERT INTO _Model (name) VALUES ('2')");
+      await t.persistentStore!
+          .execute("INSERT INTO _Model (name) VALUES ('2')");
       await Query.insertObject(t, Model()..name = "3");
     });
 
