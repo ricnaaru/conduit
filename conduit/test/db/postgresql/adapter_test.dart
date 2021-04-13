@@ -71,7 +71,7 @@ void main() {
     test(
         "Make multiple requests at once, first few fails because db connect fails (but eventually succeeds)",
         () async {
-      persistentStore = PostgresTestConfig().persistentStore();
+      persistentStore = PostgresTestConfig().persistentStore(port: 5433);
 
       var expectedValues = [1, 2, 3, 4, 5];
       var values = await Future.wait(expectedValues.map(
@@ -95,7 +95,7 @@ void main() {
 
     test("Connect to bad db fails gracefully, can then be used again",
         () async {
-      persistentStore = PostgresTestConfig().persistentStore();
+      persistentStore = PostgresTestConfig().persistentStore(port: 5433);
 
       try {
         await persistentStore!.executeQuery("SELECT 1", null, 20);
