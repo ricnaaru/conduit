@@ -78,7 +78,7 @@ void main() {
           (i) => persistentStore!.execute("select $i").catchError((e) => e)));
       expect(values, everyElement(const TypeMatcher<QueryException>()));
 
-      proxy = SocketProxy(5432, 5432);
+      proxy = SocketProxy(15432, 5432);
       await proxy?.open();
 
       expectedValues = [5, 6, 7, 8, 9];
@@ -103,7 +103,7 @@ void main() {
         // ignore: empty_catches
       } on QueryException {}
 
-      proxy = SocketProxy(5432, 5432);
+      proxy = SocketProxy(15432, 5432);
       await proxy!.open();
 
       var x = await persistentStore!.executeQuery("SELECT 1", null, 20);
