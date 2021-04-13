@@ -1,6 +1,6 @@
 name: conduit_test
 description: Utilities for writing automated tests for Conduit applications
-version: 2.0.0-a2
+version: 2.0.0-a3
 homepage: https://github.com/conduit-dart/conduit
 
 environment:
@@ -9,7 +9,8 @@ environment:
 dependencies:
   test: ^1.16.5
   matcher: ">=0.12.3 <0.14.0"
-  conduit: ^2.0.0-a2
+  conduit: ^2.0.0-0
+  conduit_common_test: ^2.0.0-0
 # This is removed before being published.
 dependency_overrides:
   conduit:

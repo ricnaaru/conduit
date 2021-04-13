@@ -10,4 +10,4 @@ dependencies:
 
 dev_dependencies:
   test: ^1.16.5
-  conduit_test: ^2.0.0-a2
+  conduit_test: ^2.0.0-0

@@ -3,11 +3,10 @@ import 'dart:io';
 
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
-
-import '../not_tests/postgres_test_config.dart';
 
 // These tests mostly duplicate authenticate_test.dart, but also add a few more
 // to manage long-term storage/cleanup of tokens and related items.

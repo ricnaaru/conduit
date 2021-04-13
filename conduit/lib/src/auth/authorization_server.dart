@@ -422,7 +422,6 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
   //////
   // APIDocumentable overrides
   //////
-
   @override
   void documentComponents(APIDocumentContext context) {
     final basic = APISecurityScheme.http("basic")

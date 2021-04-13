@@ -62,10 +62,10 @@ class CLISetup extends CLICommand with CLIProject {
     }
 
     var commands = [
-      "create database dart_test;",
-      "create user dart with createdb;",
-      "alter user dart with password 'dart';",
-      "grant all on database dart_test to dart;"
+      "create database conduit_test_db;",
+      "create user conduit_test_user with createdb;",
+      "alter user conduit_test_user with password '34achfAdce';",
+      "grant all on database conduit_test_db to dart;"
     ];
 
     if (!confirm) {
@@ -88,21 +88,22 @@ class CLISetup extends CLICommand with CLIProject {
       final result = Process.runSync("psql", args, runInShell: true);
       final output = (result.stdout as String) + (result.stderr as String);
       if (output.contains("CREATE DATABASE")) {
-        displayProgress("Successfully created database dart_test.");
+        displayProgress("Successfully created database conduit_test_db.");
       } else if (output.contains("CREATE ROLE")) {
         displayProgress(
-            "Successfully created role 'dart' with createdb permissions.");
+            "Successfully created role 'conduit_test_user' with createdb permissions.");
       } else if (output.contains("ALTER ROLE")) {
-        displayProgress("Successfully set user 'dart' password to 'dart'.");
+        displayProgress(
+            "Successfully set user 'conduit_test_user' password to '34achfAdce'.");
       } else if (output.contains("GRANT")) {
         displayProgress(
-            "Successfully granted all privileges to database dart_test to user 'dart'.");
+            "Successfully granted all privileges to database conduit_test_db to user 'conduit_test_user'.");
       }
 
-      if (output.contains("database \"dart_test\" already exists")) {
-        displayProgress("Database dart_test already exists, continuing.");
-      } else if (output.contains("role \"dart\" already exists")) {
-        displayProgress("User 'dart' already exists, continuing.");
+      if (output.contains("database \"conduit_test_db\" already exists")) {
+        displayProgress("Database conduit_test_db already exists, continuing.");
+      } else if (output.contains("role \"conduit_test_user\" already exists")) {
+        displayProgress("User 'conduit_test_user' already exists, continuing.");
       } else if (output.contains("could not connect to server")) {
         displayError(
             "Database is not accepting connections. Ensure that PostgreSQL is running locally.");

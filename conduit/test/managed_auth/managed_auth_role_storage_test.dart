@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
-
-import '../not_tests/postgres_test_config.dart';
 
 // These tests are similar to managed_auth_storage_test, but handle the cases where authenticatables
 // have scope rules.
