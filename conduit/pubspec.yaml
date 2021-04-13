@@ -1,5 +1,5 @@
 name: conduit
-version: 2.0.0-b1
+version: 2.0.0-a2
 description: A modern HTTP server application framework, ORM and OAuth2 provider with OpenAPI 3.0 integration. Foundation for REST, RPC or GraphQL services.
 homepage: https://github.com/conduit-dart/conduit
 
@@ -31,8 +31,7 @@ dev_dependencies:
   test: ^1.3.0
   http: ^0.13.0
   fs_test_agent: ^1.0.0-b1
-  conduit_test:
-    path: ../conduit_test
+  conduit_test: ^2.0.0-0
   dcli: ^0.51.0
   settings_yaml: ^3.0.3
   conduit_common_test: ^2.0.0-0
