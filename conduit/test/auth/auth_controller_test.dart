@@ -12,7 +12,6 @@ void main() {
   AuthServer? authenticationServer;
   Router? router;
   ////////////
-
   setUp(() async {
     var storage = InMemoryAuthStorage();
     storage.createUsers(3);
@@ -35,7 +34,6 @@ void main() {
   });
 
   ///////
-
   group("Success Cases: password", () {
     test("Confidental Client has all parameters including refresh_token",
         () async {
@@ -701,7 +699,7 @@ Map<String, String> substituteUser(Map<String, String> initial,
   return m;
 }
 
-Map<String, String?> refreshTokenMapFromTokenResponse(TestResponse resp) {
+Map<String, String> refreshTokenMapFromTokenResponse(TestResponse resp) {
   return {
     "refresh_token":
         resp.body.as<Map<String, dynamic>>()["refresh_token"] as String

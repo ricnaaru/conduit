@@ -5,8 +5,6 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 
-import 'postgres_test_config.dart';
-
 void main() {
   group("Behavior", () {
     PostgreSQLPersistentStore? persistentStore;
@@ -17,8 +15,8 @@ void main() {
     });
 
     tearDown(() async {
-      await persistentStore.close();
-      await proxy.close();
+      await persistentStore?.close();
+      await proxy?.close();
     });
 
     test("A down connection will restart", () async {

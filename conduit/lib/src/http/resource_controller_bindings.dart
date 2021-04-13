@@ -77,7 +77,7 @@ class Operation {
   final String? _pathVariable4;
 
   /// Returns a list of all path variables required for this operation.
-  List<String?> get pathVariables {
+  List<String> get pathVariables {
     return [_pathVariable1, _pathVariable2, _pathVariable3, _pathVariable4]
         .fold([], (acc, s) {
       if (s != null) {

@@ -123,7 +123,7 @@ class CLIAuthAddClient extends CLICommand
 
   @override
   Future cleanup() async {
-    await context.close();
+    await context?.close();
   }
 
   @override

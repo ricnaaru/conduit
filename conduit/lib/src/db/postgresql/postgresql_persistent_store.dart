@@ -148,8 +148,7 @@ class PostgreSQLPersistentStore extends PersistentStore
       {Map<String, dynamic>? substitutionValues, Duration? timeout}) async {
     timeout ??= const Duration(seconds: 30);
     var now = DateTime.now().toUtc();
-    var dbConnection =
-        await (executionContext as FutureOr<PostgreSQLExecutionContext>);
+    var dbConnection = await executionContext;
     try {
       var rows = await dbConnection!.query(sql,
           substitutionValues: substitutionValues,
@@ -192,12 +191,10 @@ class PostgreSQLPersistentStore extends PersistentStore
           output = await transactionBlock(transactionContext);
         } on Rollback catch (e) {
           /// user triggered a manual rollback.
-
           /// TODO: there is currently no reliable way for a user to detect
           /// that a manual rollback occured.
           /// The documented method of checking the return value from this method
           /// does not work.
-
           rollback = e;
           dbTransactionContext.cancelTransaction(reason: rollback!.reason);
         }
@@ -241,8 +238,7 @@ class PostgreSQLPersistentStore extends PersistentStore
   @override
   Future<Schema?> upgrade(Schema? fromSchema, List<Migration> withMigrations,
       {bool temporary = false}) async {
-    var connection =
-        await (getDatabaseConnection() as FutureOr<PostgreSQLConnection>);
+    var connection = await getDatabaseConnection();
 
     Schema? schema = fromSchema;
 

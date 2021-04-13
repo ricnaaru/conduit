@@ -8,6 +8,7 @@ import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'package:conduit/src/dev/helpers.dart';
+import 'package:mockito/mockito.dart';
 
 void main() {
   var defaultSize = RequestBody.maxSize;

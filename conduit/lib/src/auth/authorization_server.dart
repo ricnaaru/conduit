@@ -188,7 +188,7 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
       }
     }
 
-    final authenticatable = await delegate.getResourceOwner(this, username)!;
+    final authenticatable = await delegate.getResourceOwner(this, username);
     if (authenticatable == null) {
       throw AuthServerException(AuthRequestError.invalidGrant, client);
     }
@@ -220,7 +220,7 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
       throw AuthServerException(AuthRequestError.invalidRequest, null);
     }
 
-    final t = await delegate.getToken(this, byAccessToken: accessToken)!;
+    final t = await delegate.getToken(this, byAccessToken: accessToken);
     if (t == null || t.isExpired) {
       throw AuthServerException(
           AuthRequestError.invalidGrant, AuthClient(t?.clientID, null, null));
@@ -258,7 +258,7 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
       throw AuthServerException(AuthRequestError.invalidRequest, client);
     }
 
-    final t = await delegate.getToken(this, byRefreshToken: refreshToken)!;
+    final t = await delegate.getToken(this, byRefreshToken: refreshToken);
     if (t == null || t.clientID != clientID) {
       throw AuthServerException(AuthRequestError.invalidGrant, client);
     }
@@ -340,12 +340,12 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
       throw AuthServerException(AuthRequestError.unauthorizedClient, client);
     }
 
-    final authenticatable = await delegate.getResourceOwner(this, username)!;
+    final authenticatable = await delegate.getResourceOwner(this, username);
     if (authenticatable == null) {
       throw AuthServerException(AuthRequestError.accessDenied, client);
     }
 
-    final dbSalt = authenticatable.salt!;
+    final dbSalt = authenticatable.salt;
     final dbPassword = authenticatable.hashedPassword;
     if (hashPassword(password, dbSalt!) != dbPassword) {
       throw AuthServerException(AuthRequestError.accessDenied, client);
@@ -389,7 +389,7 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
       throw AuthServerException(AuthRequestError.invalidClient, client);
     }
 
-    final authCode = await delegate.getCode(this, authCodeString)!;
+    final authCode = await delegate.getCode(this, authCodeString);
     if (authCode == null) {
       throw AuthServerException(AuthRequestError.invalidGrant, client);
     }
@@ -422,7 +422,6 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
   //////
   // APIDocumentable overrides
   //////
-
   @override
   void documentComponents(APIDocumentContext context) {
     final basic = APISecurityScheme.http("basic")

@@ -85,7 +85,7 @@ class Request implements RequestOrResponse {
   /// a q-value (if one exists) and the specificity of the content-type.
   ///
   /// See also [acceptsContentType].
-  List<ContentType>? get acceptableContentTypes {
+  List<ContentType> get acceptableContentTypes {
     if (_cachedAcceptableTypes == null) {
       try {
         var contentTypes = raw.headers[HttpHeaders.acceptHeader]
@@ -135,11 +135,11 @@ class Request implements RequestOrResponse {
   ///
   /// Note that if no Accept header is present, this method always returns true.
   bool acceptsContentType(ContentType contentType) {
-    if (acceptableContentTypes!.isEmpty) {
+    if (acceptableContentTypes.isEmpty) {
       return true;
     }
 
-    return acceptableContentTypes!.any((acceptable) {
+    return acceptableContentTypes.any((acceptable) {
       if (acceptable.primaryType == "*") {
         return true;
       }
@@ -315,7 +315,7 @@ class Request implements RequestOrResponse {
     // There isn't a great way of doing this that I can think of except splitting out gzip from the fused codec,
     // have to measure the value of fusing vs the cost of gzipping smaller data.
     var canGzip = CodecRegistry.defaultInstance
-            .isContentTypeCompressable(resp.contentType!)! &&
+            .isContentTypeCompressable(resp.contentType) &&
         _acceptsGzipResponseBody;
 
     if (codec == null) {
@@ -324,10 +324,10 @@ class Request implements RequestOrResponse {
             "Invalid response body. Body of type '${resp.body.runtimeType}' cannot be encoded as content-type '${resp.contentType}'.");
       }
 
-      final bytes = resp.body as List<int>?;
+      final bytes = resp.body as List<int>;
       if (canGzip) {
         compressionType.value = "gzip";
-        return gzip.encode(bytes!);
+        return gzip.encode(bytes);
       }
       return bytes;
     }
@@ -349,7 +349,7 @@ class Request implements RequestOrResponse {
     }
 
     var canGzip = CodecRegistry.defaultInstance
-            .isContentTypeCompressable(resp.contentType!)! &&
+            .isContentTypeCompressable(resp.contentType) &&
         _acceptsGzipResponseBody;
     if (codec == null) {
       if (resp.body is! Stream<List<int>>) {
@@ -357,10 +357,10 @@ class Request implements RequestOrResponse {
             "Invalid response body. Body of type '${resp.body.runtimeType}' cannot be encoded as content-type '${resp.contentType}'.");
       }
 
-      final stream = resp.body as Stream<List<int>>?;
+      final stream = resp.body as Stream<List<int>>;
       if (canGzip) {
         compressionType.value = "gzip";
-        return gzip.encoder.bind(stream!);
+        return gzip.encoder.bind(stream);
       }
 
       return stream;

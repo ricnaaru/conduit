@@ -103,8 +103,8 @@ class Router extends Controller {
   }
 
   @override
-  Future? receive(Request req) async {
-    Controller? next;
+  Future receive(Request req) async {
+    Controller next;
     try {
       var requestURISegmentIterator = req.raw.uri.pathSegments.iterator;
 
@@ -197,7 +197,7 @@ class _RouteController extends Controller {
   @override
   Map<String, APIPath> documentPaths(APIDocumentContext components) {
     return specifications.fold(<String, APIPath>{}, (pathMap, spec) {
-      final elements = spec.segments!.map((rs) {
+      final elements = spec.segments.map((rs) {
         if (rs.isLiteralMatcher) {
           return rs.literal;
         } else if (rs.isVariable) {
@@ -215,7 +215,7 @@ class _RouteController extends Controller {
             .toList();
 
       if (spec.segments.any((seg) => seg.isRemainingMatcher)) {
-        path.parameters!.add(APIParameter.path("path")
+        path.parameters.add(APIParameter.path("path")
           ..description =
               "This path variable may contain slashes '/' and may be empty.");
       }
