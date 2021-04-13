@@ -392,7 +392,7 @@ void main() {
 
     q = Query<EnumObject>(context!)
       ..where((o) => o.enumValues).equalTo(EnumValues.efgh);
-    result = (await q.fetchOne())!;
+    result = await q.fetchOne();
     expect(result, isNull);
   });
 

@@ -7,7 +7,6 @@ import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:test/test.dart';
 
 import '../not_tests/cli_helpers.dart';
-import '../not_tests/postgres_test_config.dart';
 
 void main() {
   final dataModel = ManagedDataModel.fromCurrentMirrorSystem();

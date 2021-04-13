@@ -464,7 +464,7 @@ Future<HttpServer> bindAndRespondWith(Response response) async {
   return server;
 }
 
-class CrashingCodec extends Codec<String?, List<int>?> {
+class CrashingCodec extends Codec<String, List<int>> {
   @override
   CrashingEncoder get encoder => CrashingEncoder();
   @override
