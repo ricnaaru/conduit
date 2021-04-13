@@ -1,3 +1,9 @@
+# Conduit
+
+## 2.0.0-a2
+
+- Small clean up and fix templates
+
 ## 2.0.0-a1
 
 - Alpha release for Conduit NNBD included
