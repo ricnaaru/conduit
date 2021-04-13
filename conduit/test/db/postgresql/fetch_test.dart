@@ -381,7 +381,7 @@ void main() {
     await q.insert();
 
     q = Query<EnumObject>(context!);
-    var result = (await q.fetchOne())!;
+    EnumObject? result = (await q.fetchOne())!;
     expect(result.enumValues, EnumValues.abcd);
     expect(result.asMap()["enumValues"], "abcd");
 

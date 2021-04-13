@@ -47,7 +47,7 @@ void main() {
       var expectedMap = {
         "id": 1,
         "name": "Fred",
-        "createdAt": allObjects.first.createdAt.toIso8601String()
+        "createdAt": allObjects.first.createdAt!.toIso8601String()
       };
 
       var resp = await client.put("/controller/1", body: {"name": "Fred"});
@@ -223,7 +223,7 @@ void main() {
       expect(
           await client
               .request(
-                  "/controller?pageBy=createdAt&pageAfter=${allObjects[5].createdAt.toIso8601String()}")
+                  "/controller?pageBy=createdAt&pageAfter=${allObjects[5].createdAt!.toIso8601String()}")
               .get(),
           hasResponse(200,
               body: allObjects.sublist(6).map((m) => m.asMap()).toList()));
@@ -233,7 +233,7 @@ void main() {
       expect(
           await client
               .request(
-                  "/controller?pageBy=createdAt&pagePrior=${allObjects[5].createdAt.toIso8601String()}")
+                  "/controller?pageBy=createdAt&pagePrior=${allObjects[5].createdAt!.toIso8601String()}")
               .get(),
           hasResponse(200,
               body: allObjects
@@ -311,9 +311,8 @@ class TestChannel extends ApplicationChannel {
   @override
   Future prepare() async {
     var dataModel = ManagedDataModel([TestModel]);
-    var persistentStore = PostgresTestConfig().persistentStore;
-
-    context = ManagedContext(dataModel, persistentStore());
+    var persistentStore = PostgresTestConfig().persistentStore();
+    context = ManagedContext(dataModel, persistentStore);
 
     var targetSchema = Schema.fromDataModel(context.dataModel!);
     var schemaBuilder = SchemaBuilder.toSchema(
@@ -346,5 +345,5 @@ class _TestModel {
   int? id;
 
   String? name;
-  late DateTime createdAt;
+  DateTime? createdAt;
 }

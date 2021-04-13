@@ -24,8 +24,8 @@ void main() {
     final q = Query<ManagedAuthToken>(harness.context!)
       ..where((o) => o.accessToken)
           .equalTo((authHeader as String).substring(7));
-    final token = await (q.fetchOne() as FutureOr<ManagedAuthToken>);
-    expect(token.client.id, "id");
+    final token = await q.fetchOne();
+    expect(token!.client.id, "id");
   });
 
   test("Can use confidental client to authenticate", () async {
@@ -43,8 +43,8 @@ void main() {
     final q = Query<ManagedAuthToken>(harness.context!)
       ..where((o) => o.accessToken)
           .equalTo((authHeader as String).substring(7));
-    final token = await (q.fetchOne() as FutureOr<ManagedAuthToken>);
-    expect(token.client.id, "confidential-id");
+    final token = await q.fetchOne();
+    expect(token!.client.id, "confidential-id");
   });
 
   test("Can authenticate user with client and access protected route",

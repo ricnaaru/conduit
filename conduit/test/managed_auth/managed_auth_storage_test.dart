@@ -15,8 +15,8 @@ void main() {
   ManagedContext? context;
 
   setUp(() async {
-    context = await PostgresTestConfig()
-        .contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
+    context =
+        await PostgresTestConfig().contextWithModels([User, ManagedAuthClient, ManagedAuthToken]);
 
     var salt = "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345";
     var clients = [

@@ -15,8 +15,8 @@ class CLISetup extends CLICommand with CLIProject {
 
   @Flag("tests",
       help:
-          "Sets up a local database to run application tests. If no other option is on, the command defaults to this flag.",
-      defaultsTo: true)
+          "Sets up a local database to run application tests. If no other option is on, the command defaults to this flag.", 
+          defaultsTo: true)
   bool get shouldSetupTests => decode("tests")!;
 
   @Flag("confirm",
@@ -37,8 +37,7 @@ class CLISetup extends CLICommand with CLIProject {
   Future<int> handle() async {
     if (shouldSetupHeroku) {
       displayInfo("This option has been deprecated.");
-      displayProgress(
-          "Please see https://conduit.io/docs/deploy/deploy_heroku/ for instructions.");
+      displayProgress("Please see https://conduit.io/docs/deploy/deploy_heroku/ for instructions.");
       return 0;
     } else /*if (shouldSetupTests*/ {
       return setupTestEnvironment();

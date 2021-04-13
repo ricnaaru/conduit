@@ -336,7 +336,6 @@ void main() {
 
     /*
       There is a different set of expectations when running on macOS.
-
       On macOS, when the client request is sending data and the server decides to terminate the connection,
       the client will get a 'EPROTOTYPE' socket error (most of the time). This occurs when the client tries
       to send data while the socket is in the process of being torn down. Since the server will kill the
@@ -469,7 +468,16 @@ class CrashingCodec extends Codec<String?, List<int>?> {
   @override
   CrashingEncoder get encoder => CrashingEncoder();
   @override
-  Converter<List<int>, String> get decoder => throw UnimplementedError();
+  Converter<List<int>, String> get decoder =>
+      EmptyConverter<List<int>, String>() as Converter<List<int>, String>;
+}
+
+class EmptyConverter<T, U> extends Converter {
+  @override
+  // ignore: type_annotate_public_apis
+  T? convert(input) {
+    return null;
+  }
 }
 
 class CrashingEncoder extends Converter<String, List<int>> {

@@ -20,7 +20,8 @@ void main() {
     ManagedContext? context;
     late List<Parent> truth;
     setUpAll(() async {
-      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig()
+          .contextWithModels([Child, Parent, Toy, Vaccine]);
       truth = await populate(context);
     });
 
@@ -188,7 +189,8 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig()
+          .contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 
@@ -306,7 +308,8 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig()
+          .contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 
@@ -375,7 +378,8 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig()
+          .contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 
@@ -398,7 +402,8 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig()
+          .contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 

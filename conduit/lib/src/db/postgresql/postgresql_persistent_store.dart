@@ -108,7 +108,7 @@ class PostgreSQLPersistentStore extends PersistentStore
   ///
   /// When executing queries, prefer to use [executionContext] instead. Failure to do so might result
   /// in issues when executing queries during a transaction.
-  Future<PostgreSQLConnection?> getDatabaseConnection() async {
+  Future<PostgreSQLConnection> getDatabaseConnection() async {
     if (_databaseConnection == null || _databaseConnection!.isClosed) {
       if (_pendingConnectionCompleter == null) {
         _pendingConnectionCompleter = Completer<PostgreSQLConnection>();
@@ -129,7 +129,7 @@ class PostgreSQLPersistentStore extends PersistentStore
       return _pendingConnectionCompleter!.future;
     }
 
-    return _databaseConnection;
+    return _databaseConnection!;
   }
 
   @override
@@ -151,7 +151,7 @@ class PostgreSQLPersistentStore extends PersistentStore
     var dbConnection =
         await (executionContext as FutureOr<PostgreSQLExecutionContext>);
     try {
-      var rows = await dbConnection.query(sql,
+      var rows = await dbConnection!.query(sql,
           substitutionValues: substitutionValues,
           timeoutInSeconds: timeout.inSeconds);
 
@@ -178,8 +178,7 @@ class PostgreSQLPersistentStore extends PersistentStore
   @override
   Future<T?> transaction<T>(ManagedContext transactionContext,
       Future<T?> transactionBlock(ManagedContext transaction)) async {
-    final dbConnection =
-        await (getDatabaseConnection() as FutureOr<PostgreSQLConnection>);
+    final dbConnection = await getDatabaseConnection();
 
     T? output;
     Rollback? rollback;

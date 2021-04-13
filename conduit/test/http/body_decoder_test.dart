@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:conduit/conduit.dart';
 import 'package:http/http.dart' as http;
+import 'package:pedantic/pedantic.dart';
 import 'package:test/test.dart';
 
 import 'package:conduit/src/dev/helpers.dart';
@@ -17,14 +18,17 @@ void main() {
 
   group("Default decoders", () {
     late HttpServer server;
-    late Request request;
+    Request? request;
 
     setUp(() async {
+      print('http server starting');
       server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8123);
     });
 
     tearDown(() async {
-      await request.raw.response.close();
+      if (request != null) {
+        await request!.raw.response.close();
+      }
       await server.close(force: true);
     });
 
@@ -39,8 +43,10 @@ void main() {
       });
 
       test("Empty body shows as isEmpty", () async {
-        // ignore: unawaited_futures
-        http.get(Uri.parse("http://localhost:8123")).catchError((err) {});
+        unawaited(http
+            .get(Uri.parse("http://localhost:8123"))
+            .catchError((err) => Future.value(http.Response.bytes([], 500))));
+        print('get completed');
         var request = await server.first;
         var body = RequestBody(request);
         expect(body.isEmpty, true);
@@ -95,10 +101,10 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "application/json"},
               body: json.encode({"a": "val"}))
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       request = Request(await server.first);
-      Map<String, dynamic> body = await request.body.decode();
+      Map<String, dynamic> body = await request!.body.decode();
       expect(body, {"a": "val"});
     });
 
@@ -108,12 +114,13 @@ void main() {
       var req = await client.postUrl(Uri.parse("http://localhost:8123"));
       req.headers.add(HttpHeaders.contentTypeHeader, "application/json");
       req.add(utf8.encode(json.encode({"a": "val"})));
-      await req.close().catchError((err) {});
+      // ignore: unawaited_futures
+      req.close().catchError((err) => Future.value(MockHttpClientResponse()));
 
       request = Request(await server.first);
-      expect(request.raw.headers.contentType!.charset, null);
+      expect(request!.raw.headers.contentType!.charset, null);
 
-      Map<String, dynamic> body = await request.body.decode();
+      Map<String, dynamic> body = await request!.body.decode();
       expect(body, {"a": "val"});
     });
 
@@ -124,7 +131,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "application/x-www-form-urlencoded"},
               body: "a=b&c=2%2F4")
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
       var request = Request(await server.first);
       request.body.retainOriginalBytes = true;
       Map<String, dynamic> body = await request.body.decode();
@@ -142,7 +149,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "text/plain; charset=utf-8"},
               body: "foobar")
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var request = Request(await server.first);
       String body = await request.body.decode();
@@ -155,7 +162,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "notarealthing/nothing"},
               body: "foobar".codeUnits)
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var request = Request(await server.first);
       List<int> body = await request.body.decode();
@@ -166,7 +173,8 @@ void main() {
       var req = await HttpClient()
           .openUrl("POST", Uri.parse("http://localhost:8123"));
       req.add("foobar".codeUnits);
-      await req.close().catchError((err) {});
+      // ignore: unawaited_futures
+      req.close().catchError((err) => Future.value(MockHttpClientResponse()));
 
       var request = Request(await server.first);
       List<int> body = await request.body.decode();
@@ -180,7 +188,7 @@ void main() {
       http
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "application/json"}, body: "{a=b&c=2")
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
       var request = Request(await server.first);
 
       try {
@@ -219,7 +227,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "application/thingy"},
               body: json.encode({"key": "value"}))
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
       var request = Request(await server.first);
       Map<String, dynamic> body = await request.body.decode();
       expect(body, {"key": "value"});
@@ -231,7 +239,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "somethingelse/whatever"},
               body: json.encode({"key": "value"}))
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var request = Request(await server.first);
       Map<String, dynamic> body = await request.body.decode();
@@ -246,7 +254,7 @@ void main() {
       req.headers.add(HttpHeaders.contentTypeHeader, "somethingelse/foobar");
       req.add(utf8.encode(json.encode({"a": "val"})));
       // ignore: unawaited_futures
-      req.close().catchError((err) {});
+      req.close().catchError((err) => Future.value(MockHttpClientResponse()));
 
       var request = Request(await server.first);
       expect(request.raw.headers.contentType!.charset, null);
@@ -263,7 +271,7 @@ void main() {
       req.headers.add(HttpHeaders.contentTypeHeader, "application/thingy");
       req.add(utf8.encode(json.encode({"a": "val"})));
       // ignore: unawaited_futures
-      req.close().catchError((err) {});
+      req.close().catchError((err) => Future.value(MockHttpClientResponse()));
 
       var request = Request(await server.first);
       expect(request.raw.headers.contentType!.charset, null);
@@ -338,10 +346,10 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/json"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
       var body = RequestBody(await server.first);
 
-      expect(await body.decode<Map<String, dynamic>>(), null);
+      expect(await body.decode<Map<String, dynamic>?>(), null);
       expect(body.hasBeenDecoded, true);
     });
 
@@ -349,11 +357,11 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/json"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var body = RequestBody(await server.first);
       await body.decode();
-      expect(body.as<Map<String, dynamic>>(), null);
+      expect(body.as<Map<String, dynamic>?>(), null);
     });
   });
 
@@ -422,10 +430,10 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/json"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
       var body = RequestBody(await server.first);
 
-      expect(await body.decode(), null);
+      expect(await body.decode<RequestBody?>(), null);
       expect(body.hasBeenDecoded, true);
     });
 
@@ -433,11 +441,11 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/json"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var body = RequestBody(await server.first);
       await body.decode();
-      expect(body.as<List<Map<String, dynamic>>>(), null);
+      expect(body.as<List<Map<String, dynamic>>?>(), null);
     });
   });
 
@@ -507,10 +515,10 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "text/plain; charset=utf-8"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
       var body = RequestBody(await server.first);
 
-      expect(await body.decode<String>(), null);
+      expect(await body.decode<String?>(), null);
       expect(body.hasBeenDecoded, true);
     });
 
@@ -518,11 +526,11 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "text/plain; charset=utf-8"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var body = RequestBody(await server.first);
       await body.decode();
-      expect(body.as<String>(), null);
+      expect(body.as<String?>(), null);
     });
   });
 
@@ -568,10 +576,10 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/octet-stream"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
       var body = RequestBody(await server.first);
 
-      expect(await body.decode<List<int>>(), null);
+      expect(await body.decode<List<int>?>(), null);
       expect(body.hasBeenDecoded, true);
     });
 
@@ -579,11 +587,11 @@ void main() {
       // ignore: unawaited_futures
       http.post(Uri.parse("http://localhost:8123"), headers: {
         "Content-Type": "application/octet-stream"
-      }).catchError((err) {});
+      }).catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var body = RequestBody(await server.first);
       await body.decode();
-      expect(body.as<List<int>>(), null);
+      expect(body.as<List<int>?>(), null);
     });
 
     test("Throw exception if not retaining bytes and body was decoded",
@@ -635,7 +643,7 @@ void main() {
           .post(Uri.parse("http://localhost:8123"),
               headers: {"Content-Type": "application/json"},
               body: json.encode({"a": "val"}))
-          .catchError((err) {});
+          .catchError((err) => Future.value(http.Response.bytes([], 500)));
 
       var request = Request(await server.first);
 
@@ -722,7 +730,9 @@ void main() {
       req.headers.add(HttpHeaders.contentLengthHeader, bytes.length);
       req.add(bytes);
 
-      var response = await req.close().catchError((err) {});
+      var response = await req
+          .close()
+          .catchError((err) => Future.value(MockHttpClientResponse()));
       expect(response.statusCode, 413);
 
       req = await client.postUrl(Uri.parse("http://localhost:8123"));
@@ -756,7 +766,9 @@ void main() {
       req.headers.add(HttpHeaders.contentLengthHeader, bytes.length);
       req.add(bytes);
 
-      var response = await req.close().catchError((err) {});
+      var response = await req
+          .close()
+          .catchError((err) => Future.value(MockHttpClientResponse()));
       expect(response.statusCode, 413);
 
       req = await client.postUrl(Uri.parse("http://localhost:8123"));
@@ -776,19 +788,21 @@ Future postJSON(dynamic body) {
       .post(Uri.parse("http://localhost:8123"),
           headers: {"Content-Type": "application/json"},
           body: json.encode(body))
-      .catchError((err) {});
+      .catchError((err) => Future.value(http.Response.bytes([], 500)));
 }
 
 Future postString(String data) {
   return http
       .post(Uri.parse("http://localhost:8123"),
           headers: {"Content-Type": "text/html; charset=utf-8"}, body: data)
-      .catchError((err) {});
+      .catchError((err) => Future.value(http.Response.bytes([], 500)));
 }
 
 Future postBytes(List<int> bytes) {
   return http
       .post(Uri.parse("http://localhost:8123"),
           headers: {"Content-Type": "application/octet-stream"}, body: bytes)
-      .catchError((err) {});
+      .catchError((err) => Future.value(http.Response.bytes([], 500)));
 }
+
+class MockHttpClientResponse extends Mock implements HttpClientResponse {}

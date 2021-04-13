@@ -9,7 +9,7 @@ typedef _ResponseModifier = void Function(Response resp);
 
 /// A single HTTP request.
 ///
-/// Instances of this class travel through a [Controller] chain to be responded to, sometimes acquiring new values
+/// Instances of this class travel through a [Controller] chain to be responded to, sometimes acquiring values
 /// as they go through controllers. Each instance of this class has a standard library [HttpRequest]. You should not respond
 /// directly to the [HttpRequest], as [Controller]s take that responsibility.
 class Request implements RequestOrResponse {
@@ -123,7 +123,7 @@ class Request implements RequestOrResponse {
             body: {"error": "accept header is malformed"});
       }
     }
-    return _cachedAcceptableTypes;
+    return _cachedAcceptableTypes!;
   }
 
   List<ContentType>? _cachedAcceptableTypes;
@@ -243,7 +243,7 @@ class Request implements RequestOrResponse {
       modifier(conduitResponse);
     });
 
-    _Reference<String?> compressionType = _Reference(null);
+    _Reference<String> compressionType = _Reference(null);
     var body = conduitResponse.body;
     if (body is! Stream) {
       // Note: this pre-encodes the body in memory, such that encoding fails this will throw and we can return a 500
@@ -281,7 +281,7 @@ class Request implements RequestOrResponse {
       return response.close();
     } else if (body is Stream) {
       // Otherwise, body is stream
-      final bodyStream = _responseBodyStream(conduitResponse, compressionType)!;
+      final bodyStream = _responseBodyStream(conduitResponse, compressionType);
       if (compressionType.value != null) {
         response.headers
             .add(HttpHeaders.contentEncodingHeader, compressionType.value!);
@@ -300,7 +300,7 @@ class Request implements RequestOrResponse {
   }
 
   List<int>? _responseBodyBytes(
-      Response resp, _Reference<String?> compressionType) {
+      Response resp, _Reference<String> compressionType) {
     if (resp.body == null) {
       return null;
     }
@@ -340,8 +340,8 @@ class Request implements RequestOrResponse {
     return codec.encode(resp.body);
   }
 
-  Stream<List<int>>? _responseBodyStream(
-      Response resp, _Reference<String?> compressionType) {
+  Stream<List<int>> _responseBodyStream(
+      Response resp, _Reference<String> compressionType) {
     Codec<dynamic, List<int>>? codec;
     if (resp.encodeBody) {
       codec =
@@ -434,5 +434,5 @@ class HTTPStreamingException implements Exception {
 class _Reference<T> {
   _Reference(this.value);
 
-  T value;
+  T? value;
 }

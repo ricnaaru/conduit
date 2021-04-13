@@ -57,24 +57,26 @@ abstract class CLICommand {
         ?.runningProcess;
   }
 
-  @Flag("version", help: "Prints version of this tool", negatable: false, defaultsTo: false)
-  bool get showVersion => decode("version")!;
+  @Flag("version",
+      help: "Prints version of this tool", negatable: false, defaultsTo: false)
+  bool get showVersion => decode<bool>("version");
 
   @Flag("color", help: "Toggles ANSI color", negatable: true, defaultsTo: true)
-  bool get showColors => decode("color")!;
+  bool get showColors => decode<bool>("color");
 
-  @Flag("help", abbr: "h", help: "Shows this", negatable: false, defaultsTo: false)
-  bool get helpMeItsScary => decode("help")!;
+  @Flag("help",
+      abbr: "h", help: "Shows this", negatable: false, defaultsTo: false)
+  bool get helpMeItsScary => decode<bool>("help");
 
   @Flag("stacktrace",
       help: "Shows the stacktrace if an error occurs", defaultsTo: false)
-  bool get showStacktrace => decode("stacktrace")!;
+  bool get showStacktrace => decode<bool>("stacktrace");
 
   @Flag("machine",
       help:
           "Output is machine-readable, usable for creating tools on top of this CLI. Behavior varies by command.",
       defaultsTo: false)
-  bool get isMachineOutput => decode("machine")!;
+  bool get isMachineOutput => decode<bool>("machine");
 
   final Map<String, CLICommand> _commandMap = {};
 
@@ -96,13 +98,19 @@ abstract class CLICommand {
   static const _tabs = "    ";
   static const _errorDelimiter = "*** ";
 
-
-  T? decode<T>(String key) {
-    final val = _argumentValues[key];
-    if (T == int && val is String) {
-      return int.parse(val) as T;
+  T decode<T>(String key, {T Function()? orElse}) {
+    try {
+      final val = _argumentValues[key];
+      if (T == int && val is String) {
+        return int.parse(val) as T;
+      }
+      return RuntimeContext.current.coerce<T>(val);
+    } catch (e) {
+      if (orElse != null) {
+        return orElse();
+      }
+      rethrow;
     }
-    return RuntimeContext.current.coerce(val);
   }
 
   void registerCommand(CLICommand cmd) {
@@ -185,7 +193,8 @@ abstract class CLICommand {
       var toolPubspecFile =
           File.fromUri(conduitDirectory.absolute.uri.resolve("pubspec.yaml"));
 
-      final toolPubspecContents = loadYaml(toolPubspecFile.readAsStringSync()) as Map;
+      final toolPubspecContents =
+          loadYaml(toolPubspecFile.readAsStringSync()) as Map;
       final toolVersion = toolPubspecContents["version"] as String;
       _toolVersion = Version.parse(toolVersion);
     } catch (e) {

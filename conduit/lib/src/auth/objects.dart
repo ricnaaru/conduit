@@ -424,13 +424,12 @@ class AuthScope {
 
     final thisIterator = _segments.iterator;
     for (var incomingSegment in incomingScope._segments) {
-      if (thisIterator.moveNext()) {
+      // If the incoming scope is more restrictive than this scope,
+      // then it's not allowed.
+      if (!thisIterator.moveNext()) {
         return false;
       }
       final current = thisIterator.current;
-
-      // If the incoming scope is more restrictive than this scope,
-      // then it's not allowed.
 
       // If we have a mismatch here, then we're going
       // down the wrong path.
@@ -456,10 +455,8 @@ class AuthScope {
   bool isExactlyScope(AuthScope scope) {
     final incomingIterator = scope._segments.iterator;
     for (var segment in _segments) {
-      bool hasMore = incomingIterator.moveNext();
-
       /// the scope has less segments so no match.
-      if (hasMore == false) {
+      if (!incomingIterator.moveNext()) {
         return false;
       }
 

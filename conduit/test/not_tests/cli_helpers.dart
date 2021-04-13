@@ -81,7 +81,7 @@ class CLIClient {
       final client = CLIClient(DartProjectAgent(name, dependencies: {
         "conduit": {"path": "../.."}
       }, devDependencies: {
-        "test": "^1.0.0"
+        "test": "^1.6.7"
       }));
 
       client.projectAgent.addLibraryFile("channel", """
@@ -97,7 +97,7 @@ class TestChannel extends ApplicationChannel {
     router
       .route("/example")
       .linkFunction((request) async {
-        return new Response.ok({"key": "value"});
+        return Response.ok({"key": "value"});
       });
 
     return router;

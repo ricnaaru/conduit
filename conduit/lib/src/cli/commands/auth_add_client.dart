@@ -49,27 +49,27 @@ class CLIAuthAddClient extends CLICommand
       help:
           "Number of hash rounds to apply to secret. Must match AuthServer.hashRounds.",
       defaultsTo: "1000")
-  int get hashRounds => decode("hash-rounds")!;
+  int get hashRounds => decode<int>("hash-rounds");
 
   @Option("hash-length",
       help:
           "Length in bytes of secret key after hashing. Must match AuthServer.hashLength.",
       defaultsTo: "32")
-  int get hashLength => decode("hash-length")!;
+  int get hashLength => decode<int>("hash-length");
 
   @Option("allowed-scopes",
       help:
           "A space-delimited list of allowed scopes. Omit if application does not support scopes.",
       defaultsTo: "")
   List<String>? get allowedScopes {
-    String v = decode("allowed-scopes") as String;
+    String v = decode<String>("allowed-scopes");
     if (v.isEmpty) {
       return null;
     }
     return v.split(" ").toList();
   }
 
-  late ManagedContext context;
+  ManagedContext? context;
 
   @override
   Future<int> handle() async {
@@ -90,7 +90,7 @@ class CLIAuthAddClient extends CLICommand
 
     var managedCredentials = ManagedAuthClient.fromClient(credentials);
 
-    final query = Query<ManagedAuthClient>(context)
+    final query = Query<ManagedAuthClient>(context!)
       ..values = managedCredentials;
 
     try {

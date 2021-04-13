@@ -1,7 +1,7 @@
 name: conduit_test
 description: Utilities for writing automated tests for Conduit applications
 version: 2.0.0-b1
-homepage: https://github.com/stablekernel/conduit
+homepage: https://github.com/conduit-dart/conduit
 author: stable|kernel <jobs@stablekernel.com>
 documentation:
 
@@ -14,10 +14,4 @@ dependencies:
   conduit: ^2.0.0-b1
   conduit_common_test: ^2.0.0-b1
 
-# This is removed before being published.
-dependency_overrides:
-  conduit:
-    path: ../conduit
 
-  conduit_common_test:
-    path: ../../common_test

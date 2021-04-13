@@ -15,8 +15,7 @@ void main() {
   late HttpServer server;
 
   setUpAll(() async {
-    context =
-        await PostgresTestConfig().contextWithModels([TestModel, StringModel]);
+    context = await PostgresTestConfig().contextWithModels([TestModel, StringModel]);
 
     server = await HttpServer.bind(InternetAddress.loopbackIPv4, 8888);
     var router = Router();

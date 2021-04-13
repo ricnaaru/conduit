@@ -417,8 +417,9 @@ class ManagedObjectController<InstanceType extends ManagedObject>
     final entityName = _query!.entity!.name;
 
     if (path.parameters
-        .where((p) => p!.location == APIParameterLocation.path)
-        .isNotEmpty) {
+            ?.where((p) => p!.location == APIParameterLocation.path)
+            .isNotEmpty ??
+        false) {
       ops["get"]!.id = "get$entityName";
       ops["put"]!.id = "update$entityName";
       ops["delete"]!.id = "delete$entityName";

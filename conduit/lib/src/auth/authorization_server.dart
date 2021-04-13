@@ -157,8 +157,8 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
   /// If credentials are not correct, it will throw the appropriate [AuthRequestError].
   ///
   /// After [expiration], this token will no longer be valid.
-  Future<AuthToken> authenticate(
-      String? username, String? password, String? clientID, String? clientSecret,
+  Future<AuthToken> authenticate(String? username, String? password,
+      String? clientID, String? clientSecret,
       {Duration expiration = const Duration(hours: 24),
       List<AuthScope>? requestedScopes}) async {
     if (clientID == null) {
@@ -347,7 +347,7 @@ class AuthServer implements AuthValidator, APIComponentDocumenter {
 
     final dbSalt = authenticatable.salt!;
     final dbPassword = authenticatable.hashedPassword;
-    if (hashPassword(password, dbSalt) != dbPassword) {
+    if (hashPassword(password, dbSalt!) != dbPassword) {
       throw AuthServerException(AuthRequestError.accessDenied, client);
     }
 
