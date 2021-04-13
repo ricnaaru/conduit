@@ -2,6 +2,7 @@ import 'dart:mirrors';
 
 import 'package:conduit/conduit.dart';
 import 'package:conduit/src/runtime/orm/entity_mirrors.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/src/db/managed/relationship_type.dart';
 
@@ -426,7 +427,7 @@ void main() {
   group("Unique column set", () {
     late PostgreSQLPersistentStore psc;
     setUp(() {
-      psc = PostgreSQLPersistentStore(null, null, null, null, null);
+      psc = PostgresTestConfig().persistentStore();
     });
 
     test("Can add unique", () {
@@ -443,7 +444,8 @@ void main() {
       var schema = Schema.fromDataModel(dm);
       schema.tableForName("_Unique")!.uniqueColumnSet = null;
 
-      var cmds = psc.deleteTableUniqueColumnSet(schema.tableForName("_Unique")!);
+      var cmds =
+          psc.deleteTableUniqueColumnSet(schema.tableForName("_Unique")!);
       expect(cmds.first, "DROP INDEX IF EXISTS _Unique_unique_idx");
     });
 

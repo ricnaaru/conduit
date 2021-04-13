@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 
 void main() {
-  var store =
-      PostgreSQLPersistentStore("dart", "dart", "localhost", 5432, "dart_test");
+  var store = PostgresTestConfig().persistentStore();
 
   setUp(() async {});
 

@@ -2,7 +2,7 @@
 @Tags(const ["cli"])
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
-import 'package:conduit/src/dev/context_helpers.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:test/test.dart';
 
@@ -19,16 +19,12 @@ void main() {
     cli = CLIClient(DartProjectAgent("application_test", dependencies: {
       "conduit": {"path": "../.."}
     }))
-      ..defaultArgs = [
-        "--connect",
-        "postgres://dart:dart@localhost:5432/dart_test"
-      ];
+      ..defaultArgs = ["--connect", PostgresTestConfig().connectionUrl];
     await cli.agent.getDependencies();
   });
 
   setUp(() async {
-    store = PostgreSQLPersistentStore(
-        "dart", "dart", "localhost", 5432, "dart_test");
+    store = PostgresTestConfig().persistentStore();
 
     final builder = SchemaBuilder.toSchema(store, schema);
     for (var command in builder.commands) {
@@ -39,7 +35,7 @@ void main() {
   });
 
   tearDown(() async {
-    await dropSchemaTables(schema, store);
+    await PostgresTestConfig().dropSchemaTables(schema, store);
     await context.close();
   });
 

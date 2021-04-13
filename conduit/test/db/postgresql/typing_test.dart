@@ -1,9 +1,9 @@
 import 'package:conduit/src/db/postgresql/postgresql_query.dart';
 import 'package:conduit/src/db/postgresql/query_builder.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
-import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   ManagedContext? context;
@@ -13,7 +13,7 @@ void main() {
   });
 
   test("Values get typed when used in predicate", () async {
-    context = await contextWithModels([TestModel]);
+    context = await PostgresTestConfig().contextWithModels([TestModel]);
 
     final q = Query<TestModel>(context!)
       ..where((o) => o.id).equalTo(1)
@@ -35,7 +35,7 @@ void main() {
   });
 
   test("Values get typed when used as insertion values", () async {
-    context = await contextWithModels([TestModel]);
+    context = await PostgresTestConfig().contextWithModels([TestModel]);
 
     final q = Query<TestModel>(context!)
       ..values.id = 1

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:conduit/conduit.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -10,8 +11,7 @@ void main() {
     late SocketProxy proxy;
 
     setUp(() async {
-      persistentStore = PostgreSQLPersistentStore(
-          "dart", "dart", "localhost", 5432, "dart_test");
+      persistentStore = PostgresTestConfig().persistentStore();
     });
 
     tearDown(() async {
@@ -59,8 +59,9 @@ void main() {
 
     test("Make multiple requests at once, all fail because db connect fails",
         () async {
-      persistentStore = PostgreSQLPersistentStore(
-          "dart", "dart", "localhost", 5432, "xyzxyznotadb");
+      persistentStore =
+          PostgresTestConfig().persistentStore(dbName: 'xyzxyznotadb');
+
       var expectedValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       var values = await Future.wait(expectedValues.map(
           (i) => persistentStore.execute("select $i").catchError((e) => e)));
@@ -70,8 +71,7 @@ void main() {
     test(
         "Make multiple requests at once, first few fails because db connect fails (but eventually succeeds)",
         () async {
-      persistentStore = PostgreSQLPersistentStore(
-          "dart", "dart", "localhost", 5433, "dart_test");
+      persistentStore = PostgresTestConfig().persistentStore();
 
       var expectedValues = [1, 2, 3, 4, 5];
       var values = await Future.wait(expectedValues.map(
@@ -95,8 +95,7 @@ void main() {
 
     test("Connect to bad db fails gracefully, can then be used again",
         () async {
-      persistentStore = PostgreSQLPersistentStore(
-          "dart", "dart", "localhost", 5433, "dart_test");
+      persistentStore = PostgresTestConfig().persistentStore();
 
       try {
         await persistentStore.executeQuery("SELECT 1", null, 20);
@@ -117,8 +116,7 @@ void main() {
   group("Registration", () {
     test("Create with default constructor registers and handles shutdown",
         () async {
-      var store = PostgreSQLPersistentStore(
-          "dart", "dart", "localhost", 5432, "dart_test");
+      var store = PostgresTestConfig().persistentStore();
 
       await store.execute("SELECT 1");
       expect(store.isConnected, true);

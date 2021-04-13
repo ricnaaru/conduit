@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:conduit/conduit.dart';
 import 'package:conduit/src/cli/runner.dart';
 import 'package:conduit/src/cli/running_process.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:fs_test_agent/working_directory_agent.dart';
@@ -127,9 +128,8 @@ class TestChannel extends ApplicationChannel {
         DartProjectAgent.projectsDirectory.uri.resolve("$name/")));
   }
 
-  Future<int> executeMigrations(
-      {String connectString =
-          "postgres://dart:dart@localhost:5432/dart_test"}) async {
+  Future<int> executeMigrations({String? connectString}) async {
+    connectString ??= PostgresTestConfig().connectionUrl;
     final res = await run("db", ["upgrade", "--connect", connectString]);
     if (res != 0) {
       print("executeMigrations failed: $output");

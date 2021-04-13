@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:conduit/conduit.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
-import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   group("Multiple contexts, same data model", () {
@@ -110,10 +110,10 @@ class _U {
 class U extends ManagedObject<_U> implements _U {}
 
 Future<ManagedContext> contextWithDataModel(ManagedDataModel dataModel) async {
-  var persistentStore =
-      PostgreSQLPersistentStore("dart", "dart", "localhost", 5432, "dart_test");
+  var persistentStore = PostgresTestConfig().persistentStore();
 
-  var commands = commandsFromDataModel(dataModel, temporary: true);
+  var commands =
+      PostgresTestConfig().commandsFromDataModel(dataModel, temporary: true);
   var context = ManagedContext(dataModel, persistentStore);
 
   for (var cmd in commands) {

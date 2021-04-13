@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:conduit/conduit.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 
 /*
@@ -14,8 +15,7 @@ void main() {
   late PostgreSQLPersistentStore store;
 
   setUp(() async {
-    store = PostgreSQLPersistentStore(
-        "dart", "dart", "localhost", 5432, "dart_test");
+    store = PostgresTestConfig().persistentStore();
   });
 
   tearDown(() async {

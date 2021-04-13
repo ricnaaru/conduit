@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:conduit/conduit.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 
-import 'package:conduit/src/dev/helpers.dart';
 
 /*
   The test data is like so:
@@ -20,7 +20,7 @@ void main() {
     ManagedContext? context;
     late List<Parent> truth;
     setUpAll(() async {
-      context = await contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
       truth = await populate(context);
     });
 
@@ -244,7 +244,7 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 
@@ -368,7 +368,7 @@ void main() {
     late List<Parent> truth;
 
     setUpAll(() async {
-      context = await contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
       truth = await populate(context);
     });
 
@@ -421,7 +421,7 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 
@@ -445,7 +445,7 @@ void main() {
     ManagedContext? context;
 
     setUpAll(() async {
-      context = await contextWithModels([Child, Parent, Toy, Vaccine]);
+      context = await PostgresTestConfig().contextWithModels([Child, Parent, Toy, Vaccine]);
       await populate(context);
     });
 

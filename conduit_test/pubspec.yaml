@@ -12,8 +12,12 @@ dependencies:
   test: ^1.3.0
   matcher: '>=0.12.3 <0.14.0'
   conduit: ^2.0.0-b1
+  conduit_common_test: ^2.0.0-b1
 
 # This is removed before being published.
 dependency_overrides:
   conduit:
     path: ../conduit
+
+  conduit_common_test:
+    path: ../../common_test

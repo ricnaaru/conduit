@@ -1,8 +1,8 @@
 import 'package:conduit/conduit.dart';
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:postgres/postgres.dart';
 import 'package:test/test.dart';
 
-import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   ManagedContext? context;
@@ -14,7 +14,7 @@ void main() {
 
   test("Accessing values to a `Query` automatically creates an instance.",
       () async {
-    context = await contextWithModels([TestModel]);
+    context = await PostgresTestConfig().contextWithModels([TestModel]);
 
     var q = Query<TestModel>(context!)..values.id = 1;
 
@@ -25,7 +25,7 @@ void main() {
     test(
         "fails when values is set to `null` and the model has required fields.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       final q = Query<TestModel>(context!);
 
@@ -42,7 +42,7 @@ void main() {
     });
 
     test("fails when no value is set for a required field.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()..emailAddress = "required@a.com";
 
@@ -57,7 +57,7 @@ void main() {
     });
 
     test("fails when `null` is set as a value for a required field.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()
         ..name = null
@@ -74,7 +74,7 @@ void main() {
     });
 
     test("fails when a non-existent value is set to the `valueMap`.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var insertReq = Query<TestModel>(context!)
         ..valueMap = {
@@ -94,7 +94,7 @@ void main() {
 
     test("fails when an object that violated a unique constraint is inserted.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()
         ..name = "bob"
@@ -123,7 +123,7 @@ void main() {
     test(
         "fails when an object that violates a unique set constraint is inserted.",
         () async {
-      context = await contextWithModels([MultiUnique]);
+      context = await PostgresTestConfig().contextWithModels([MultiUnique]);
 
       var q = Query<MultiUnique>(context!)
         ..values.a = "a"
@@ -149,7 +149,7 @@ void main() {
     });
 
     test("works given an object and returns is as a result.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()
         ..name = "bob"
@@ -166,7 +166,7 @@ void main() {
     });
 
     test("works given an object into the database.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()
         ..name = "bob"
@@ -186,7 +186,7 @@ void main() {
     });
 
     test("works when values are set directly to the `valueMap`.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var insertReq = Query<TestModel>(context!)
         ..valueMap = {"id": 20, "name": "Bob"}
@@ -211,7 +211,7 @@ void main() {
     test(
         "works when given object with relationship and returns embedded object.",
         () async {
-      context = await contextWithModels([GenUser, GenPost]);
+      context = await PostgresTestConfig().contextWithModels([GenUser, GenPost]);
 
       var u = GenUser()..name = "Joe";
       var q = Query<GenUser>(context!)..values = u;
@@ -229,7 +229,7 @@ void main() {
 
     test("works correctly on an object with a default value for timestamp.",
         () async {
-      context = await contextWithModels([GenTime]);
+      context = await PostgresTestConfig().contextWithModels([GenTime]);
 
       var t = GenTime()..text = "hey";
 
@@ -243,7 +243,7 @@ void main() {
     });
 
     test("works when timestamp is set manually.", () async {
-      context = await contextWithModels([GenTime]);
+      context = await PostgresTestConfig().contextWithModels([GenTime]);
 
       var dt = DateTime.now();
       var t = GenTime()
@@ -259,7 +259,7 @@ void main() {
     });
 
     test("works properly given a model with transient value.", () async {
-      context = await contextWithModels([TransientModel]);
+      context = await PostgresTestConfig().contextWithModels([TransientModel]);
 
       var t = TransientModel()..value = "foo";
 
@@ -270,7 +270,7 @@ void main() {
 
     test("works when values are read from JSON and does not insert relations.",
         () async {
-      context = await contextWithModels([GenUser, GenPost]);
+      context = await PostgresTestConfig().contextWithModels([GenUser, GenPost]);
 
       var json = {
         "name": "Bob",
@@ -293,7 +293,7 @@ void main() {
     });
 
     test("works given an object with no keys.", () async {
-      context = await contextWithModels([BoringObject]);
+      context = await PostgresTestConfig().contextWithModels([BoringObject]);
 
       var q = Query<BoringObject>(context!);
       var result = await q.insert();
@@ -301,7 +301,7 @@ void main() {
     });
 
     test("works given an object with private fields.", () async {
-      context = await contextWithModels([PrivateField]);
+      context = await PostgresTestConfig().contextWithModels([PrivateField]);
 
       await (Query<PrivateField>(context!)..values.public = "abc").insert();
       var q = Query<PrivateField>(context!);
@@ -310,7 +310,7 @@ void main() {
     });
 
     test("works when an enum is set as a value for enum field.", () async {
-      context = await contextWithModels([EnumObject]);
+      context = await PostgresTestConfig().contextWithModels([EnumObject]);
 
       var q = Query<EnumObject>(context!)..values.enumValues = EnumValues.efgh;
 
@@ -319,7 +319,7 @@ void main() {
     });
 
     test("works when an enum field is set to `null`.", () async {
-      context = await contextWithModels([EnumObject]);
+      context = await PostgresTestConfig().contextWithModels([EnumObject]);
 
       var q = Query<EnumObject>(context!)..values.enumValues = null;
 
@@ -329,7 +329,7 @@ void main() {
 
     test("can infer query generic parameter from values in constructor.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       final tm = TestModel()
         ..id = 1
@@ -343,7 +343,7 @@ void main() {
 
   group("Static method insertObject(..) in `Query`", () {
     test("works given a proper object.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
       final o = await Query.insertObject(context!, TestModel()..name = "Bob");
       expect(o.id, isNotNull);
       expect(o.name, "Bob");
@@ -353,7 +353,7 @@ void main() {
   group("Static method insertObjects(..) in `Query`", () {
     test("works given multiple objects and returns the them as a result.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var m = TestModel()
         ..name = "bob"
@@ -381,7 +381,7 @@ void main() {
     test(
         "fails when at least one bad object is give and does not insert any objects into the database.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var goodModel = TestModel()
         ..name = "bob"
@@ -405,7 +405,7 @@ void main() {
 
   group("Method insertMany(..) in `Query`", () {
     test("works given an empty list.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var q = Query<TestModel>(context!);
 
@@ -417,7 +417,7 @@ void main() {
     });
 
     test("works given a list with one element.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var q = Query<TestModel>(context!);
 
@@ -431,7 +431,7 @@ void main() {
     });
 
     test("works given a list with two elements.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var goodModel = TestModel()
         ..name = "alice"
@@ -457,7 +457,7 @@ void main() {
 
     test("works given a list with two elements with different fields filled.",
         () async {
-      context = await contextWithModels([NullableObject]);
+      context = await PostgresTestConfig().contextWithModels([NullableObject]);
 
       await Query<NullableObject>(context!).insertMany([
         NullableObject()..a = "a",
@@ -481,7 +481,7 @@ void main() {
 
     test("works given a list with one element and no values set to it.",
         () async {
-      context = await contextWithModels([NullableObject]);
+      context = await PostgresTestConfig().contextWithModels([NullableObject]);
 
       await Query<NullableObject>(context!).insertMany([
         NullableObject(),
@@ -500,7 +500,7 @@ void main() {
     test(
         "fails when at least one bad object is give and does not insert any objects into the database.",
         () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var goodModel = TestModel()
         ..name = "bob"
@@ -524,7 +524,7 @@ void main() {
     test(
         "fails when two of the records given conflict on a unique field "
         "and does not insert any objects into the database.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       var goodModel = TestModel()
         ..name = "alice"
@@ -548,7 +548,7 @@ void main() {
     test(
         "can be given returning prop "
         "and does not insert any objects into the database.", () async {
-      context = await contextWithModels([TestModel]);
+      context = await PostgresTestConfig().contextWithModels([TestModel]);
 
       final query = Query<TestModel>(context!)
         ..returningProperties((tm) => [tm.id]);

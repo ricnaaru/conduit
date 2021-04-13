@@ -1,11 +1,11 @@
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
-import 'package:conduit/src/dev/helpers.dart';
 
 void main() {
   late ManagedContext ctx;
   setUpAll(() async {
-    ctx = await contextWithModels([T, U, V, W]);
+    ctx = await PostgresTestConfig().contextWithModels([T, U, V, W]);
   });
 
   tearDownAll(() async {

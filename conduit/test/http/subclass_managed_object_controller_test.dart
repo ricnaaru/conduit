@@ -1,6 +1,7 @@
 import 'dart:async';
 
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
@@ -109,8 +110,7 @@ class TestChannel extends ApplicationChannel {
   @override
   Future prepare() async {
     var dataModel = ManagedDataModel([TestModel]);
-    var persistentStore = PostgreSQLPersistentStore(
-        "dart", "dart", "localhost", 5432, "dart_test");
+    var persistentStore = PostgresTestConfig().persistentStore();
     context = ManagedContext(dataModel, persistentStore);
 
     var targetSchema = Schema.fromDataModel(context.dataModel!);

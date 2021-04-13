@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
@@ -21,7 +22,8 @@ void main() {
     expect(authHeader, startsWith("Bearer"));
 
     final q = Query<ManagedAuthToken>(harness.context!)
-      ..where((o) => o.accessToken).equalTo((authHeader as String).substring(7));
+      ..where((o) => o.accessToken)
+          .equalTo((authHeader as String).substring(7));
     final token = await (q.fetchOne() as FutureOr<ManagedAuthToken>);
     expect(token.client.id, "id");
   });
@@ -39,7 +41,8 @@ void main() {
     expect(authHeader, startsWith("Bearer"));
 
     final q = Query<ManagedAuthToken>(harness.context!)
-      ..where((o) => o.accessToken).equalTo((authHeader as String).substring(7));
+      ..where((o) => o.accessToken)
+          .equalTo((authHeader as String).substring(7));
     final token = await (q.fetchOne() as FutureOr<ManagedAuthToken>);
     expect(token.client.id, "confidential-id");
   });
@@ -118,10 +121,8 @@ class Channel extends ApplicationChannel {
 
   @override
   Future prepare() async {
-    context = ManagedContext(
-        ManagedDataModel.fromCurrentMirrorSystem(),
-        PostgreSQLPersistentStore(
-            "dart", "dart", "localhost", 5432, "dart_test"));
+    context = ManagedContext(ManagedDataModel.fromCurrentMirrorSystem(),
+        PostgresTestConfig().persistentStore());
     authServer = AuthServer(ManagedAuthDelegate<User>(context));
   }
 
@@ -146,7 +147,6 @@ class HarnessSubclass extends TestHarness<Channel>
 
   @override
   ManagedContext? get context => channel!.context;
-
 
   @override
   Future onSetUp() async {
