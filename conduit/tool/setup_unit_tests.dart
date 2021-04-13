@@ -1,5 +1,7 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
 import 'package:dcli/dcli.dart';
 
 import 'package:conduit_common_test/conduit_common_test.dart';
@@ -35,6 +37,18 @@ import 'package:conduit_common_test/conduit_common_test.dart';
 /// initialises posgres with the db/accounts used for unit tests.
 ///
 void main(List<String> args) {
+  var parser = ArgParser()
+    ..addFlag('verbose',
+        abbr: 'v',
+        defaultsTo: false,
+        help: 'Outputs verbose logging. WARNING passwords will be displayed');
+
+  var parsed = parser.parse(args);
+
+  final verbose = parsed['verbose'] as bool;
+  Settings().setVerbose(enabled: verbose);
+
+  'docker-compose down'.start(progress: Progress.devNull());
   var dbSettings = DbSettings.load();
 
   var nameRegExp = r'[a-zA-Z0-0\-_]+';
@@ -86,8 +100,16 @@ void main(List<String> args) {
     installPostgressDaemon();
 
     startPostgresDaemon();
+
+    print('Waiting for postgres to start.');
+    while (!isPostgresRunning(dbSettings)) {
+      stdout.write('.');
+      waitForEx(stdout.flush());
+    }
+    print('');
   }
 
+  print('Configuring postgress');
   configurePostgress(dbSettings, useDockerContainer: createPostgresContainer);
 }
 
