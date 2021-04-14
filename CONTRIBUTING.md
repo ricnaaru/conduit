@@ -13,6 +13,13 @@ Tests will automatically be run when you submit a pull request (PR), but you wil
 
 The Conduit repo contains scripts to make running the unit tests easier.
 
+The scripts a written using dcli so you need to install dcli first:
+
+```bash
+pub global activate dcli
+```
+
+
 To configure unit tests, including install a docker based postgres image run:
 
 ```bash
@@ -52,7 +59,7 @@ tool/.setting.yaml
 POSTGRES_HOST: localhost
 POSTGRES_PORT: 15432
 POSTGRES_USER: conduit_test_user
-POSTGRES_PASSWORD: 34achfAdce
+POSTGRES_PASSWORD: conduit!
 POSTGRES_DB: conduit_test_db
 ```
 
@@ -62,7 +69,7 @@ If you have installed postgres yourself then you will need to create the test db
 
 ```bash
 psql -c 'create user conduit_test_user with createdb;' -U postgres
-psql -c "alter user conduit_test_user with password '34achfAdce';" -U postgres
+psql -c "alter user conduit_test_user with password 'conduit!';" -U postgres
 psql -c 'create database conduit_test_db;' -U postgres
 psql -c 'grant all on database conduit_test_db to conduit_test_user;' -U postgres
 ```
@@ -77,3 +84,14 @@ Run all tests with the following command:
 ```
 pub run test -j 1
 ```
+
+
+# Running individual unit tests
+
+If you need to run an individual unit tests that requires the test postgres db, can use:
+
+```
+tool/start_db.dart
+```
+
+You need to have either run tool/setup_unit_tests.dart to correctly configure the db settings.
