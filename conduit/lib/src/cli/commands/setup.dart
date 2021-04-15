@@ -65,7 +65,7 @@ class CLISetup extends CLICommand with CLIProject {
     var commands = [
       "create database conduit_test_db;",
       "create user conduit_test_user with createdb;",
-      "alter user conduit_test_user with password '34achfAdce';",
+      "alter user conduit_test_user with password 'conduit!';",
       "grant all on database conduit_test_db to dart;"
     ];
 
@@ -95,7 +95,7 @@ class CLISetup extends CLICommand with CLIProject {
             "Successfully created role 'conduit_test_user' with createdb permissions.");
       } else if (output.contains("ALTER ROLE")) {
         displayProgress(
-            "Successfully set user 'conduit_test_user' password to '34achfAdce'.");
+            "Successfully set user 'conduit_test_user' password to 'conduit!'.");
       } else if (output.contains("GRANT")) {
         displayProgress(
             "Successfully granted all privileges to database conduit_test_db to user 'conduit_test_user'.");

@@ -30,5 +30,5 @@ user: dart password: dart db name: dart\_test
 
 In conduit these have been changed to:
 
-user: conduit\_test\_user password: 34achfAdce db name: conduit\_test\_db
+user: conduit\_test\_user password: conduit! db name: conduit\_test\_db
 

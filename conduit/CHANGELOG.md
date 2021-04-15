@@ -8,7 +8,7 @@ Expanded the no. of acceptable characters for the password. Migrated to using th
 The run_unit_test script now starts and waits for postgress to be running and resets the db if required.
 replaced all references to aqueduct to conduit.
 removed the unused context_helpers.dart
-Updated all reference to the db name dart_test to be conduit_test_db. Changed the default password to 34achfAdce to make it easier to remember given we are publishing this password anyway.
+Updated all reference to the db name dart_test to be conduit_test_db. Changed the default password to conduit! to make it easier to remember given we are publishing this password anyway.
 "break" tests
 Fixed permission issues with the postgres user setup
 move dummy config to not_test
