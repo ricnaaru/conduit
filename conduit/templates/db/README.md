@@ -20,7 +20,7 @@ Tests are run with a local PostgreSQL database named `conduit_test_db`. If this 
 
 CREATE DATABASE conduit_test_db;
 CREATE USER conduit_test_user WITH createdb;
-ALTER USER conduit_test_user WITH password 'conduit!';
+ALTER USER conduit_test_user WITH password '34achfAdce';
 GRANT all ON DATABASE conduit_test_db TO conduit_test_user;
 
 
