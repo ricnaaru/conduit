@@ -31,7 +31,7 @@ class PropertyBuilder {
 
     if (type?.isEnumerated ?? false) {
       _validators!.add(ValidatorBuilder(
-          this, Validate.oneOf(type!.enumerationMap!.values.toList())));
+          this, Validate.oneOf(type!.enumerationMap.values.toList())));
     }
   }
 
@@ -208,7 +208,7 @@ class PropertyBuilder {
     try {
       if (column?.databaseType != null) {
         return ManagedType(
-            declType.reflectedType, column!.databaseType!, null, null);
+            declType.reflectedType, column!.databaseType!, null, {});
       }
 
       return getManagedTypeFromType(declType);

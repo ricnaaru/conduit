@@ -113,10 +113,10 @@ class ColumnBuilder extends Returnable {
     if (property is ManagedAttributeDescription) {
       final p = property as ManagedAttributeDescription;
       if (p.isEnumeratedValue) {
-        if (!p.enumerationValueMap!.containsKey(value)) {
+        if (!p.enumerationValueMap.containsKey(value)) {
           throw ValidationException(["invalid option for key '${p.name}'"]);
         }
-        return p.enumerationValueMap![value];
+        return p.enumerationValueMap[value];
       } else if (p.type!.kind == ManagedPropertyType.document) {
         return Document(value);
       }

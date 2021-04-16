@@ -95,7 +95,7 @@ class ResourceControllerParameter {
   // ignore: prefer_constructors_over_static_methods
   static ResourceControllerParameter make<T>(
       {required String symbolName,
-      required String name,
+      required String? name,
       required BindingType location,
       required bool isRequired,
       required dynamic Function(dynamic input) decoder,

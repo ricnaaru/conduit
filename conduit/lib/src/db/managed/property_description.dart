@@ -234,7 +234,7 @@ class ManagedAttributeDescription extends ManagedPropertyDescription {
   ///           "option2": Options.option2
   ///          }
   ///
-  Map<String, dynamic>? get enumerationValueMap => type!.enumerationMap;
+  Map<String, dynamic> get enumerationValueMap => type!.enumerationMap;
 
   /// The validity of a transient attribute as input, output or both.
   ///
@@ -242,7 +242,7 @@ class ManagedAttributeDescription extends ManagedPropertyDescription {
   final Serialize? transientStatus;
 
   /// Whether or not this attribute is represented by a Dart enum.
-  bool get isEnumeratedValue => enumerationValueMap != null;
+  bool get isEnumeratedValue => enumerationValueMap.isNotEmpty;
 
   @override
   APISchemaObject documentSchemaObject(APIDocumentContext context) {
@@ -354,10 +354,10 @@ class ManagedAttributeDescription extends ManagedPropertyDescription {
       }
       return value.toDouble();
     } else if (isEnumeratedValue) {
-      if (!enumerationValueMap!.containsKey(value)) {
+      if (!enumerationValueMap.containsKey(value)) {
         throw ValidationException(["invalid option for key '$name'"]);
       }
-      return enumerationValueMap![value];
+      return enumerationValueMap[value];
     } else if (type!.kind == ManagedPropertyType.document) {
       return Document(value);
     } else if (type!.kind == ManagedPropertyType.list ||

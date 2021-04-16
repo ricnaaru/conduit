@@ -173,7 +173,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
 
     if (property.type?.isEnumerated ?? false) {
       final enumeratedValues =
-          property.type!.enumerationMap!.values.map(sourcifyValue).join(",");
+          property.type!.enumerationMap.values.map(sourcifyValue).join(",");
       constructorInvocations.add('Validate.oneOf([$enumeratedValues])');
     }
 
@@ -232,8 +232,8 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
 
     final enumStr = type.enumerationMap == null
         ? "{}"
-        : "{${type.enumerationMap!.keys.map((k) {
-            var vStr = sourcifyValue(type.enumerationMap![k]);
+        : "{${type.enumerationMap.keys.map((k) {
+            var vStr = sourcifyValue(type.enumerationMap[k]);
             return "'$k': $vStr";
           }).join(",")}}";
 

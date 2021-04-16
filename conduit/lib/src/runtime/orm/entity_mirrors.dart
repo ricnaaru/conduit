@@ -7,7 +7,7 @@ import 'package:conduit/src/utilities/mirror_helpers.dart';
 ManagedType getManagedTypeFromType(TypeMirror type) {
   ManagedPropertyType kind;
   ManagedType? elements;
-  Map<String, dynamic>? enumerationMap;
+  Map<String, dynamic> enumerationMap = {};
 
   if (type.isAssignableTo(reflectType(int))) {
     kind = ManagedPropertyType.integer;
@@ -34,10 +34,9 @@ ManagedType getManagedTypeFromType(TypeMirror type) {
   } else if (type is ClassMirror && type.isEnum) {
     kind = ManagedPropertyType.string;
     final enumeratedCases = type.getField(#values).reflectee as List<dynamic>;
-    enumerationMap = enumeratedCases.fold(<String, dynamic>{}, (m, v) {
-      m![v.toString().split(".").last] = v;
-      return m;
-    }); //  as Map<String, dynamic>? Function(Map<String, dynamic>?, dynamic);
+    for (final v in enumeratedCases) {
+      enumerationMap[v.toString().split(".").last] = v;
+    }
   } else {
     throw UnsupportedError(
         "Invalid type '${type.reflectedType}' for 'ManagedType'.");
