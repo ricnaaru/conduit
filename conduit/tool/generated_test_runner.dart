@@ -40,7 +40,6 @@ Future main(List<String> args) async {
     final currentTime = DateTime.now();
     final makePrompt = () =>
         "(Pass: ${passingFiles.length} Fail: ${failingFiles.length} Remain: $remainingCounter)";
-    print("${makePrompt()} Loading test ${f.path}...");
 
     final ctx = BuildContext(
         Directory.current.uri.resolve("lib/").resolve("conduit.dart"),
@@ -75,10 +74,10 @@ Future main(List<String> args) async {
     }
 
     final elapsed = DateTime.now().difference(currentTime);
+    remainingCounter--;
     print(
         "${makePrompt()} (${elapsed.inSeconds}s) Completed tests derived from ${f.path}.");
     await bm.clean();
-    remainingCounter--;
   }
 
   print("==============");
@@ -86,18 +85,13 @@ Future main(List<String> args) async {
   print("==============");
 
   final testRoot = Directory.current.uri.resolve("test/");
-  final stripParentDir = (Uri uri) {
-    final testPathIterator = uri.pathSegments.iterator;
-    final parentDirPathIterator = testRoot.pathSegments.iterator;
-    while (parentDirPathIterator.moveNext()) {
-      testPathIterator.moveNext();
-    }
-    final components = <String>[];
-    do {
-      components.add(testPathIterator.current);
-    } while (testPathIterator.moveNext());
+  String stripParentDir(Uri uri) {
+    final testPathList = uri.pathSegments;
+    final parentDirPathList = testRoot.pathSegments;
+    final components = testPathList.skip(parentDirPathList.length - 1);
+
     return components.join("/");
-  };
+  }
 
   passingFiles.forEach((f) {
     print("  ${stripParentDir(f.uri)}: success");

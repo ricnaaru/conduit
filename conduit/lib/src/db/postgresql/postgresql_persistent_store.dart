@@ -122,8 +122,6 @@ class PostgreSQLPersistentStore extends PersistentStore
           _pendingConnectionCompleter!.completeError(QueryException.transport(
               "unable to connect to database",
               underlyingException: e));
-          print(password);
-          print('ahsdhiaushdiaudhi');
           _pendingConnectionCompleter = null;
         });
       }

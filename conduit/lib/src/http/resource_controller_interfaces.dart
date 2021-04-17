@@ -100,10 +100,10 @@ class ResourceControllerParameter {
       required bool isRequired,
       required dynamic Function(dynamic input) decoder,
       required dynamic defaultValue,
-      required List<String> acceptFilter,
-      required List<String> ignoreFilter,
-      required List<String> requireFilter,
-      required List<String> rejectFilter}) {
+      required List<String>? acceptFilter,
+      required List<String>? ignoreFilter,
+      required List<String>? requireFilter,
+      required List<String>? rejectFilter}) {
     return ResourceControllerParameter(
         symbolName: symbolName,
         name: name,

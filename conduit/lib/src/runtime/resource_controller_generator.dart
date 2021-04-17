@@ -41,7 +41,7 @@ String getApplyRequestPropertiesSource(
 
   runtime.ivarParameters!.forEach((f) {
     buf.writeln("(untypedController as $subclassName).${f.symbolName} "
-        "= args.instanceVariables['${f.symbolName}'] as ${f.type};");
+        "= args.instanceVariables['${f.symbolName}'] as ${f.type}?;");
   });
 
   return buf.toString();
@@ -97,7 +97,7 @@ String getDecoderSource(
 
 String sourcifyFilter(List<String>? filter) {
   if (filter == null) {
-    return "[]";
+    return "null";
   }
 
   return "[${filter.map((s) => "'$s'").join(",")}]";
