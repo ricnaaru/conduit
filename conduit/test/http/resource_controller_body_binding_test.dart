@@ -38,7 +38,6 @@ void main() {
       ];
       var response = await postJSON(m);
       expect(response.statusCode, 200);
-      print(response.body);
       expect(json.decode(response.body), m);
     });
 
