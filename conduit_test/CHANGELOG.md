@@ -1,5 +1,9 @@
 # Conduit
 
+# 2.0.0-b1
+
+- Tooling works with conduit
+
 # 2.0.0-a3
 - broadened the version no. so works with any 2.0 version of conduit.
 - Updated pubspec to pull conduit_test from pub.dev now that it is published.
