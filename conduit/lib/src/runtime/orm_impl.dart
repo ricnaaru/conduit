@@ -230,12 +230,10 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
         ? "null"
         : _getManagedTypeInstantiator(type.elements);
 
-    final enumStr = type.enumerationMap == null
-        ? "{}"
-        : "{${type.enumerationMap.keys.map((k) {
-            var vStr = sourcifyValue(type.enumerationMap[k]);
-            return "'$k': $vStr";
-          }).join(",")}}";
+    final enumStr = "{${type.enumerationMap.keys.map((k) {
+      var vStr = sourcifyValue(type.enumerationMap[k]);
+      return "'$k': $vStr";
+    }).join(",")}}";
 
     return "ManagedType.make<${type.type}>(${type.kind}, $elementStr, $enumStr)";
   }
