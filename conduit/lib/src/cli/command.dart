@@ -98,18 +98,65 @@ abstract class CLICommand {
   static const _tabs = "    ";
   static const _errorDelimiter = "*** ";
 
-  T decode<T>(String key, {T Function()? orElse}) {
+  /// Use this method to extract a required value for the command line argument for [key].
+  /// If the command line argument uses defaultsTo to set a default value that will
+  /// satisfy the requirements.
+  ///
+  /// Extracts the value from an command argument for the
+  /// given [key]. If the command argument [key] was not passed
+  /// on the cli and does not have a default value then a
+  /// CLIException is thrown.
+  ///
+  /// If the argument cannot be coerced to the expected type [T] then
+  /// a [CLIException] is thrown.
+  T decode<T extends Object>(
+    String key,
+  ) {
+    T? val = decodeOptional(key);
+
+    if (val == null) {
+      throw CLIException('The required argument "$key" was not passed.');
+    }
+
+    return val;
+  }
+
+  /// Use this method to extract an optional value for the command line argument for [key].
+  /// If the command argument [key] was not passed
+  /// then null is returned unless [orElse] is passed.
+  ///
+  /// If the value for [key] is null and [orElse] is passed then
+  /// [orElse] is called and the resulting value returned.
+  ///
+  /// If the argument is passed but cannot be coerced to the expected type [T] then
+  /// a [CLIException] is thrown.
+  T? decodeOptional<T>(String key, {T? Function()? orElse}) {
+    dynamic val;
     try {
-      final val = _argumentValues[key];
+      if (!_argumentValues.options.contains(key)) {
+        return null;
+      }
+      val = _argumentValues[key];
+
+      if (val == null) {
+        if (orElse != null)
+          return orElse();
+        else
+          return null;
+      }
+
       if (T == int && val is String) {
-        return int.parse(val) as T;
+        var t = int.tryParse(val);
+        if (t == null) {
+          throw CLIException(
+              'Invalid integer value "$val" for argument "$key".');
+        } else
+          return t as T;
       }
       return RuntimeContext.current.coerce<T>(val);
-    } catch (e) {
-      if (orElse != null) {
-        return orElse();
-      }
-      rethrow;
+    } on TypeCoercionException catch (_) {
+      throw CLIException(
+          'The value "$val" for argument "$key" could not be coerced to a $T.');
     }
   }
 

@@ -19,21 +19,21 @@ class CLIServer extends CLICommand with CLIProject {
   @Option("ssl-key-path",
       help:
           "The path to an SSL private key file. If provided along with --ssl-certificate-path, the application will be HTTPS-enabled.")
-  String? get keyPath => decode("ssl-key-path");
+  String? get keyPath => decodeOptional("ssl-key-path");
 
   @Option("ssl-certificate-path",
       help:
           "The path to an SSL certicate file. If provided along with --ssl-certificate-path, the application will be HTTPS-enabled.")
-  String? get certificatePath => decode("ssl-certificate-path");
+  String? get certificatePath => decodeOptional("ssl-certificate-path");
 
   @Flag("observe", help: "Enables Dart Observatory", defaultsTo: false)
-  bool get shouldRunObservatory => decode("observe", orElse: () => false);
+  bool get shouldRunObservatory => decode("observe");
 
   @Flag("ipv6-only",
       help: "Limits listening to IPv6 connections only.",
       negatable: false,
       defaultsTo: false)
-  bool get ipv6Only => decode("ipv6-only", orElse: () => false);
+  bool get ipv6Only => decode("ipv6-only");
 
   @Option("port",
       abbr: "p",
@@ -41,8 +41,11 @@ class CLIServer extends CLICommand with CLIProject {
       defaultsTo: "8888")
   int get port => decode<int>("port");
 
-  @Option("isolates", abbr: "n", help: "Number of isolates processing requests")
-  int get numberOfIsolates => decode("isolates", orElse: () => 0);
+  @Option("isolates",
+      abbr: "n",
+      help: "Number of isolates processing requests",
+      defaultsTo: "0")
+  int get numberOfIsolates => decode("isolates");
 
   @Option("address",
       abbr: "a",
@@ -50,14 +53,15 @@ class CLIServer extends CLICommand with CLIProject {
           "The address to listen on. See HttpServer.bind for more details; this value is used as the String passed to InternetAddress.lookup."
           " Using the default will listen on any address.",
       defaultsTo: '0.0.0.0')
-  String get address => decode("address", orElse: () => '0.0.0.0');
+  String get address => decode("address");
 
   @Option("channel",
       abbr: "s",
       help:
           "The name of the ApplicationChannel subclass to be instantiated to serve requests. "
           "By default, this subclass is determined by reflecting on the application library in the [directory] being served.")
-  String get channelType => decode("channel", orElse: () => derivedChannelType);
+  String get channelType =>
+      decodeOptional("channel", orElse: () => derivedChannelType)!;
 
   @Option("config-path",
       abbr: "c",
@@ -65,8 +69,7 @@ class CLIServer extends CLICommand with CLIProject {
           "The path to a configuration file. This File is available in the ApplicationOptions"
           "for a ApplicationChannel to use to read application-specific configuration values. Relative paths are relative to [directory].",
       defaultsTo: "config.yaml")
-  File get configurationFile =>
-      File(decode("config-path", orElse: () => "config.yaml")).absolute;
+  File get configurationFile => File(decode("config-path")).absolute;
 
   ReceivePort? messagePort;
   ReceivePort? errorPort;

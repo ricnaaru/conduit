@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:conduit/src/cli/metadata.dart';
 import 'package:path/path.dart' as path_lib;
+import 'package:path/path.dart';
 import 'package:pub_cache/pub_cache.dart';
 import 'package:yaml/yaml.dart';
 
@@ -17,12 +18,25 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
 
   @Option("template",
       abbr: "t", help: "Name of the template to use", defaultsTo: "default")
-  String get templateName => decode("template", orElse: () => "default");
+  String get templateName => decode("template");
 
   @Flag("offline",
       negatable: false,
-      help: "Will fetch dependencies from a local cache if they exist.")
-  bool get offline => decode("offline", orElse: () => false);
+      help: "Will fetch dependencies from a local cache if they exist.",
+      defaultsTo: false)
+  bool get offline => decode("offline");
+
+  @Option(
+    "test",
+    help:
+        "Path to the source code. Only used by the unit-test framework. Causes all conduit dependencies to be pulled from local source.",
+  )
+
+  /// If passed it contains a path to the local source.
+  /// If this switch is passed then the generate pubpspec will
+  /// include paths to local source rather than references
+  /// to pub.dev
+  String? get test => decodeOptional("test");
 
   String? get projectName =>
       remainingArguments.isNotEmpty ? remainingArguments.first : null;
@@ -37,6 +51,12 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     if (!isSnakeCase(projectName!)) {
       displayError("Invalid project name ($projectName is not snake_case).");
       return 1;
+    }
+
+    if (test != null) {
+      if (!_validTestSources(test!)) {
+        return 1;
+      }
     }
 
     var destDirectory = destinationDirectoryFromPath(projectName!);
@@ -64,7 +84,20 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
 
       addDependencyOverridesToPackage(destDirectory.path, {
         "conduit": conduitLocation.uri,
-        "conduit_test": conduitLocation.parent.uri.resolve("conduit_test/")
+        "conduit_test": _packageUri(conduitLocation, 'conduit_test'),
+        "conduit_codeable": _packageUri(conduitLocation, 'codable'),
+        "conduit_common": _packageUri(conduitLocation, 'common'),
+        "conduit_common_test": _packageUri(conduitLocation, 'common_test'),
+        "conduit_config": _packageUri(conduitLocation, 'config'),
+        "conduit_isolate_exec": _packageUri(conduitLocation, 'isolate_exec'),
+        "conduit_open_api": _packageUri(conduitLocation, 'open_api'),
+
+        //          valid &= _testPackagePath(testPath, 'codable');
+        // valid &= _testPackagePath(testPath, 'common');
+        // valid &= _testPackagePath(testPath, 'common_test');
+        // valid &= _testPackagePath(testPath, 'config');
+        // valid &= _testPackagePath(testPath, 'isolate_exec');
+        // valid &= _testPackagePath(testPath, 'open_api');
       });
     }
 
@@ -86,6 +119,10 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
         "See ${destDirectory.path}${path_lib.separator}README.md for more information.");
 
     return 0;
+  }
+
+  Uri _packageUri(Directory conduitLocation, String packageDir) {
+    return Directory(join(conduitLocation.path, '..', packageDir)).uri;
   }
 
   bool shouldIncludeItem(FileSystemEntity entity) {
@@ -290,6 +327,40 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
   String get description {
     return "Creates Conduit applications from templates.";
   }
+
+  bool _validTestSources(String testPath) {
+    if (!_exists(testPath)) {
+      displayError('The $testPath path does not exist.');
+      return false;
+    }
+
+    bool valid = true;
+    valid &= _testPackagePath(testPath, 'codable');
+    valid &= _testPackagePath(testPath, 'common');
+    valid &= _testPackagePath(testPath, 'common_test');
+    valid &= _testPackagePath(testPath, 'config');
+    valid &= _testPackagePath(testPath, 'isolate_exec');
+    valid &= _testPackagePath(testPath, 'open-api-dart');
+
+    return valid;
+  }
+
+  /// check if a path exists sync.
+  bool _exists(String path) {
+    return Directory(path).existsSync();
+  }
+
+  /// test if the given package dir exists in the test path
+  bool _testPackagePath(String testPath, String packageDir) {
+    String packagePath = _truepath(join(testPath, packageDir));
+    if (!_exists(packagePath)) {
+      displayError("The path $packagePath doesn't exists.");
+      return false;
+    }
+    return true;
+  }
+
+  String _truepath(String path) => canonicalize(absolute(path));
 }
 
 class CLITemplateList extends CLICommand with CLIConduitGlobal {

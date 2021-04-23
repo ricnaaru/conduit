@@ -14,7 +14,7 @@ abstract class CLIProject implements CLICommand {
       abbr: "d", help: "Project directory to execute command in")
   Directory? get projectDirectory {
     if (_projectDirectory == null) {
-      String? dir = decode("directory");
+      String? dir = decodeOptional("directory");
       if (dir == null) {
         _projectDirectory = Directory.current.absolute;
       } else {

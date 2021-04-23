@@ -17,7 +17,7 @@ class CLIAuthScopeClient extends CLICommand
   late ManagedContext context;
 
   @Option("id", abbr: "i", help: "The client ID to insert.")
-  String? get clientID => decode("id");
+  String? get clientID => decodeOptional("id");
 
   @Option("scopes",
       help:
@@ -25,7 +25,7 @@ class CLIAuthScopeClient extends CLICommand
       defaultsTo: "")
   List<String>? get scopes {
     String? v = decode("scopes");
-    if (v == null || v.isEmpty) {
+    if (v.isEmpty) {
       return null;
     }
     return v.split(" ").toList();
