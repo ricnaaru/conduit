@@ -26,18 +26,6 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
       defaultsTo: false)
   bool get offline => decode("offline");
 
-  @Option(
-    "test",
-    help:
-        "Path to the source code. Only used by the unit-test framework. Causes all conduit dependencies to be pulled from local source.",
-  )
-
-  /// If passed it contains a path to the local source.
-  /// If this switch is passed then the generate pubpspec will
-  /// include paths to local source rather than references
-  /// to pub.dev
-  String? get test => decodeOptional("test");
-
   String? get projectName =>
       remainingArguments.isNotEmpty ? remainingArguments.first : null;
 
@@ -51,12 +39,6 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     if (!isSnakeCase(projectName!)) {
       displayError("Invalid project name ($projectName is not snake_case).");
       return 1;
-    }
-
-    if (test != null) {
-      if (!_validTestSources(test!)) {
-        return 1;
-      }
     }
 
     var destDirectory = destinationDirectoryFromPath(projectName!);
@@ -82,23 +64,22 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     if (conduitPackageRef?.sourceType == "path") {
       final conduitLocation = conduitPackageRef!.resolve()!.location;
 
-      addDependencyOverridesToPackage(destDirectory.path, {
+      if (!addDependencyOverridesToPackage(destDirectory.path, {
         "conduit": conduitLocation.uri,
         "conduit_test": _packageUri(conduitLocation, 'conduit_test'),
-        "conduit_codeable": _packageUri(conduitLocation, 'codable'),
+        "conduit_codable": _packageUri(conduitLocation, 'codable'),
         "conduit_common": _packageUri(conduitLocation, 'common'),
         "conduit_common_test": _packageUri(conduitLocation, 'common_test'),
         "conduit_config": _packageUri(conduitLocation, 'config'),
         "conduit_isolate_exec": _packageUri(conduitLocation, 'isolate_exec'),
         "conduit_open_api": _packageUri(conduitLocation, 'open_api'),
-
-        //          valid &= _testPackagePath(testPath, 'codable');
-        // valid &= _testPackagePath(testPath, 'common');
-        // valid &= _testPackagePath(testPath, 'common_test');
-        // valid &= _testPackagePath(testPath, 'config');
-        // valid &= _testPackagePath(testPath, 'isolate_exec');
-        // valid &= _testPackagePath(testPath, 'open_api');
-      });
+        "conduit_password_hash": _packageUri(conduitLocation, 'password_hash'),
+        "conduit_runtime": _packageUri(conduitLocation, 'runtime'),
+      })) {
+        displayError(
+            'You are running from a local source (pub global activate --source=path) version of conduit and are missing the source for some dependencies.');
+        return 1;
+      }
     }
 
     displayInfo(
@@ -224,20 +205,27 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
         .copySync(File(path_lib.join(directoryPath, "config.yaml")).path);
   }
 
-  void addDependencyOverridesToPackage(
+  bool addDependencyOverridesToPackage(
       String packageDirectoryPath, Map<String, Uri> overrides) {
     var pubspecFile = File(path_lib.join(packageDirectoryPath, "pubspec.yaml"));
     var contents = pubspecFile.readAsStringSync();
 
+    bool valid = true;
+
     final overrideBuffer = StringBuffer();
     overrideBuffer.writeln("dependency_overrides:");
     overrides.forEach((packageName, location) {
+      var path = location.toFilePath(windows: Platform.isWindows);
+
+      valid &= _testPackagePath(path, packageName);
       overrideBuffer.writeln("  $packageName:");
       overrideBuffer.writeln(
           "    path:  ${location.toFilePath(windows: Platform.isWindows)}");
     });
 
     pubspecFile.writeAsStringSync("$contents\n$overrideBuffer");
+
+    return valid;
   }
 
   void copyProjectFiles(Directory destinationDirectory,
@@ -328,33 +316,17 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     return "Creates Conduit applications from templates.";
   }
 
-  bool _validTestSources(String testPath) {
-    if (!_exists(testPath)) {
-      displayError('The $testPath path does not exist.');
-      return false;
-    }
-
-    bool valid = true;
-    valid &= _testPackagePath(testPath, 'codable');
-    valid &= _testPackagePath(testPath, 'common');
-    valid &= _testPackagePath(testPath, 'common_test');
-    valid &= _testPackagePath(testPath, 'config');
-    valid &= _testPackagePath(testPath, 'isolate_exec');
-    valid &= _testPackagePath(testPath, 'open-api-dart');
-
-    return valid;
-  }
-
   /// check if a path exists sync.
   bool _exists(String path) {
     return Directory(path).existsSync();
   }
 
   /// test if the given package dir exists in the test path
-  bool _testPackagePath(String testPath, String packageDir) {
-    String packagePath = _truepath(join(testPath, packageDir));
+  bool _testPackagePath(String testPath, String packageName) {
+    String packagePath = _truepath(testPath);
     if (!_exists(packagePath)) {
-      displayError("The path $packagePath doesn't exists.");
+      displayError(
+          "The source for path '$packageName' doesn't exists. Expected to find it at '$packagePath'");
       return false;
     }
     return true;

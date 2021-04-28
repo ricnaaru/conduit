@@ -80,10 +80,10 @@ class CLIServer extends CLICommand with CLIProject {
 
   @override
   Future<int> handle() async {
-    await prepare();
+    await _prepare();
 
     try {
-      runningProcess = await start();
+      runningProcess = await _start();
     } catch (e, st) {
       displayError("Application failed to start.");
       exitCode.completeError(e, st);
@@ -100,7 +100,7 @@ class CLIServer extends CLICommand with CLIProject {
 
   /////
 
-  Future<StoppableProcess> start() async {
+  Future<StoppableProcess> _start() async {
     var replacements = {
       "PACKAGE_NAME": packageName,
       "LIBRARY_NAME": libraryName,
@@ -175,7 +175,7 @@ class CLIServer extends CLICommand with CLIProject {
     return process;
   }
 
-  Future prepare() async {
+  Future<void> _prepare() async {
     if (keyPath != null && certificatePath == null) {
       throw CLIException(
           "Configuration error: --ssl-key-path was specified, but --ssl-certificate-path was not.");
@@ -185,7 +185,6 @@ class CLIServer extends CLICommand with CLIProject {
           "Configuration error: --ssl-certificate-path was specified, but --ssl-key-path was not.");
     }
 
-    displayInfo("Preparing...");
     derivedChannelType = await getChannelName();
   }
 

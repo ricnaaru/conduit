@@ -34,5 +34,20 @@ dev_dependencies:
   pedantic: ^1.0.0
   settings_yaml: ^3.0.3
   test: ^1.16.5
+
+dependency_overrides:
+  conduit_common:
+    path: ../common
+  conduit_config: 
+    path: ../config
+  conduit_isolate_exec:
+    path: ../isolate_exec
+  conduit_open_api: 
+    path: ../open_api
+  conduit_password_hash:
+    path: ../password_hash
+  conduit_runtime: 
+    path: ../runtime
+
 executables:
   conduit: conduit

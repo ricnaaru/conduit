@@ -3,7 +3,9 @@
 import 'dart:io';
 
 import 'package:dcli/dcli.dart';
-import 'package:conduit_common_test/conduit_common_test.dart';
+
+import 'db_settings.dart';
+import 'postgres_manager.dart';
 
 /// This script will run the conduit unit tests
 ///
@@ -18,7 +20,6 @@ import 'package:conduit_common_test/conduit_common_test.dart';
 /// ./run_unit_tests.dart
 /// ```
 ///
-
 void main(List<String> args) {
   if (which('psql').notfound) {
     printerr(red(
@@ -30,16 +31,19 @@ void main(List<String> args) {
     print('ctrl-caught');
     'docker-compose down'.run;
   });
-  DartSdk().runPubGet('..');
 
-  var dbSettings = DbSettings.load();
+  final projectRoot = DartProject.current.pathToProjectRoot;
+  final pathToToolDir = join(projectRoot, 'tool');
+  DartSdk().runPubGet(projectRoot);
+
+  var dbSettings = DbSettings.load(pathToSettings: pathToToolDir);
   dbSettings.createEnvironmentVariables();
 
   var postgresManager = PostgresManager(dbSettings);
 
   if (dbSettings.useContainer) {
     print('Starting postgres docker image');
-    postgresManager.startPostgresDaemon();
+    postgresManager.startPostgresDaemon(pathToToolDir);
   }
 
   postgresManager.waitForPostgresToStart();
@@ -50,11 +54,29 @@ void main(List<String> args) {
 
   postgresManager.createPostgresDb();
 
-  print('Staring Conduit unit tests');
+  print(red('Activating local copy of conduit.'));
+  // print(orange('You may want to revert this after the unit tests finish!'));
+
+  // activate('common');
+  // activate('conduit-config');
+  // activate('isolate-exec');
+  // activate('open-api-dart');
+  // activate('password-hash');
+  // activate('conduit-runtime');
+  // activate('common_test');
+
+  'pub global activate . --source=path'.start(workingDirectory: projectRoot);
+
+  print('Starting Conduit unit tests');
 
   /// run the tests
-  'pub run test -j1'.start(workingDirectory: '..');
+  'pub run test -j1'.start(workingDirectory: projectRoot);
 
   print('Stopping posgress docker image');
-  postgresManager.stopPostgresDaemon();
+  postgresManager.stopPostgresDaemon(pathToToolDir);
 }
+
+// void activate(String projectRoot,  package) {
+//   'pub global activate $package --source=path'.start(
+//       workingDirectory: truepath(projectRoot, '..'));
+// }
