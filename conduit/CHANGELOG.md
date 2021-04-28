@@ -1,5 +1,10 @@
 # Conduit
 
+# 2.0.0-b2
+
+- Stabilize with dependency changes
+- Add ssl capabilities
+
 # 2.0.0-b1
 
 - Tooling tests pass
