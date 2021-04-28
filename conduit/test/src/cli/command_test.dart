@@ -95,6 +95,22 @@ void main() {
     expect(cmd.people, isNull);
   });
 
+  test('Command missing optional arg with orElse', () {
+    var cmd = TestCLICommand();
+
+    var args = <String>['--guaranteed=4'];
+
+    var results = cmd.options.parse(args);
+    cmd.process(results);
+    expect(cmd.guaranteed, 4);
+
+    cmd = TestCLICommand();
+    args = <String>[];
+    results = cmd.options.parse(args);
+    cmd.process(results);
+    expect(cmd.guaranteed, 1);
+  });
+
   test('Command invalid int conversion', () {
     var cmd = TestCLICommand();
 
@@ -163,6 +179,9 @@ class TestCLICommand extends CLICommand {
 
   @Option("people", abbr: "p", help: "The no. of people.")
   int? get people => decodeOptional("people");
+
+  @Option("guaranteed", abbr: "g", help: "The no. of guaranteed people.")
+  int get guaranteed => decodeOptional("guaranteed", orElse: () => 1)!;
 
   @Flag("useSSL", abbr: "u", help: "UseSSL.", negatable: true)
   bool get useSSl => decode("useSSL");

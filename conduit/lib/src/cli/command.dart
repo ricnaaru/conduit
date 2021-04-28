@@ -134,15 +134,12 @@ abstract class CLICommand {
     dynamic val;
     try {
       if (!_argumentValues.options.contains(key)) {
-        return null;
+        return _orElse(orElse);
       }
       val = _argumentValues[key];
 
       if (val == null) {
-        if (orElse != null)
-          return orElse();
-        else
-          return null;
+        return _orElse(orElse);
       }
 
       if (T == int && val is String) {
@@ -158,6 +155,13 @@ abstract class CLICommand {
       throw CLIException(
           'The value "$val" for argument "$key" could not be coerced to a $T.');
     }
+  }
+
+  T? _orElse<T>(T? Function()? orElse) {
+    if (orElse != null)
+      return orElse();
+    else
+      return null;
   }
 
   void registerCommand(CLICommand cmd) {
