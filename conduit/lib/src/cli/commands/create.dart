@@ -189,11 +189,7 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
     if (pathString.startsWith("/")) {
       return Directory(pathString);
     }
-    var currentDirPath = Directory.current.uri.toFilePath();
-    if (!currentDirPath.endsWith(path_lib.separator)) {
-      currentDirPath += path_lib.separator;
-    }
-    currentDirPath += pathString;
+    var currentDirPath = join(Directory.current.path, pathString);
 
     return Directory(currentDirPath);
   }
