@@ -68,6 +68,7 @@ class CLIClient {
     return CLIClient(DartProjectAgent.existing(dstUri));
   }
 
+  /// Clears any cached output from a prior call to [run].
   void clearOutput() {
     _output.clear();
   }
