@@ -25,4 +25,7 @@ tmp/
 conduit/foobar
 conduit/migrations
 conduit/tool/.settings.yaml
-conduit/.history
+**/.history
+**/*.dart.vm.json
+stackoverflow
+conduit/.failed_tracker
