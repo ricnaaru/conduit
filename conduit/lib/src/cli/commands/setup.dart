@@ -51,7 +51,7 @@ class CLISetup extends CLICommand with CLIProject {
     if (!hasPSQLCLI) {
       displayError(
           "The application 'psql' was not found in \$PATH.\n\nIf you do not have PostgreSQL installed locally, "
-          "you must do so to run tests in an Conduit application. For macOS users, "
+          "you must do so to run tests in a Conduit application. For macOS users, "
           "download Postgres.app from http://postgresapp.com. Once installed, open the "
           "application at least once and add the following line to ~/.bash_profile:\n\n"
           "\texport PATH=\$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin\n\n"
