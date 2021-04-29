@@ -26,7 +26,7 @@ void main() {
   setUpAll(() async {
     final t =
         CLIClient(WorkingDirectoryAgent(DartProjectAgent.projectsDirectory));
-    cli = await t.createProject();
+    cli = await t.createTestProject();
     await cli.agent.getDependencies(offline: true);
   });
 
