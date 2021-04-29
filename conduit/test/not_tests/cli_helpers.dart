@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:conduit/src/cli/commands/create.dart';
 import 'package:conduit/src/cli/runner.dart';
 import 'package:conduit/src/cli/running_process.dart';
 import 'package:conduit_common_test/conduit_common_test.dart';
+import 'package:dcli/dcli.dart';
 
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:fs_test_agent/working_directory_agent.dart';
@@ -73,13 +75,13 @@ class CLIClient {
     _output.clear();
   }
 
-  Future<CLIClient> createProject(
+  Future<CLIClient> createTestProject(
       {String name = "application_test",
       String? template,
       bool offline = true}) async {
     if (template == null) {
       final client = CLIClient(DartProjectAgent(name, dependencies: {
-        "conduit": {"path": "../.."}
+        "conduit": {"path": DartProject.fromPath('.').pathToProjectRoot}
       }, devDependencies: {
         "test": "^1.6.7"
       }));

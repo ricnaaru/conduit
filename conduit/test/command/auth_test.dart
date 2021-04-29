@@ -3,6 +3,7 @@
 import 'package:conduit/conduit.dart';
 import 'package:conduit/managed_auth.dart';
 import 'package:conduit_common_test/conduit_common_test.dart';
+import 'package:dcli/dcli.dart';
 import 'package:fs_test_agent/dart_project_agent.dart';
 import 'package:test/test.dart';
 
@@ -17,7 +18,7 @@ void main() {
 
   setUpAll(() async {
     cli = CLIClient(DartProjectAgent("application_test", dependencies: {
-      "conduit": {"path": "../.."}
+      "conduit": {"path": DartProject.fromPath('.').pathToProjectRoot}
     }))
       ..defaultArgs = ["--connect", PostgresTestConfig().connectionUrl];
     await cli.agent.getDependencies();
