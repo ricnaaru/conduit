@@ -80,6 +80,10 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
             'You are running from a local source (pub global activate --source=path) version of conduit and are missing the source for some dependencies.');
         return 1;
       }
+    } else {
+      displayError(
+          "We can't find conduit in the pub cache. Check that your PUB_CACHE is set correctly.");
+      return 1;
     }
 
     displayInfo(
@@ -376,8 +380,11 @@ class CLIConduitGlobal {
   PubCache pub = PubCache();
 
   PackageRef? get conduitPackageRef {
-    return pub
-        .getGlobalApplications()
+    var apps = pub.getGlobalApplications();
+    if (apps.isEmpty) {
+      return null;
+    }
+    return apps
         .firstWhere((app) => app.name == "conduit")
         .getDefiningPackageRef();
   }
