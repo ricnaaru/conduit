@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:conduit/src/cli/commands/create.dart';
 import 'package:conduit/src/cli/runner.dart';
 import 'package:conduit/src/cli/running_process.dart';
 import 'package:conduit_common_test/conduit_common_test.dart';
