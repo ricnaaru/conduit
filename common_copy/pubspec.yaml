@@ -1,0 +1,11 @@
+name: conduit_common
+version: 1.0.0
+description: Common classes shared by conduit projects.
+repository: https://github.com/bsutton/conduit-orm
+environment: 
+  sdk: '>=2.12.0 <3.0.0'
+dependencies: 
+  conduit_open_api: ^1.0.0-0
+dev_dependencies: 
+  dcli: ^1.0.0
+  lint: ^1.0.0
