@@ -2,13 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:conduit/src/cli/command.dart';
 import 'package:conduit/src/cli/metadata.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:path/path.dart';
 import 'package:pub_cache/pub_cache.dart';
 import 'package:yaml/yaml.dart';
-
-import 'package:conduit/src/cli/command.dart';
 
 /// Used internally.
 class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
@@ -66,7 +65,7 @@ class CLITemplateCreator extends CLICommand with CLIConduitGlobal {
 
       if (!addDependencyOverridesToPackage(destDirectory.path, {
         "conduit": conduitLocation.uri,
-        "conduit_test": _packageUri(conduitLocation, 'conduit_test'),
+        "conduit_test": _packageUri(conduitLocation, 'test_harness'),
         "conduit_codable": _packageUri(conduitLocation, 'codable'),
         "conduit_common": _packageUri(conduitLocation, 'common'),
         "conduit_common_test": _packageUri(conduitLocation, 'common_test'),
