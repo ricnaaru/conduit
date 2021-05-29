@@ -1,0 +1,10 @@
+name: conduit_common_test
+version: 2.0.0-b5
+homepage: https://github.com/conduit-dart/common-test
+description: A collection of classes and function used for testing conduit and by the conduit test harness.
+environment: 
+  sdk: '>=2.12.0 <3.0.0'
+dependencies: 
+  conduit: ^2.0.0-0
+  dcli: ^1.0.0
+  settings_yaml: ^3.0.3

@@ -1,0 +1,17 @@
+name: conduit_runtime
+version: 1.0.0-b2
+description: Provides behaviors and base types for packages that can use mirrors and be AOT compiled.
+repository: https://github.com/conduit-dart/conduit-runtime
+environment: 
+  sdk: '>=2.12.0-0 <3.0.0'
+dependencies: 
+  analyzer: ^1.2.0
+  args: ^2.0.0
+  conduit_isolate_exec: ^1.0.0-b1
+  path: ^1.8.0
+  pubspec: ^2.0.1
+  yaml: ^3.1.0
+dev_dependencies: 
+  fs_test_agent: 1.0.0-b1
+  lint: ^1.5.0
+  test: ^1.16.5
