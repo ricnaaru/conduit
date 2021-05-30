@@ -56,13 +56,21 @@ class ConduitCompiler extends Compiler {
       copyDirectory(
           src: context.sourceApplicationDirectory.uri
               .resolve("../")
-              .resolve("conduit_test/"),
-          dst: context.buildPackagesDirectory.uri.resolve("conduit_test/"));
+              .resolve("test_harness/"),
+          dst: context.buildPackagesDirectory.uri.resolve("test_harness/"));
+      copyDirectory(
+          src: context.sourceApplicationDirectory.uri
+              .resolve("../")
+              .resolve("common_test/"),
+          dst: context.buildPackagesDirectory.uri.resolve("common_test/"));
+      print(context.buildPackagesDirectory.uri.resolve("common_test/"));
       final targetPubspecFile =
           File.fromUri(context.buildDirectoryUri.resolve("pubspec.yaml"));
       final pubspecContents = json.decode(targetPubspecFile.readAsStringSync());
       pubspecContents["dev_dependencies"]["conduit_test"]["path"] =
-          "packages/conduit_test";
+          "packages/test_harness";
+      pubspecContents["dev_dependencies"]["conduit_common_test"]["path"] =
+          "packages/common_test";
       pubspecContents["dependency_overrides"]["conduit"] =
           pubspecContents["dependencies"]["conduit"];
       targetPubspecFile.writeAsStringSync(json.encode(pubspecContents));

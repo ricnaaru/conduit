@@ -5,9 +5,9 @@ on:
     branches: [master, develop]
 
 jobs:
-  conduit_test:
+  test_harness:
     env:
-      TEST_DIR: conduit_test
+      TEST_DIR: test_harness
       POSTGRES_USER: conduit_test_user
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
