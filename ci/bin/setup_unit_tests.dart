@@ -47,7 +47,9 @@ void main(List<String> args) {
   final verbose = parsed['verbose'] as bool;
   Settings().setVerbose(enabled: verbose);
 
-  'docker-compose down'.start(progress: Progress.devNull());
+  if (which('docker-compose').found) {
+    'docker-compose down'.start(progress: Progress.devNull());
+  }
   var dbSettings = DbSettings.load();
 
   var nameRegExp = r'[a-zA-Z0-0\-_]+';
