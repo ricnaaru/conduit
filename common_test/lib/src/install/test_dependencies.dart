@@ -11,7 +11,7 @@ void installDocker() {
 
   if (isAptInstalled()) {
     print('Installing docker daemon');
-    'apt --assume-yes install dockerd'.start(privileged: true);
+    'apt --assume-yes install docker.io'.start(privileged: true);
   } else {
     printerr(
         red('Docker is not installed. Please install docker and start again.'));
@@ -36,4 +36,4 @@ void installDockerCompose() {
   }
 }
 
-bool isAptInstalled() => which('apt').notfound;
+bool isAptInstalled() => which('apt').found;
