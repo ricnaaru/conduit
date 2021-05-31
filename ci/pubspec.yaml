@@ -14,6 +14,6 @@ dependencies:
 dev_dependencies:
   lint: ^1.0.0
 
-dependencies_overrides:
+dependency_overrides:
   conduit_common_test:
-    path: ../conduit_common_test
+    path: ../common_test
