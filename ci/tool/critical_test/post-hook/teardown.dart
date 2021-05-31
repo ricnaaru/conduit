@@ -2,8 +2,7 @@
 
 import 'package:dcli/dcli.dart';
 
-import '../../db_settings.dart';
-import '../../postgres_manager.dart';
+import 'package:conduit_ci/conduit_ci.dart';
 
 /// This script will run the conduit unit tests
 ///
