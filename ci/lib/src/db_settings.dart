@@ -57,7 +57,7 @@ class DbSettings {
     print('$keyPostgresUsername = ${env[keyPostgresUsername]}');
     print('$keyPostgresPassword = ${env[keyPostgresPassword]}');
     print('$keyPSQLDbName = ${env[keyPSQLDbName]}');
-    print('$keyUseContainer = ${useContainer}');
+    print('$keyUseContainer = $useContainer');
 
     print('');
   }
@@ -70,7 +70,9 @@ class DbSettings {
     password = settings[keyPostgresPassword] as String? ?? defaultPassword;
     dbName = settings[keyPSQLDbName] as String? ?? defaultDbName;
     host = settings[keyPostgresHost] as String? ?? defaultHost;
-    port = settings[keyPostgresPort] as int? ?? defaultPort;
+    port =
+        int.tryParse(settings[keyPostgresPort] as String? ?? '$defaultPort') ??
+            defaultPort;
     useContainer = settings[keyUseContainer] as bool? ?? defaultUseContainer;
   }
 

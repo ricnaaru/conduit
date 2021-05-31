@@ -20,7 +20,7 @@ class PostgresManager {
 
     /// create user
     final results =
-        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'select 42424242;' -q -t -U postgres"
+        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'select 42424242;' -q -t -U ${_dbSettings.username} postgres "
             .toList(nothrow: true);
 
     if (results.first.contains('password authentication failed')) {
@@ -35,7 +35,7 @@ class PostgresManager {
 
     /// lists the database.
     final sql =
-        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -t -q -c '\\l ${_dbSettings.dbName};' -U postgres";
+        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -t -q -c '\\l ${_dbSettings.dbName};' -U ${_dbSettings.username}";
 
     final results = sql.toList(skipLines: 1);
 
@@ -46,24 +46,24 @@ class PostgresManager {
   void createPostgresDb() {
     print('Creating database');
 
-    final bool save = _setPassword();
+    final save = _setPassword();
 
     /// create user
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create user ${_dbSettings.username} with createdb;' -U postgres"
+    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create user ${_dbSettings.username} with createdb;' -U ${_dbSettings.username}"
         .run;
 
     /// set password
     Settings().setVerbose(enabled: false);
-    '''psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c "alter user ${_dbSettings.username} with password '${_dbSettings.password}';" -U postgres'''
+    '''psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c "alter user ${_dbSettings.username} with password '${_dbSettings.password}';" -U ${_dbSettings.username}'''
         .run;
     Settings().setVerbose(enabled: save);
 
     /// create db
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create database ${_dbSettings.dbName};' -U postgres"
+    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create database ${_dbSettings.dbName};' -U ${_dbSettings.username}"
         .run;
 
     /// grant permissions
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'grant all on database ${_dbSettings.dbName} to ${_dbSettings.username};' -U postgres "
+    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'grant all on database ${_dbSettings.dbName} to ${_dbSettings.username};' -U ${_dbSettings.username} "
         .run;
   }
 
@@ -79,14 +79,14 @@ class PostgresManager {
   void dropPostgresDb() {
     _setPassword();
 
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop database if exists  ${_dbSettings.dbName};' -U postgres"
+    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop database if exists  ${_dbSettings.dbName};' -U ${_dbSettings.username}"
         .run;
   }
 
   void dropUser() {
     _setPassword();
 
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop user if exists  ${_dbSettings.username};' -U postgres"
+    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop user if exists  ${_dbSettings.username};' -U ${_dbSettings.username}"
         .run;
   }
 
@@ -114,7 +114,7 @@ class PostgresManager {
   }
 
   bool isPostgresDaemonInstalled() {
-    bool found = false;
+    var found = false;
     final images = 'docker images'.toList(skipLines: 1);
 
     for (var image in images) {
@@ -168,4 +168,4 @@ class PostgresManager {
   }
 }
 
-bool isAptInstalled() => which('apt').notfound;
+bool isAptInstalled() => which('apt').found;

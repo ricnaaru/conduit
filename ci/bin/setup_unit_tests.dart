@@ -1,8 +1,9 @@
 #! /usr/bin/env dcli
 
+import 'package:conduit_common_test/conduit_common_test.dart'
+    hide PostgresManager, DbSettings;
 import 'package:dcli/dcli.dart';
-
-import 'package:conduit_common_test/conduit_common_test.dart';
+import 'package:conduit_ci/conduit_ci.dart';
 
 /// late final pathToPostgresDb = join(HOME, 'postgres-db');
 
@@ -46,7 +47,9 @@ void main(List<String> args) {
   final verbose = parsed['verbose'] as bool;
   Settings().setVerbose(enabled: verbose);
 
-  'docker-compose down'.start(progress: Progress.devNull());
+  if (which('docker-compose').found) {
+    'docker-compose down'.start(progress: Progress.devNull());
+  }
   var dbSettings = DbSettings.load();
 
   var nameRegExp = r'[a-zA-Z0-0\-_]+';
@@ -102,10 +105,10 @@ void main(List<String> args) {
 
     postgresManager.installPostgressDaemon();
 
-    postgresManager.startPostgresDaemon();
+    postgresManager.startPostgresDaemon('.');
   }
 
-  postgresManager.stopPostgresDaemon();
+  postgresManager.stopPostgresDaemon('.');
 
   print('Setup complete');
   print(orange('run ./run_unit_tests.dart'));
