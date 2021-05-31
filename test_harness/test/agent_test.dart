@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:test/test.dart';
 import 'package:conduit/conduit.dart';
 import 'package:conduit_test/conduit_test.dart';
+import 'package:test/test.dart';
 
 void main() {
   group("Agent instantiation", () {
@@ -254,7 +254,7 @@ void main() {
     });
 
     test("Responses have body", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4000);
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4001);
       server.listen((req) {
         final resReq = Request(req);
         resReq.respond(Response.ok([
@@ -262,33 +262,33 @@ void main() {
         ]));
       });
 
-      final defaultTestClient = Agent.onPort(4000);
+      final defaultTestClient = Agent.onPort(4001);
       final response = await defaultTestClient.request("/foo").get();
       expect(response.body.as<List>().length, 1);
       expect(response.body.as<List>().first["a"], "b");
     });
 
     test("Responses with no body don't return one", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4000);
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4002);
       server.listen((req) {
         req.response.statusCode = 200;
         req.response.close();
       });
 
-      final defaultTestClient = Agent.onPort(4000);
+      final defaultTestClient = Agent.onPort(4002);
       final response = await defaultTestClient.request("/foo").get();
       expect(response.body.isEmpty, true);
     });
 
     test("Request with accept adds header", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4000);
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4003);
       server.listen((req) {
         final resReq = Request(req);
         resReq.respond(Response.ok(
             {"ACCEPT": req.headers.value(HttpHeaders.acceptHeader)}));
       });
 
-      final client = Agent.onPort(4000);
+      final client = Agent.onPort(4003);
       final req = client.request("/foo")
         ..accept = [ContentType.json, ContentType.text];
 
