@@ -27,7 +27,7 @@ dev_dependencies:
     path: ../common_test
   conduit_test:
     path: ../test_harness
-  dcli: ^1.0.0
+  dcli: ^1.3.0
   fs_test_agent: ^1.0.0-b1
   http: ^0.13.0
   matcher: ">=0.12.3 <0.14.0"
