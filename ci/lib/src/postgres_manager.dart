@@ -20,7 +20,7 @@ class PostgresManager {
 
     /// create user
     final results =
-        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'select 42424242;' -q -t -U ${_dbSettings.username}"
+        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'select 42424242;' -q -t -U ${_dbSettings.username} postgres "
             .toList(nothrow: true);
 
     if (results.first.contains('password authentication failed')) {
