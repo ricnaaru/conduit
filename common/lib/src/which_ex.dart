@@ -14,8 +14,8 @@ void runEx(String exeName, {required String args}) {
       '$exeName.exe $args'.run;
       return;
     }
-    if (which('$exeName.bat $args').found) {
-      '$exeName.bat'.run;
+    if (which('$exeName.bat').found) {
+      '$exeName.bat  $args'.run;
       return;
     }
 
