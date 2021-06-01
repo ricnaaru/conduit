@@ -12,3 +12,4 @@ doc/api/
 
 *.iml
 .tool-versions.failed_tracker
+.failed_tracker

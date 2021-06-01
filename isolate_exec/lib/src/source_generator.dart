@@ -5,6 +5,7 @@ import 'dart:mirrors';
 import 'package:analyzer/dart/analysis/analysis_context.dart';
 import 'package:analyzer/dart/analysis/context_builder.dart';
 import 'package:analyzer/dart/analysis/context_locator.dart';
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/file_system/file_system.dart';
 import 'package:analyzer/file_system/physical_file_system.dart';
 import 'package:analyzer/dart/ast/ast.dart';
@@ -66,7 +67,7 @@ Future main (List<String> args, Map<String, dynamic> message) async {
 
     final context = _createContext(path);
     final session = context.currentSession;
-    final unit = session.getParsedUnit(path);
+    final unit = session.getParsedUnit2(path) as ParsedUnitResult;
     final typeName = MirrorSystem.getName(reflectClass(type).simpleName);
 
     return unit.unit.declarations
