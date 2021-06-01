@@ -178,6 +178,6 @@ class AdditionalContentsInstantiator extends Executable {
   }
 }
 
-void _getDependencies(String projectDir) async {
+void _getDependencies(String projectDir) {
   DartSdk().runPubGet(projectDir);
 }
