@@ -38,5 +38,5 @@ void main(List<String> args) {
       join(dirname(DartProject.fromPath('.').pathToProjectRoot), 'conduit'));
   final version = conduitProject.pubSpec.version;
 
-  'pub_release multi --dry-run --no-git --setVersion=$version'.run;
+  runEx('pub_release', args: 'multi --dry-run --no-git --setVersion=$version');
 }
