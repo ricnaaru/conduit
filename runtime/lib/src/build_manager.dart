@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_void_to_null
 import 'dart:io';
 
+import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:conduit_isolate_exec/conduit_isolate_exec.dart';
 import 'package:conduit_runtime/runtime.dart';
@@ -41,10 +42,10 @@ class BuildManager {
       ..writeAsStringSync(scriptSource);
     final analyzer = CodeAnalyzer(strippedScriptFile.absolute.uri);
     final analyzerContext = analyzer.contexts.contextFor(analyzer.path);
-    final mainFunctions = analyzerContext.currentSession
-        .getParsedUnit(analyzer.path)
-        .unit
-        .declarations
+    final parsedUnit = analyzerContext.currentSession
+        .getParsedUnit2(analyzer.path) as ParsedUnitResult;
+
+    final mainFunctions = parsedUnit.unit.declarations
         .whereType<FunctionDeclaration>()
         .where((f) => f.name.name == "main")
         .toList();

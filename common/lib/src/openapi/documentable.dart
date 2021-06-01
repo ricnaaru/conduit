@@ -149,7 +149,7 @@ class APIDocumentContext {
   /// Documentation methods are synchronous. Asynchronous methods may be called and awaited on
   /// in [document]. All [document] closures will be executes and awaited on before finishing [document].
   /// These closures are called in the order they were added.
-  void defer(FutureOr document()) {
+  void defer(FutureOr Function() document) {
     _deferredOperations.add(document);
   }
 
@@ -169,13 +169,13 @@ class APIDocumentContext {
       req!.requirements!.forEach((schemeName, scopes) {
         final scheme = document.components!.securitySchemes[schemeName];
         if (scheme!.type == APISecuritySchemeType.oauth2) {
-          scheme.flows!.values.forEach((flow) {
-            scopes.forEach((scope) {
+          for (final flow in scheme.flows!.values) {
+            for (final scope in scopes) {
               if (!flow!.scopes!.containsKey(scope)) {
                 flow.scopes![scope] = "";
               }
-            });
-          });
+            }
+          }
         }
       });
     });
