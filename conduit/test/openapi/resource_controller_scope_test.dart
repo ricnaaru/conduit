@@ -46,12 +46,12 @@ void main() {
             .length,
         1);
     expect(
-        doc.paths!["/level1-authorizer"]!.operations["delete"]!.security!
-            .first!.requirements!.length,
+        doc.paths!["/level1-authorizer"]!.operations["delete"]!.security!.first!
+            .requirements!.length,
         1);
     expect(
-        doc.paths!["/level1-authorizer"]!.operations["delete"]!.security!
-            .first!.requirements!["oauth2"],
+        doc.paths!["/level1-authorizer"]!.operations["delete"]!.security!.first!
+            .requirements!["oauth2"],
         ["level1", "level2"]);
 
     expect(
@@ -83,16 +83,16 @@ void main() {
         ["level1:subscope"]);
 
     expect(
-        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!
-            .security!.length,
+        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!.security!
+            .length,
         1);
     expect(
-        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!
-            .security!.first!.requirements!.length,
+        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!.security!
+            .first!.requirements!.length,
         1);
     expect(
-        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!
-            .security!.first!.requirements!["oauth2"],
+        doc.paths!["/level1-subscope-authorizer"]!.operations["post"]!.security!
+            .first!.requirements!["oauth2"],
         ["level1:subscope", "level2"]);
 
     expect(
