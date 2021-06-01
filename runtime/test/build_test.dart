@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:conduit_runtime/runtime.dart';
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 /*
@@ -12,24 +13,24 @@ need to test for local (relative), in pub cache (absolute)
 
 void main() {
   setUpAll(() async {
-    final cmd = Platform.isWindows ? "pub.bat" : "pub";
-
     final testPackagesUri =
-        Directory.current.uri.resolve("test/").resolve("test_packages/");
-    await Process.run(cmd, ["get", "--offline"],
-        workingDirectory: testPackagesUri
-            .resolve("application/")
-            .toFilePath(windows: Platform.isWindows),
-        runInShell: true);
-    await Process.run(cmd, ["get", "--offline"],
-        workingDirectory: testPackagesUri
-            .resolve("dependency/")
-            .toFilePath(windows: Platform.isWindows),
-        runInShell: true);
+        Directory.current.uri.resolve("..").resolve("runtime_test_packages/");
+    DartSdk().runPub(
+      args: ["get", "--offline"],
+      workingDirectory: testPackagesUri
+          .resolve("application/")
+          .toFilePath(windows: Platform.isWindows),
+    );
+    DartSdk().runPub(
+      args: ["get", "--offline"],
+      workingDirectory: testPackagesUri
+          .resolve("dependency/")
+          .toFilePath(windows: Platform.isWindows),
+    );
 
     final appDir = Directory.current.uri
-        .resolve("test/")
-        .resolve("test_packages/")
+        .resolve("../")
+        .resolve("runtime_test_packages/")
         .resolve("application/");
     final appLib = appDir.resolve("lib/").resolve("application.dart");
     final tmp = Directory.current.uri.resolve("tmp/");
@@ -50,8 +51,8 @@ void main() {
 
   test("Non-compiled version returns mirror runtimes", () async {
     final output = await dart(Directory.current.uri
-        .resolve("test/")
-        .resolve("test_packages/")
+        .resolve("../")
+        .resolve("runtime_test_packages/")
         .resolve("application/"));
     expect(json.decode(output), {
       "Consumer": "mirrored",
@@ -66,8 +67,8 @@ void main() {
     final output = await runExecutable(
         Directory.current.uri.resolve("tmp/").resolve("app.aot"),
         Directory.current.uri
-            .resolve("test/")
-            .resolve("test_packages/")
+            .resolve("../")
+            .resolve("runtime_test_packages/")
             .resolve("application/"));
     expect(json.decode(output), {
       "Consumer": "generated",

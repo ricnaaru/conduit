@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:conduit_runtime/runtime.dart';
+import 'package:dcli/dcli.dart';
 import 'package:test/test.dart';
 
 void main() {
   final absolutePathToAppLib = Directory.current.uri
-      .resolve("test/")
-      .resolve("test_packages/")
+      .resolve("../")
+      .resolve("runtime_test_packages/")
       .resolve("application/")
       .resolve("lib/")
       .toFilePath();
@@ -16,21 +17,23 @@ void main() {
     final cmd = Platform.isWindows ? "pub.bat" : "pub";
 
     final testPackagesUri =
-        Directory.current.uri.resolve("test/").resolve("test_packages/");
-    await Process.run(cmd, ["get", "--offline"],
-        workingDirectory: testPackagesUri
-            .resolve("application/")
-            .toFilePath(windows: Platform.isWindows),
-        runInShell: true);
-    await Process.run(cmd, ["get", "--offline"],
-        workingDirectory: testPackagesUri
-            .resolve("dependency/")
-            .toFilePath(windows: Platform.isWindows),
-        runInShell: true);
+        Directory.current.uri.resolve("../").resolve("runtime_test_packages/");
+    DartSdk().runPub(
+      args: ["get", "--offline"],
+      workingDirectory: testPackagesUri
+          .resolve("application/")
+          .toFilePath(windows: Platform.isWindows),
+    );
+    DartSdk().runPub(
+      args: ["get", "--offline"],
+      workingDirectory: testPackagesUri
+          .resolve("dependency/")
+          .toFilePath(windows: Platform.isWindows),
+    );
 
     final appDir = Directory.current.uri
-        .resolve("test/")
-        .resolve("test_packages/")
+        .resolve("../")
+        .resolve("runtime_test_packages/")
         .resolve("application/");
     final appLib = appDir.resolve("lib/").resolve("application.dart");
     final tmp = Directory.current.uri.resolve("tmp/");
@@ -59,8 +62,8 @@ void main() {
   test("Find in file", () {
     final imports = ctx.getImportDirectives(
         uri: Directory.current.uri
-            .resolve("test/")
-            .resolve("test_packages/")
+            .resolve("../")
+            .resolve("runtime_test_packages/")
             .resolve("application/")
             .resolve("lib/")
             .resolve("application.dart"));
