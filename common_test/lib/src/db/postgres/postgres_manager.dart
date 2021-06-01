@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
 
 import '../../../conduit_common_test.dart';
@@ -16,7 +17,7 @@ class PostgresManager {
 
   final DbSettings _dbSettings;
 
-  bool isPostgresClientInstalled() => which('psql').found;
+  bool isPostgresClientInstalled() => whichEx('psql');
 
   /// Checks if the posgres service is running and excepting commands
   bool isPostgresRunning() {

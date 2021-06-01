@@ -14,8 +14,6 @@ void main() {
   late BuildContext ctx;
 
   setUpAll(() async {
-    final cmd = Platform.isWindows ? "pub.bat" : "pub";
-
     final testPackagesUri =
         Directory.current.uri.resolve("../").resolve("runtime_test_packages/");
     DartSdk().runPub(

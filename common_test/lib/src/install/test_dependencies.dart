@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
 
 /// Docker functions
@@ -21,7 +22,7 @@ void installDocker() {
 
 /// Docker-Compose functions
 void installDockerCompose() {
-  if (which('docker-compose').found) {
+  if (whichEx('docker-compose')) {
     print('Using an existing docker-compose install.');
     return;
   }

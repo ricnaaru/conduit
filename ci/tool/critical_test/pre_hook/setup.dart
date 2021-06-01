@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
 import 'package:conduit_ci/conduit_ci.dart';
 
@@ -20,7 +21,7 @@ import 'package:conduit_ci/conduit_ci.dart';
 /// ```
 ///
 void main() {
-  if (which('psql').notfound) {
+  if (!whichEx('psql')) {
     printerr(red(
         'Postgres not found. Have you run "install_unit_test_dependencies.dart".'));
     exit(1);

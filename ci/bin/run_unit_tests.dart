@@ -1,7 +1,6 @@
 #! /usr/bin/env dcli
 
-import 'dart:io';
-
+import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
 
 /// This script will run the conduit unit tests
@@ -18,15 +17,13 @@ import 'package:dcli/dcli.dart';
 /// ```
 ///
 void main(List<String> args) {
-  if (which('critical_test').notfound) {
+  if (!whichEx('critical_test')) {
     print('Installing global package critical_test');
     DartSdk().globalActivate('critical_test');
-    exit(1);
   }
-  if (which('pub_release').notfound) {
+  if (!whichEx('pub_release')) {
     print('Installing global package pub_release');
     DartSdk().globalActivate('pub_release');
-    exit(1);
   }
 
   /// Required by conduit_config/test/config_test.dart

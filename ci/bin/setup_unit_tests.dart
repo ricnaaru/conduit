@@ -1,5 +1,7 @@
 #! /usr/bin/env dcli
 
+
+import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_common_test/conduit_common_test.dart'
     hide PostgresManager, DbSettings;
 import 'package:dcli/dcli.dart';
@@ -47,7 +49,7 @@ void main(List<String> args) {
   final verbose = parsed['verbose'] as bool;
   Settings().setVerbose(enabled: verbose);
 
-  if (which('docker-compose').found) {
+  if (whichEx('docker-compose')) {
     'docker-compose down'.start(progress: Progress.devNull(), nothrow: true);
   }
   var dbSettings = DbSettings.load();
@@ -125,6 +127,8 @@ void main(List<String> args) {
   print(orange(
       'run ${relative(join(projectRoot, 'bin', 'run_unit_tests.dart'))}'));
 }
+
+
 
 // void preChecks() {
 //   if (!Platform.isLinux) {

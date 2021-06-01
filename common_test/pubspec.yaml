@@ -6,5 +6,12 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   conduit: ^2.0.0-0
+  conduit_common: ^2.0.0-0
   dcli: ^1.0.0
   settings_yaml: ^3.0.3
+
+
+dependency_overrides:
+  conduit_common:
+    path: ../common    
+
