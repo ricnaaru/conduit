@@ -38,6 +38,7 @@ void main(List<String> args) {
   }
 
   postgresManager.dropPostgresDb();
+
   /// we don't drop the user if we are using a container as
   /// we only have the one user.
   if (!dbSettings.useContainer) {
