@@ -13,3 +13,4 @@ build/
 doc/api/
 
 .history
+.failed_tracker
