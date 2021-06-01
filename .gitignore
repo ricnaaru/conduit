@@ -28,4 +28,4 @@ conduit/tool/.settings.yaml
 **/.history
 **/*.dart.vm.json
 stackoverflow
-conduit/.failed_tracker
+**/.failed_tracker
