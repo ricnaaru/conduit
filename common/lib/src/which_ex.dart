@@ -5,7 +5,7 @@ import 'package:dcli/dcli.dart';
 bool whichEx(String exeName) {
   return which(exeName).found ||
       (Platform.isWindows &&
-          (which('$exeName.exe').found || which('$exeName.exe').found));
+          (which('$exeName.exe').found || which('$exeName.bat').found));
 }
 
 void runEx(String exeName, {required String args}) {
