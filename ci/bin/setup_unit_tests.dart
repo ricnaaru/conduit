@@ -48,7 +48,7 @@ void main(List<String> args) {
   Settings().setVerbose(enabled: verbose);
 
   if (which('docker-compose').found) {
-    'docker-compose down'.start(progress: Progress.devNull());
+    'docker-compose down'.start(progress: Progress.devNull(), nothrow: true);
   }
   var dbSettings = DbSettings.load();
 
@@ -67,6 +67,11 @@ void main(List<String> args) {
     dbSettings.host = ask('Test Database Host:',
         validator: Ask.any([Ask.fqdn, Ask.alphaNumeric, Ask.ipAddress()]),
         defaultValue: dbSettings.host);
+    dbSettings.adminUsername = ask('Postgres Admin Username:',
+        validator: Ask.regExp(nameRegExp), defaultValue: dbSettings.username);
+    dbSettings.adminPassword = ask('Postgres Admin Password:',
+        validator: Ask.regExp(passwordRegExp),
+        defaultValue: dbSettings.password);
   }
 
   print(
@@ -75,10 +80,15 @@ void main(List<String> args) {
   dbSettings.port = int.parse(ask('Test Database Port No.:',
       validator: Ask.all([Ask.integer, Ask.valueRange(1025, 65535)]),
       defaultValue: '${dbSettings.port}'));
+
   dbSettings.username = ask('Database Username:',
       validator: Ask.regExp(nameRegExp), defaultValue: dbSettings.username);
+  dbSettings.adminUsername = dbSettings.username;
+
   dbSettings.password = ask('Database Password:',
       validator: Ask.regExp(passwordRegExp), defaultValue: dbSettings.password);
+  dbSettings.adminPassword = dbSettings.password;
+
   dbSettings.dbName = ask('Database Name:',
       validator: Ask.regExp(nameRegExp), defaultValue: dbSettings.dbName);
 
@@ -93,7 +103,6 @@ void main(List<String> args) {
   }
 
   dbSettings.save();
-  dbSettings.createEnvironmentVariables();
 
   final postgresManager = PostgresManager(dbSettings);
 
@@ -105,13 +114,16 @@ void main(List<String> args) {
 
     postgresManager.installPostgressDaemon();
 
-    postgresManager.startPostgresDaemon('.');
+    postgresManager.startPostgresDaemon('.', dbSettings);
+    postgresManager.stopPostgresDaemon('.');
+  } else {
+    postgresManager.createTestDatabase();
   }
 
-  postgresManager.stopPostgresDaemon('.');
-
   print('Setup complete');
-  print(orange('run ./run_unit_tests.dart'));
+  final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
+  print(orange(
+      'run ${relative(join(projectRoot, 'bin', 'run_unit_tests.dart'))}'));
 }
 
 // void preChecks() {

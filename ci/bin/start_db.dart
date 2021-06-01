@@ -32,13 +32,17 @@ void main(List<String> args) {
   }
 
   if (dbSettings.useContainer) {
-    postgresManager.startPostgresDaemon('.');
+    postgresManager.startPostgresDaemon('.', dbSettings);
   } else {
     postgresManager.waitForPostgresToStart();
   }
 
   postgresManager.dropPostgresDb();
-  postgresManager.dropUser();
+  /// we don't drop the user if we are using a container as
+  /// we only have the one user.
+  if (!dbSettings.useContainer) {
+    postgresManager.dropUser();
+  }
 
   postgresManager.createPostgresDb();
 

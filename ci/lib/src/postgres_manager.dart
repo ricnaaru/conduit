@@ -18,9 +18,9 @@ class PostgresManager {
   bool isPostgresRunning() {
     _setPassword();
 
-    /// create user
+    /// run a simple select to see that we get a result and therefor the postgres server must be up.
     final results =
-        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'select 42424242;' -q -t -U ${_dbSettings.username} postgres "
+        "psql $connectionStringAdminPostgres -q -t  -c 'select 42424242;'"
             .toList(nothrow: true);
 
     if (results.first.contains('password authentication failed')) {
@@ -30,12 +30,32 @@ class PostgresManager {
     return results.first.contains('42424242');
   }
 
+  String get connectionString =>
+      '$connectionStringHostPort --username=${_dbSettings.username} --dbname=${_dbSettings.dbName}';
+
+  String get connectionStringSansDbName =>
+      '$connectionStringHostPort --username=${_dbSettings.username}';
+
+  String get connectionStringAdmin =>
+      '$connectionStringHostPort --username=${_dbSettings.adminUsername} --dbname=${_dbSettings.adminUsername}';
+
+  String get connectionStringAdminSansDbName =>
+      '$connectionStringHostPort --username=${_dbSettings.adminUsername}';
+
+  /// the postgres db always exists and we need to use this connection if our test db
+  /// doesn't exist.
+  String get connectionStringAdminPostgres =>
+      '$connectionStringHostPort --username=${_dbSettings.adminUsername} --dbname=postgres';
+
+  String get connectionStringHostPort =>
+      '--host=${_dbSettings.host} --port=${_dbSettings.port}';
+
   bool doesDbExist() {
-    _setPassword();
+    _setPassword(admin: true);
 
     /// lists the database.
     final sql =
-        "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -t -q -c '\\l ${_dbSettings.dbName};' -U ${_dbSettings.username}";
+        "psql $connectionStringAdminSansDbName -t -q -c '\\l ${_dbSettings.dbName};' ";
 
     final results = sql.toList(skipLines: 1);
 
@@ -46,47 +66,51 @@ class PostgresManager {
   void createPostgresDb() {
     print('Creating database');
 
-    final save = _setPassword();
+    final save = _setPassword(admin: true);
 
-    /// create user
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create user ${_dbSettings.username} with createdb;' -U ${_dbSettings.username}"
-        .run;
+    if (!usersExists(_dbSettings.username)) {
+      /// create user
+      "psql $connectionStringAdminSansDbName --dbname=postgres -c 'create user ${_dbSettings.username} with createdb;'"
+          .run;
 
-    /// set password
-    Settings().setVerbose(enabled: false);
-    '''psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c "alter user ${_dbSettings.username} with password '${_dbSettings.password}';" -U ${_dbSettings.username}'''
-        .run;
-    Settings().setVerbose(enabled: save);
+      /// set password
+      Settings().setVerbose(enabled: false);
+      '''psql $connectionStringAdminSansDbName --dbname=postgres -c "alter user ${_dbSettings.username} with password '${_dbSettings.password}';"'''
+          .run;
+      Settings().setVerbose(enabled: save);
+    }
 
     /// create db
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'create database ${_dbSettings.dbName};' -U ${_dbSettings.username}"
+    "psql $connectionStringAdminSansDbName --dbname=postgres  -c 'create database ${_dbSettings.dbName};'"
         .run;
 
     /// grant permissions
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'grant all on database ${_dbSettings.dbName} to ${_dbSettings.username};' -U ${_dbSettings.username} "
+    "psql $connectionStringAdminSansDbName --dbname=postgres -c 'grant all on database ${_dbSettings.dbName} to ${_dbSettings.username};'"
         .run;
   }
 
-  /// Creates the enviornment variable that postgres requires to obtain the users's password.
-  bool _setPassword() {
+  /// Creates the enviornment variable that psql requires to obtain the users's password.
+  bool _setPassword({bool admin = false}) {
     final save = Settings().isVerbose;
     Settings().setVerbose(enabled: false);
-    env['PGPASSWORD'] = _dbSettings.password;
+    env['PGPASSWORD'] =
+        admin ? _dbSettings.adminPassword : _dbSettings.password;
     Settings().setVerbose(enabled: save);
     return save;
   }
 
   void dropPostgresDb() {
-    _setPassword();
+    _setPassword(admin: true);
 
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop database if exists  ${_dbSettings.dbName};' -U ${_dbSettings.username}"
+    "psql $connectionStringAdminSansDbName --dbname=postgres -c 'drop database if exists  ${_dbSettings.dbName};'"
         .run;
   }
 
   void dropUser() {
-    _setPassword();
+    print(red('An attempt was made to drop the user'));
+    _setPassword(admin: true);
 
-    "psql --host=${_dbSettings.host} --port=${_dbSettings.port} -c 'drop user if exists  ${_dbSettings.username};' -U ${_dbSettings.username}"
+    "psql $connectionStringAdminSansDbName -c 'drop user if exists  ${_dbSettings.username};'"
         .run;
   }
 
@@ -100,7 +124,7 @@ class PostgresManager {
     print('');
   }
 
-  void configurePostgress() {
+  void createTestDatabase() {
     if (!_dbSettings.useContainer) {
       print(
           'As you have selected to use your own postgres server, we can automatically create the unit test db.');
@@ -128,16 +152,17 @@ class PostgresManager {
     return found;
   }
 
-  void startPostgresDaemon(String pathToTool) {
+  void startPostgresDaemon(String pathToProjectRoot, DbSettings dbSettings) {
+    dbSettings.createEnvironmentVariables();
     print('Starting docker postgres image');
-    'docker-compose up -d'.start(workingDirectory: pathToTool);
+    'docker-compose up -d'.start(workingDirectory: pathToProjectRoot);
 
     waitForPostgresToStart();
   }
 
-  void stopPostgresDaemon(String pathToTool) {
+  void stopPostgresDaemon(String pathToProjectRoot) {
     print('Stoping docker postgres image');
-    'docker-compose down'.start(workingDirectory: pathToTool);
+    'docker-compose down'.start(workingDirectory: pathToProjectRoot);
   }
 
   /// Postgres functions
@@ -165,6 +190,15 @@ class PostgresManager {
           red('psql is not installed. Please install psql and start again.'));
       exit(1);
     }
+  }
+
+  bool usersExists(String username) {
+    final sql =
+        '''psql $connectionStringAdminPostgres -t -q -c "SELECT 'userfound' FROM pg_roles WHERE rolname='$username';" ''';
+
+    final results = sql.toList();
+
+    return results.isNotEmpty && results.first.contains('userfound');
   }
 }
 

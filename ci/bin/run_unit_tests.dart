@@ -23,5 +23,23 @@ void main(List<String> args) {
     DartSdk().globalActivate('critical_test');
     exit(1);
   }
-  'critical_test'.run;
+  if (which('pub_release').notfound) {
+    print('Installing global package pub_release');
+    DartSdk().globalActivate('pub_release');
+    exit(1);
+  }
+
+  /// Required by conduit_config/test/config_test.dart
+  env['TEST_VALUE'] = '1';
+  env['TEST_BOOL'] = 'true';
+  env['TEST_DB_ENV_VAR'] = 'postgres://user:password@host:5432/dbname';
+
+  /// we use a fixed version no. for all of the projects.
+  /// This avoid issues with pub publish bitching if some
+  /// version no.s are beta releases and some not.
+  var conduitProject = DartProject.fromPath(
+      join(dirname(DartProject.fromPath('.').pathToProjectRoot), 'conduit'));
+  final version = conduitProject.pubSpec.version;
+
+  'pub_release multi --dry-run --no-git --setVersion=$version'.run;
 }

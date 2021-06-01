@@ -21,8 +21,6 @@ void main(List<String> args) {
   final projectRoot = DartProject.current.pathToProjectRoot;
   final pathToToolDir = join(projectRoot, 'tool');
   var dbSettings = DbSettings.load(pathToSettings: pathToToolDir);
-  dbSettings.createEnvironmentVariables();
-
   var postgresManager = PostgresManager(dbSettings);
 
   print('Stopping posgress docker image');

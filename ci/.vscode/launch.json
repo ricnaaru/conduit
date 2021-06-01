@@ -10,6 +10,13 @@
             "type": "dart",
             "program": "bin/setup_unit_tests.dart",
             "console": "terminal"
+        },
+        {
+            "name": "pre-hook-setup",
+            "request": "launch",
+            "type": "dart",
+            "program": "tool/critical_test/pre_hook/setup.dart",
+            "console": "terminal"
         }
     ]
 }
