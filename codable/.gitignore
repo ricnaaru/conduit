@@ -12,3 +12,4 @@ doc/api/
 *.iml
 .metadata
 .project
+.failed_tracker
