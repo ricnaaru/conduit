@@ -14,3 +14,4 @@ doc/api/
 test/specs/kubernetes.json
 test/specs/stripe.json
 test/specs/petstore-simple.json
+.failed_tracker
