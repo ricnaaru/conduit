@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   conduit_runtime:
-    path: ../../runtime
+    path: ../../..
 
 dev_dependencies:
   lint: ^1.5.0

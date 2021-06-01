@@ -8,8 +8,8 @@ void main() {
   test("ProjectAnalyzer can find a specific class declaration in project",
       () async {
     final terminal = DartProjectAgent.existing(Directory.current.uri
-        .resolve("../")
-        .resolve("runtime_test_packages/")
+        .resolve("test/")
+        .resolve("test_packages/")
         .resolve("application/"));
     await terminal.getDependencies();
 
