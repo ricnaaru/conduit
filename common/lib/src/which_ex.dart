@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:dcli/dcli.dart';
 
 bool whichEx(String exeName) {
-  return which('psql').found ||
+  return which(exeName).found ||
       (Platform.isWindows &&
-          (which('psql.exe').found || which('psql.exe').found));
+          (which('$exeName.exe').found || which('$exeName.exe').found));
 }
 
 void runEx(String exeName, {required String args}) {
@@ -15,10 +15,9 @@ void runEx(String exeName, {required String args}) {
       return;
     }
     if (which('$exeName.bat').found) {
-      '$exeName.bat  $args'.run;
+      '$exeName.bat $args'.run;
       return;
     }
-
-    '$exeName $args'.run;
   }
+  '$exeName $args'.run;
 }
