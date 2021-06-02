@@ -58,6 +58,9 @@ void main() {
 
   postgresManager.createPostgresDb();
 
+  print(blue('Running pub get on all projects'));
+  DartScript.fromFile(join(projectRoot, 'bin', 'warmup.dart')).run([]);
+
   print(red('Activating local copy of conduit.'));
   // print(orange('You may want to revert this after the unit tests finish!'));
 
