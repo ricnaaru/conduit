@@ -2,7 +2,7 @@
 
 import 'package:dcli/dcli.dart';
 
-import 'package:conduit_ci/conduit_ci.dart';
+import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// This script will run the conduit unit tests
 ///

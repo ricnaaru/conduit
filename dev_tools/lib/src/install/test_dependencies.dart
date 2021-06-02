@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
 
+
 /// Docker functions
 void installDocker() {
-  if (which('docker').found) {
+  if (whichEx('docker')) {
     print('Using an existing docker install.');
     return;
   }
@@ -37,4 +38,4 @@ void installDockerCompose() {
   }
 }
 
-bool isAptInstalled() => which('apt').found;
+bool isAptInstalled() => whichEx('apt');

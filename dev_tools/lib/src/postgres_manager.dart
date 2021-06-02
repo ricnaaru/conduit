@@ -4,6 +4,7 @@ import 'package:dcli/dcli.dart';
 import 'package:conduit_common/conduit_common.dart';
 
 import 'db_settings.dart';
+import 'install/test_dependencies.dart';
 
 /// We have our own copy of the PostgresManager as during testing
 /// we have to switch to a local copy of conduit which means
@@ -153,17 +154,17 @@ class PostgresManager {
     return found;
   }
 
-  void startPostgresDaemon(String pathToProjectRoot, DbSettings dbSettings) {
+  void startPostgresDaemon(String pathToCIProjectRoot, DbSettings dbSettings) {
     dbSettings.createEnvironmentVariables();
     print('Starting docker postgres image');
-    'docker-compose up -d'.start(workingDirectory: pathToProjectRoot);
+    'docker-compose up -d'.start(workingDirectory: pathToCIProjectRoot);
 
     waitForPostgresToStart();
   }
 
-  void stopPostgresDaemon(String pathToProjectRoot) {
+  void stopPostgresDaemon(String pathToCIProjectRoot) {
     print('Stoping docker postgres image');
-    'docker-compose down'.start(workingDirectory: pathToProjectRoot);
+    'docker-compose down'.start(workingDirectory: pathToCIProjectRoot);
   }
 
   /// Postgres functions
@@ -206,5 +207,3 @@ class PostgresManager {
     return results.isNotEmpty && results.first.contains('userfound');
   }
 }
-
-bool isAptInstalled() => whichEx('apt');

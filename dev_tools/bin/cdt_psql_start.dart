@@ -1,7 +1,7 @@
 #! /usr/bin/env dcli
 
 import 'package:dcli/dcli.dart';
-import 'package:conduit_ci/conduit_ci.dart';
+import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// Starts the postgres daemon (assuming it is configured to work with a container)
 /// Waits for it to be fully started

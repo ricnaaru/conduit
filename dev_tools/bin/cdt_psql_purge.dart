@@ -9,8 +9,10 @@ import 'package:dcli/dcli.dart';
 void main(List<String> args) {
   print('Purging down Postgres docker container and the database');
 
-  final projectRoot = DartProject.fromPath('.').pathToProjectRoot;
-  'docker-compose down'.start(workingDirectory: join(projectRoot, 'tool'));
+ final pathToCiProject =
+      join(DartProject.fromPath('.').pathToProjectRoot, '..', 'ci');
+
+  'docker-compose down'.start(workingDirectory: pathToCiProject);
 
   var images =
       'docker images'.toList().where((line) => line.startsWith('postgres'));

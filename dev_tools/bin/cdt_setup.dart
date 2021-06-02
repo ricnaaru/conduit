@@ -3,10 +3,8 @@
 import 'dart:io';
 
 import 'package:conduit_common/conduit_common.dart';
-import 'package:conduit_common_test/conduit_common_test.dart'
-    hide PostgresManager, DbSettings;
 import 'package:dcli/dcli.dart';
-import 'package:conduit_ci/conduit_ci.dart';
+import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// late final pathToPostgresDb = join(HOME, 'postgres-db');
 
@@ -50,6 +48,9 @@ void main(List<String> args) {
   final verbose = parsed['verbose'] as bool;
   Settings().setVerbose(enabled: verbose);
 
+  final pathToCiProject =
+      join(DartProject.fromPath('.').pathToProjectRoot, '..', 'ci');
+
   print(
       'The unit tests can setup a docker container running postgres or you can use an existing postgres server');
   var createPostgresContainer =
@@ -57,7 +58,10 @@ void main(List<String> args) {
 
   if (createPostgresContainer) {
     if (whichEx('docker-compose')) {
-      'docker-compose down'.start(progress: Progress.devNull(), nothrow: true);
+      'docker-compose down'.start(
+          workingDirectory: pathToCiProject,
+          progress: Progress.devNull(),
+          nothrow: true);
     } else {
       printerr(red('Please install docker-compose and try again'));
       exit(1);
@@ -122,8 +126,8 @@ void main(List<String> args) {
 
     postgresManager.installPostgressDaemon();
 
-    postgresManager.startPostgresDaemon('.', dbSettings);
-    postgresManager.stopPostgresDaemon('.');
+    postgresManager.startPostgresDaemon(pathToCiProject, dbSettings);
+    postgresManager.stopPostgresDaemon(pathToCiProject);
   } else {
     postgresManager.createTestDatabase();
   }

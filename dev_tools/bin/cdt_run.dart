@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
-import 'package:conduit_ci/conduit_ci.dart';
+import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// This script will run the conduit unit tests
 ///
@@ -37,8 +37,21 @@ void main(List<String> args) {
   /// we use a fixed version no. for all of the projects.
   /// This avoid issues with pub publish bitching if some
   /// version no.s are beta releases and some not.
-  var conduitProject = DartProject.fromPath(
-      join(dirname(DartProject.fromPath('.').pathToProjectRoot), 'conduit'));
+  DartProject conduitProject;
+  if (exists('dev_tools')) {
+    conduitProject = DartProject.fromPath('conduit');
+  } else {
+    conduitProject = DartProject.fromPath('.');
+  }
+  if (!conduitProject.hasPubSpec) {
+    printerr(red("We can't find the conduit project folder"));
+    printerr('You must run this script from within the Conduit mono repo');
+    exit(1);
+  }
+
+  final pathToCiProjectRoot =
+      join(conduitProject.pathToProjectRoot, '..', 'ci');
+
   final version = conduitProject.pubSpec.version;
 
   final dbSettings = DbSettings.load();
@@ -46,8 +59,7 @@ void main(List<String> args) {
   if (!pmgr.isPostgresRunning()) {
     if (dbSettings.useContainer) {
       print('Starting postges daemon');
-      pmgr.startPostgresDaemon(
-          DartProject.fromPath('.').pathToProjectRoot, dbSettings);
+      pmgr.startPostgresDaemon(pathToCiProjectRoot, dbSettings);
     } else {
       printerr(red('Please start postgres and try again.'));
       print('''
@@ -61,5 +73,5 @@ Database: ${dbSettings.dbName}''');
     }
   }
 
-  runEx('pub_release', args: 'multi --dry-run --no-git --setVersion=$version');
+  runEx('pub_release', args: 'multi --dry-run --no-git --setVersion=$version', workingDirectory: pathToCiProjectRoot);
 }

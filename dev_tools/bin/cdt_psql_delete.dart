@@ -1,8 +1,7 @@
 #! /usr/bin/env dcli
 
-import 'package:conduit_ci/src/db_settings.dart';
-import 'package:conduit_ci/src/postgres_manager.dart';
 import 'package:dcli/dcli.dart';
+import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// Used to reset the test database.
 ///
@@ -18,8 +17,10 @@ void main(List<String> args) {
 
   final postgresManager = PostgresManager(dbSettings);
 
+  final pathToCiProject =
+      join(DartProject.fromPath('.').pathToProjectRoot, '..', 'ci');
   if (dbSettings.useContainer) {
-    postgresManager.startPostgresDaemon('.', dbSettings);
+    postgresManager.startPostgresDaemon(pathToCiProject, dbSettings);
   } else {
     postgresManager.waitForPostgresToStart();
   }

@@ -8,16 +8,20 @@ bool whichEx(String exeName) {
           (which('$exeName.exe').found || which('$exeName.bat').found));
 }
 
-void runEx(String exeName, {required String args}) {
+void runEx(String exeName,
+    {required String args, required String workingDirectory}) {
   if (Platform.isWindows) {
     if (which('$exeName.exe').found) {
-      '$exeName.exe $args'.run;
+      '$exeName.exe $args'.start(
+          workingDirectory: workingDirectory, progress: Progress.print());
       return;
     }
     if (which('$exeName.bat').found) {
-      '$exeName.bat $args'.run;
+      '$exeName.bat $args'.start(
+          workingDirectory: workingDirectory, progress: Progress.print());
       return;
     }
   }
-  '$exeName $args'.run;
+  '$exeName $args'
+      .start(workingDirectory: workingDirectory, progress: Progress.print());
 }
