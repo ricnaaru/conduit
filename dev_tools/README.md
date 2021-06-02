@@ -10,7 +10,7 @@ The following scripts are available:
 |---------------|------------
 |cdt_psql_delete.dart | Deletes the Postgres test database
 |cdt_psql_purge.dart | Completely removes the Postgres docker container.
-|cdt_run.dart | Runs the unit tests of all conduit projects.
+|cdt_test.dart | Runs the unit tests of all conduit projects.
 |cdt_setup.dart | Configures the unit test environment. Run this before running cdt_run.dart
 |cdt_set_versions.dart | sets the version no. of all conduit packages to a single common version no. This should be done when preparing a release and before running cdt_run.dart
 |cdt_psql_start.dart | Starts the psql container, recreating the test database.
