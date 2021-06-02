@@ -1,5 +1,5 @@
 name: conduit_common_test
-version: 2.0.0-b6
+version: 2.0.0-b7
 homepage: https://github.com/conduit-dart/common-test
 description: A collection of classes and function used for testing conduit and by the conduit test harness.
 environment: 
