@@ -5,6 +5,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   conduit_common: ^2.0.0-b6
+  conduit_dev_tools: ^2.0.0-b6
   dcli: ^1.5.1
   settings_yaml: ^3.0.0
   conduit_common_test: ^2.0.0-b6
@@ -31,6 +32,8 @@ dependency_overrides:
     path: ../codable
   conduit_config:
     path: ../config
+  conduit_dev_tools: 
+    path: ../dev_tools
   conduit_isolate_exec:
     path: ../isolate_exec
   conduit_password_hash:
