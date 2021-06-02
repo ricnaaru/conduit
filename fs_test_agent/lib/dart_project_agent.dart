@@ -21,6 +21,7 @@ class DartProjectAgent extends WorkingDirectoryAgent {
     this.name, {
     Map<String, dynamic> dependencies = const {},
     Map<String, dynamic> devDependencies = const {},
+    Map<String, dynamic> dependencyOverrides = const {},
   }) : super(Directory(join(projectsDirectory.path, name))) {
     if (!projectsDirectory.existsSync()) {
       projectsDirectory.createSync();
@@ -32,7 +33,9 @@ class DartProjectAgent extends WorkingDirectoryAgent {
 
     addOrReplaceFile("analysis_options.yaml", _analysisOptionsContents);
     addOrReplaceFile(
-        "pubspec.yaml", _pubspecContents(name, dependencies, devDependencies));
+        "pubspec.yaml",
+        _pubspecContents(
+            name, dependencies, devDependencies, dependencyOverrides));
     addOrReplaceFile("lib/$name.dart", "");
   }
 
@@ -107,7 +110,8 @@ class DartProjectAgent extends WorkingDirectoryAgent {
   String _pubspecContents(
     String name,
     Map<String, dynamic> deps,
-    Map<String, dynamic> devDeps, {
+    Map<String, dynamic> devDeps,
+    Map<String, dynamic> dependencyOverrides, {
     bool nullsafe = true,
   }) {
     return """
@@ -123,6 +127,9 @@ ${_asYaml(deps, indent: 1)}
 
 dev_dependencies:
 ${_asYaml(devDeps, indent: 1)}
+
+dependency_overrides:
+${_asYaml(dependencyOverrides, indent: 1)}
 """;
   }
 
