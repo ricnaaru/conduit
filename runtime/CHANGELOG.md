@@ -1,3 +1,6 @@
+# 2.0.0-b8
+3rd attempt at first release.
+
 
 # 1.0.0-b2
 Invalided null check operator. extendedClause can be null. Changed to ? operator which will cause the comparison to fail which is what you would expect.
