@@ -1,7 +1,10 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
+
 import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
+import 'package:conduit_ci/conduit_ci.dart';
 
 /// This script will run the conduit unit tests
 ///
@@ -37,6 +40,26 @@ void main(List<String> args) {
   var conduitProject = DartProject.fromPath(
       join(dirname(DartProject.fromPath('.').pathToProjectRoot), 'conduit'));
   final version = conduitProject.pubSpec.version;
+
+  final dbSettings = DbSettings.load();
+  final pmgr = PostgresManager(dbSettings);
+  if (!pmgr.isPostgresRunning()) {
+    if (dbSettings.useContainer) {
+      print('Starting postges daemon');
+      pmgr.startPostgresDaemon(
+          DartProject.fromPath('.').pathToProjectRoot, dbSettings);
+    } else {
+      printerr(red('Please start postgres and try again.'));
+      print('''
+The expected settings are:
+Host: ${dbSettings.host}
+Port: ${dbSettings.port}
+User: ${dbSettings.username}
+Password: ${dbSettings.password}
+Database: ${dbSettings.dbName}''');
+      exit(1);
+    }
+  }
 
   runEx('pub_release', args: 'multi --dry-run --no-git --setVersion=$version');
 }
