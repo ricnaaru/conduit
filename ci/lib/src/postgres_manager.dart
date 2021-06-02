@@ -189,6 +189,10 @@ class PostgresManager {
     } else {
       printerr(
           red('psql is not installed. Please install psql and start again.'));
+      if (Platform.isWindows) {
+        print(
+            'Find download instructions at: https://www.postgresql.org/download/windows/');
+      }
       exit(1);
     }
   }
