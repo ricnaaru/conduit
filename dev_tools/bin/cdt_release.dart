@@ -58,5 +58,6 @@ void main(List<String> args) {
   final pathToCiProjectRoot =
       join(conduitProject.pathToProjectRoot, '..', 'ci');
 
-  runEx('pub_release', args: 'multi', workingDirectory: pathToCiProjectRoot);
+  runEx('pub_release',
+      args: 'multi --no-test', workingDirectory: pathToCiProjectRoot);
 }
