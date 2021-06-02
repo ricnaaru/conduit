@@ -18,7 +18,7 @@ import 'package:conduit_ci/conduit_ci.dart';
 /// ```
 ///
 void main(List<String> args) {
-  final projectRoot = DartProject.current.pathToProjectRoot;
+  final projectRoot = DartProject.fromPath(pwd).pathToProjectRoot;
   final pathToToolDir = join(projectRoot, 'tool');
   var dbSettings = DbSettings.load(pathToSettings: pathToToolDir);
   var postgresManager = PostgresManager(dbSettings);
