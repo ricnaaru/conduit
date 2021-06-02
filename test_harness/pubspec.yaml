@@ -1,5 +1,5 @@
 name: conduit_test
-version: 2.0.0-b6
+version: 2.0.0-b8
 homepage: https://github.com/conduit-dart/conduit
 description: Utilities for writing automated tests for Conduit applications
 environment: 
@@ -11,15 +11,8 @@ dependencies:
 dev_dependencies: 
   conduit_common_test: 
     path: ../common_test
-    
-# So we can tests against the same version of
-# every package we need to set path overrides.
-# The overrides are fixed by the publish process
-# when you run ci/bin/release.dart
-# We need direct depdencies as well
-# as transitive dependencies listed.
-dependency_overrides:
-  conduit:
+dependency_overrides: 
+  conduit: 
     path: ../conduit
   conduit_codable: 
     path: ../codable
@@ -27,11 +20,11 @@ dependency_overrides:
     path: ../common
   conduit_config: 
     path: ../config
-  conduit_isolate_exec:
+  conduit_isolate_exec: 
     path: ../isolate_exec
   conduit_open_api: 
     path: ../open_api
-  conduit_password_hash:
+  conduit_password_hash: 
     path: ../password_hash
   conduit_runtime: 
     path: ../runtime
