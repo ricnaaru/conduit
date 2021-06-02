@@ -1,5 +1,6 @@
 #! /usr/bin/env dcli
 
+import 'dart:io';
 
 import 'package:conduit_common/conduit_common.dart';
 import 'package:conduit_common_test/conduit_common_test.dart'
@@ -49,18 +50,23 @@ void main(List<String> args) {
   final verbose = parsed['verbose'] as bool;
   Settings().setVerbose(enabled: verbose);
 
-  if (whichEx('docker-compose')) {
-    'docker-compose down'.start(progress: Progress.devNull(), nothrow: true);
+  print(
+      'The unit tests can setup a docker container running postgres or you can use an existing postgres server');
+  var createPostgresContainer =
+      confirm('Do you want to start a postgres docker container?');
+
+  if (createPostgresContainer) {
+    if (whichEx('docker-compose')) {
+      'docker-compose down'.start(progress: Progress.devNull(), nothrow: true);
+    } else {
+      printerr(red('Please install docker-compose and try again'));
+      exit(1);
+    }
   }
   var dbSettings = DbSettings.load();
 
   var nameRegExp = r'[a-zA-Z0-0\-_]+';
   var passwordRegExp = r'[a-zA-Z0-0\-_!]+';
-
-  print(
-      'The unit tests can setup a docker container running postgres or you can use an existing postgres server');
-  var createPostgresContainer =
-      confirm('Do you want to start a postgres docker container?');
 
   dbSettings.useContainer = createPostgresContainer;
   if (createPostgresContainer) {
@@ -127,8 +133,6 @@ void main(List<String> args) {
   print(orange(
       'run ${relative(join(projectRoot, 'bin', 'run_unit_tests.dart'))}'));
 }
-
-
 
 // void preChecks() {
 //   if (!Platform.isLinux) {
