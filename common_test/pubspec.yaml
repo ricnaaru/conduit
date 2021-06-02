@@ -9,29 +9,20 @@ dependencies:
   conduit_common: ^2.0.0-b6
   dcli: ^1.5.1
   settings_yaml: ^3.0.3
-
-
-# So we can tests against the same version of
-# every package we need to set path overrides.
-# The overrides are fixed by the publish process
-# when you run ci/bin/release.dart
-# We need direct depdencies as well
-# as transitive dependencies listed.  
 dependency_overrides: 
-  conduit:
+  conduit: 
     path: ../conduit
   conduit_common: 
     path: ../common
   conduit_open_api: 
     path: ../open_api
-  conduit_codable:
+  conduit_codable: 
     path: ../codable
-  conduit_config:
+  conduit_config: 
     path: ../config
-  conduit_isolate_exec:
+  conduit_isolate_exec: 
     path: ../isolate_exec
-  conduit_password_hash:
+  conduit_password_hash: 
     path: ../password_hash
-  conduit_runtime:
+  conduit_runtime: 
     path: ../runtime
-

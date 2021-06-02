@@ -1,3 +1,8 @@
+# 2.0.0-b6
+The primary purpose of the release is to test the release process.
+
+All unit tests are now working correctly on Linux and Windows.
+
 # 2.0.0-b5
 Upgraded to lastest dcli version.
 
