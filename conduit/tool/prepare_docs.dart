@@ -7,10 +7,10 @@ import 'package:dcli/dcli.dart';
 import 'package:path/path.dart';
 
 late final defaultDocPath =
-    join(DartProject.current.pathToProjectRoot, 'doc', 'gitbook', 'source');
+    join(DartProject.self.pathToProjectRoot, 'doc', 'gitbook', 'source');
 
 late final buildPath =
-    join(DartProject.current.pathToProjectRoot, 'doc', 'gitbook', 'build');
+    join(DartProject.self.pathToProjectRoot, 'doc', 'gitbook', 'build');
 
 /// This script is intended to update the .md files with any links to the api documentaiton
 ///

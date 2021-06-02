@@ -8,11 +8,11 @@ dependencies:
   analyzer: ^1.2.0
   args: ^2.0.0
   conduit_isolate_exec: ^2.0.0-b6
+  dcli: ^1.5.1
   path: ^1.8.0
   pubspec: ^2.0.1
   yaml: ^3.1.0
 dev_dependencies: 
-  dcli: ^1.5.0
   lint: ^1.5.0
   test: ^1.16.5
   fs_test_agent: 
