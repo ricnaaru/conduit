@@ -7,7 +7,6 @@ environment:
 dependencies: 
   analyzer: ^1.3.0
   glob: ^2.0.0
-
 dev_dependencies: 
   dcli: ^1.5.0
   lint: ^1.5.3
