@@ -14,7 +14,7 @@ need to test for local (relative), in pub cache (absolute)
 void main() {
   setUpAll(() async {
     final testPackagesUri =
-        Directory.current.uri.resolve("test/").resolve("test_packages/");
+        Directory.current.uri.resolve("../").resolve("runtime_test_packages/");
     DartSdk().runPub(
       args: ["get", "--offline"],
       workingDirectory: testPackagesUri
@@ -29,8 +29,8 @@ void main() {
     );
 
     final appDir = Directory.current.uri
-        .resolve("test/")
-        .resolve("test_packages/")
+        .resolve("../")
+        .resolve("runtime_test_packages/")
         .resolve("application/");
     final appLib = appDir.resolve("lib/").resolve("application.dart");
     final tmp = Directory.current.uri.resolve("tmp/");
@@ -51,8 +51,8 @@ void main() {
 
   test("Non-compiled version returns mirror runtimes", () async {
     final output = await dart(Directory.current.uri
-        .resolve("test/")
-        .resolve("test_packages/")
+        .resolve("../")
+        .resolve("runtime_test_packages/")
         .resolve("application/"));
     expect(json.decode(output), {
       "Consumer": "mirrored",
@@ -67,8 +67,8 @@ void main() {
     final output = await runExecutable(
         Directory.current.uri.resolve("tmp/").resolve("app.aot"),
         Directory.current.uri
-            .resolve("test/")
-            .resolve("test_packages/")
+            .resolve("../")
+            .resolve("runtime_test_packages/")
             .resolve("application/"));
     expect(json.decode(output), {
       "Consumer": "generated",
