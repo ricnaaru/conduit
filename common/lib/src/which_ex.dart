@@ -13,15 +13,21 @@ void runEx(String exeName,
   if (Platform.isWindows) {
     if (which('$exeName.exe').found) {
       '$exeName.exe $args'.start(
-          workingDirectory: workingDirectory, progress: Progress.print());
+          workingDirectory: workingDirectory,
+          progress: Progress.print(),
+          terminal: true);
       return;
     }
     if (which('$exeName.bat').found) {
       '$exeName.bat $args'.start(
-          workingDirectory: workingDirectory, progress: Progress.print());
+          workingDirectory: workingDirectory,
+          progress: Progress.print(),
+          terminal: true);
       return;
     }
   }
-  '$exeName $args'
-      .start(workingDirectory: workingDirectory, progress: Progress.print());
+  '$exeName $args'.start(
+      workingDirectory: workingDirectory,
+      progress: Progress.print(),
+      terminal: true);
 }
