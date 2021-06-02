@@ -6,7 +6,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   conduit_open_api: ^2.0.0-b6
-  dcli: ^1.0.0
+  dcli: ^1.5.1
 dev_dependencies: 
   lint: ^1.0.0
 

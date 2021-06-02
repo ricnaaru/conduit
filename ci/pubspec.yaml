@@ -5,7 +5,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
   conduit_common: ^2.0.0-b6
-  dcli: ^1.5.0
+  dcli: ^1.5.1
   settings_yaml: ^3.0.0
   conduit_common_test: ^2.0.0-b6
 dev_dependencies: 
