@@ -11,6 +11,27 @@ dependencies:
 dev_dependencies: 
   conduit_common_test: 
     path: ../common_test
-dependency_overrides: 
-  conduit: 
+    
+# So we can tests against the same version of
+# every package we need to set path overrides.
+# The overrides are fixed by the publish process
+# when you run ci/bin/release.dart
+# We need direct depdencies as well
+# as transitive dependencies listed.
+dependency_overrides:
+  conduit:
     path: ../conduit
+  conduit_codable: 
+    path: ../codable
+  conduit_common: 
+    path: ../common
+  conduit_config: 
+    path: ../config
+  conduit_isolate_exec:
+    path: ../isolate_exec
+  conduit_open_api: 
+    path: ../open_api
+  conduit_password_hash:
+    path: ../password_hash
+  conduit_runtime: 
+    path: ../runtime
