@@ -84,7 +84,7 @@ PubSpec? findKnown(List<PubSpec> knownProjects, Dependency dependency) {
 }
 
 void showUseage(ArgParser parser) {
-  print(blue('Usage: ${DartScript.current.basename} --version=x.x.x'));
+  print(blue('Usage: ${DartScript.self.basename} --version=x.x.x'));
   print('');
   print('''
 Sets the version no. of every top level pubspec.yaml to the same version no.
