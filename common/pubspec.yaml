@@ -1,5 +1,5 @@
 name: conduit_common
-version: 2.0.0-b7
+version: 2.0.0-b8
 description: Common classes shared by conduit projects.
 repository: https://github.com/bsutton/conduit-orm
 environment: 

@@ -1,3 +1,8 @@
+# 2.0.0-b8
+Added the --no-test flag to the release process as we assume the unit tests have already been run.
+
+3rd attempt at first release.
+
 # 2.0.0-b7
 Created release script to release conduit to pub.dev.
 
