@@ -1,3 +1,8 @@
+# 2.0.0-b7
+Created release script to release conduit to pub.dev.
+
+2nd attempt at first release.
+
 # 2.0.0-b6
 
 The primary purpose of the release is to test the release process.
