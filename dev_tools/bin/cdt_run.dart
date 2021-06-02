@@ -42,6 +42,9 @@ void main(List<String> args) {
     conduitProject = DartProject.fromPath('conduit');
   } else {
     conduitProject = DartProject.fromPath('.');
+    if (conduitProject.pubSpec.name == 'dev_tools') {
+      conduitProject = DartProject.fromPath('../conduit');
+    }
   }
   if (!conduitProject.hasPubSpec) {
     printerr(red("We can't find the conduit project folder"));
@@ -73,5 +76,7 @@ Database: ${dbSettings.dbName}''');
     }
   }
 
-  runEx('pub_release', args: 'multi --dry-run --no-git --setVersion=$version', workingDirectory: pathToCiProjectRoot);
+  runEx('pub_release',
+      args: 'multi --dry-run --no-git --setVersion=$version',
+      workingDirectory: pathToCiProjectRoot);
 }

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:conduit_common/conduit_common.dart';
 import 'package:dcli/dcli.dart';
-import 'package:conduit_dev_tools/conduit_dev_tools.dart';
 
 /// Use this script to release all conduit packages
 ///
