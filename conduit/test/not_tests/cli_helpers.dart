@@ -78,11 +78,37 @@ class CLIClient {
       {String name = "application_test",
       String? template,
       bool offline = true}) async {
+    final project = DartProject.fromPath('.');
     if (template == null) {
       final client = CLIClient(DartProjectAgent(name, dependencies: {
         "conduit": {"path": DartProject.fromPath('.').pathToProjectRoot}
       }, devDependencies: {
         "test": "^1.6.7"
+      }, dependencyOverrides: {
+        'conduit_runtime': {
+          'path': '${join(project.pathToProjectRoot, '..', 'runtime')}'
+        },
+        'conduit_isolate_exec': {
+          'path': '${join(project.pathToProjectRoot, '..', 'isolate_exec')}'
+        },
+        'conduit_password_hash': {
+          'path': '${join(project.pathToProjectRoot, '..', 'password_hash')}'
+        },
+        'conduit_open_api': {
+          'path': '${join(project.pathToProjectRoot, '..', 'open_api')}'
+        },
+        'conduit_codable': {
+          'path': '${join(project.pathToProjectRoot, '..', 'codable')}'
+        },
+        'conduit_config': {
+          'path': '${join(project.pathToProjectRoot, '..', 'config')}'
+        },
+        'conduit_common': {
+          'path': '${join(project.pathToProjectRoot, '..', 'common')}'
+        },
+        'fs_test_agent': {
+          'path': '${join(project.pathToProjectRoot, '..', 'fs_test_agent')}'
+        }
       }));
 
       client.projectAgent.addLibraryFile("channel", """
