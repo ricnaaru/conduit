@@ -59,7 +59,7 @@ void main() {
 
   test("Find in file", () {
     final imports = ctx.getImportDirectives(
-        uri: Directory.current.uri
+        uri:  Directory.current.uri
             .resolve("../")
             .resolve("runtime_test_packages/")
             .resolve("application/")
@@ -67,7 +67,7 @@ void main() {
             .resolve("application.dart"));
     expect(imports, [
       "import 'package:dependency/dependency.dart';",
-      "import 'file:${absolutePathToAppLib}src/file.dart';"
+      "import 'file:${truepath(absolutePathToAppLib, 'src', 'file.dart')}';"
     ]);
   });
 

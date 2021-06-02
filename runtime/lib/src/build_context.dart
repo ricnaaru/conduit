@@ -2,13 +2,13 @@ import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:dcli/dcli.dart' hide PubSpec;
 import 'package:pubspec/pubspec.dart';
 import 'package:conduit_runtime/src/analyzer.dart';
 import 'package:conduit_runtime/src/context.dart';
 import 'package:conduit_runtime/src/file_system.dart';
 import 'package:conduit_runtime/src/mirror_context.dart';
 import 'package:yaml/yaml.dart';
-import 'package:path/path.dart';
 
 /// Configuration and context values used during [Build.execute].
 class BuildContext {
@@ -174,8 +174,10 @@ class BuildContext {
       final importedUri = Uri.parse(m.group(1)!);
 
       if (!importedUri.isAbsolute) {
-        final path = fileUri!.resolve(importedUri.path);
-        return "import 'file:${absolute(path.path)}';";
+        final path = fileUri!
+            .resolve(importedUri.path)
+            .toFilePath(windows: Platform.isWindows);
+        return "import 'file:${absolute(path)}';";
       }
 
       return text.substring(m.start, m.end);
