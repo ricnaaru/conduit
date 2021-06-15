@@ -1,6 +1,8 @@
-Conduit is a modern Dart HTTP server framework. The framework is composed of libraries for handling and routing HTTP requests, object-relational mapping (ORM), authentication and authorization (OAuth 2.0 provider) and documentation (OpenAPI). These libraries are used to build scalable REST APIs that run on the Dart VM.
+<img src="https://raw.githubusercontent.com/conduit-dart/conduit/master/assets/conduit-name.svg" width="500" height="150">
 
-If this is your first time viewing Conduit, check out [the tour](https://conduit.io/docs/tour/).
+[![Test Suite](https://github.com/conduit-dart/conduit/actions/workflows/test.yml/badge.svg)](https://github.com/conduit-dart/conduit/actions/workflows/test.yml) [<img src="https://discord.com/assets/3437c10597c1526c3dbd98c737c2bcae.svg" width="28" height="20">](https://discord.gg/MHz5cqktHW)
+
+Conduit is a fork of Stablekernel's Aqueduct, a modern Dart HTTP server framework.
 
 ## Getting Started
 
@@ -13,16 +15,8 @@ If this is your first time viewing Conduit, check out [the tour](https://conduit
 
         conduit create my_project
 
-Open the project directory in [IntelliJ IDE](https://www.jetbrains.com/idea/download/), [Atom](https://atom.io) or [Visual Studio Code](https://code.visualstudio.com). All three IDEs have a Dart plugin. For IntelliJ IDEA users, there are [file and code templates](https://conduit.io/docs/intellij/) for Conduit.
-
 ## Tutorials, Documentation and Examples
 
-Step-by-step tutorials for beginners are available [here](https://conduit.io/docs/tut/getting-started).
+We are currently in the process of collating helpful resources for your edification. Our main docs live [here](https://gitbook.theconduit.dev/contributing).
 
-You can find the API reference [here](https://www.dartdocs.org/documentation/conduit/latest) or you can install it in [Dash](https://kapeli.com/docsets#dartdoc).
-
-You can find in-depth and conceptual guides [here](https://conduit.io/docs/).
-
-An ever-expanding repository of Conduit examples is [here](https://github.com/conduit.dart/conduit_examples).
-
-*If you are migrating from Conduit 2.5 to Conduit 3.0, see [the migration guide](https://conduit.io/docs/migration/).*
+Conduit is a close fork to Aqueduct, so Aqueduct examples can be tweaked to work with Conduit [here](https://github.com/stablekernel/aqueduct_examples). The major concern is updating the code to use null-safety.
