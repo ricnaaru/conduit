@@ -1,3 +1,6 @@
+# 3.0.4
+Stable Release
+
 # 2.0.0-b9
 Fixed a bug with the conduit build command. We had left in dep overrides 
 which should only be used for conduit internal dev.
@@ -79,14 +82,14 @@ sue when generating an OpenAPI document with List<Serializable> bound to a reque
 - Fixes bug where ManagedObjects cannot have mixins
 - Adds `ManagedContext.insertObject`, `ManagedContext.insertObjects` and `ManagedContext.fetchObjectWithID`.
 
-## 3.0.2
+## 3.0.3
 
 - Fix regression when generating OpenAPI documentation for `ManagedObject`s
 - Adds `--resolve-relative-urls` flag to `document` commands to improve client applications
 - Adds `Serializable.documentSchema` instance method. Removes `Serializable.document` static method.
 - Adds optional `values` argument to `Query` constructor
 
-## 3.0.1
+## 3.0.3
 
 - `Controller` is now an abstract class that requires implementing `handle`. This is a minor breaking change that should not have an impact.
 - 'Serializable' can now implement static 'document' method to override component documentation behavior

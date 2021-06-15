@@ -1,10 +1,10 @@
 name: conduit_dev_tools
-version: 3.0.1
+version: 3.0.4
 description: Tools to make developing/testing conduit easier.
 environment: 
   sdk: '>=2.12.0 <3.0.0'
 dependencies: 
-  conduit_common: ^3.0.1
+  conduit_common: ^3.0.4
   dcli: ^1.5.1
   pub_release: ^7.1.4
   settings_yaml: ^3.0.3
