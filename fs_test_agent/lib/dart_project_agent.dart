@@ -16,7 +16,7 @@ class DartProjectAgent extends WorkingDirectoryAgent {
   /// delete the [projectsDirectory] ]where the package is written to. ('$PWD/tmp')
   ///
   /// Both [dependencies] and [devDependencies] are a valid dependency map,
-  /// e.g. `{'aqueduct': '^3.0.0'}` or `{'relative' : {'path' : '../'}}`
+  /// e.g. `{'aqueduct': '^2.0.0'}` or `{'relative' : {'path' : '../'}}`
   DartProjectAgent(
     this.name, {
     Map<String, dynamic> dependencies = const {},
