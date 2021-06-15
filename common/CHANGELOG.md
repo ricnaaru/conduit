@@ -1,3 +1,9 @@
+# 3.0.0
+update major
+Readme (#49)
+Assets (#46)
+Stable Release (#47)
+
 # 2.0.0-b9
 renamed cdt_run to cdt_test.
 Added additional info for the dev_tools readme.
