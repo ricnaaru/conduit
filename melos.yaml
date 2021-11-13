@@ -1,0 +1,14 @@
+name: Conduit
+repository: https://github.com/conduit-dart/conduit
+packages:
+  - packages/**
+ignore:
+  - ci
+  - wildfire
+command:
+  version:
+    linkToCommits: true
+scripts:
+  analyze: melos exec -- pub global run tuneup check
+environment:
+  sdk: ">=2.12.0 <3.0.0"

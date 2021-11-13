@@ -8,7 +8,7 @@ on:
 jobs:
   test_harness:
     env:
-      TEST_DIR: test_harness
+      TEST_DIR: packages/test_harness
       POSTGRES_USER: conduit_test_user
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
@@ -42,7 +42,7 @@ jobs:
 
   conduit:
     env:
-      TEST_DIR: conduit
+      TEST_DIR: packages/conduit
       POSTGRES_USER: conduit_test_user
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
@@ -76,7 +76,7 @@ jobs:
 
   conduit_tool:
     env:
-      TEST_DIR: ci
+      TEST_DIR: packages/ci
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -110,4 +110,4 @@ jobs:
           dart pub global activate --source path test_harness
       - name: Run tests
         working-directory: ${{ env.TEST_DIR }}
-        run: ls $PUB_CACHE/* && export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart generated_test_runner.dart
+        run: dart generated_test_runner.dart
