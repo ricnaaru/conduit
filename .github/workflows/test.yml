@@ -76,7 +76,7 @@ jobs:
 
   conduit_tool:
     env:
-      TEST_DIR: packages/ci
+      TEST_DIR: packages/conduit
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -110,4 +110,4 @@ jobs:
           dart pub global activate --source path test_harness
       - name: Run tests
         working-directory: ${{ env.TEST_DIR }}
-        run: dart generated_test_runner.dart
+        run: dart tools/generated_test_runner.dart
