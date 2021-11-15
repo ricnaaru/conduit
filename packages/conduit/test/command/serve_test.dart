@@ -14,12 +14,12 @@ import 'package:yaml/yaml.dart' as yaml;
 import '../not_tests/cli_helpers.dart';
 
 File get certificateFile => File.fromUri(Directory.current.uri
-    .resolve("../")
+    .resolve("../../")
     .resolve("ci/")
     .resolve("conduit.cert.pem"));
 
 File get keyFile => File.fromUri(Directory.current.uri
-    .resolve("../")
+    .resolve("../../")
     .resolve("ci/")
     .resolve("conduit.key.pem"));
 
