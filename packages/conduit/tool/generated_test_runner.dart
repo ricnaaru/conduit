@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:conduit_runtime/runtime.dart';
 
 Future main(List<String> args) async {
-  final conduitDir = Directory.current.uri.resolve('../');
+  final conduitDir = Directory.current.uri;
   final blacklist = [
     (String s) => s.contains('test/command/'),
     (String s) => s.contains('/compilation_errors/'),
