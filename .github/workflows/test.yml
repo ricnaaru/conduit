@@ -96,16 +96,14 @@ jobs:
       - name: Get Dependencies
         working-directory: ${{ env.TEST_DIR }}
         run: dart pub get
-      - name: Global Activate
-        working-directory: packages
-        run: |
-          dart pub global activate --source path codable
-          dart pub global activate --source path common
-          dart pub global activate --source path config
-          dart pub global activate --source path isolate_exec
-          dart pub global activate --source path open_api
-          dart pub global activate --source path password_hash
-          dart pub global activate --source path test_harness
       - name: Run tests
         working-directory: ${{ env.TEST_DIR }}
-        run: export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart tool/generated_test_runner.dart
+        run: |
+          dart pub global activate --source path ../codable
+          dart pub global activate --source path ../common
+          dart pub global activate --source path ../config
+          dart pub global activate --source path ../isolate_exec
+          dart pub global activate --source path ../open_api
+          dart pub global activate --source path ../password_hash
+          dart pub global activate --source path ../test_harness
+          export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart tool/generated_test_runner.dart
