@@ -108,4 +108,4 @@ jobs:
           dart pub global activate --source path test_harness
       - name: Run tests
         working-directory: ${{ env.TEST_DIR }}
-        run: export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart tools/generated_test_runner.dart
+        run: export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart tool/generated_test_runner.dart
