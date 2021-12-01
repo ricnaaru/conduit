@@ -69,7 +69,7 @@ class ResourceControllerRuntimeImpl extends ResourceControllerRuntime {
             if (type.isSubtypeOf(_listType)) {
               return type.typeArguments.first.location?.sourceUri;
             }
-            type.location?.sourceUri;
+            return type.location?.sourceUri;
           })
           .where((uri) =>
               uri != null &&
