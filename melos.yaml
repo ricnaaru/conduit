@@ -10,5 +10,8 @@ command:
     linkToCommits: true
 scripts:
   analyze: melos exec -- pub global run tuneup check
+  hello_flutter:
+    run: melos exec -- "echo 'Hello $(dirname $PWD)'"
 environment:
   sdk: ">=2.12.0 <3.0.0"
+  

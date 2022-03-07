@@ -67,7 +67,7 @@ class Build {
       } else {
         sourcePackageIsCompiled = true;
       }
-      print("Package '${packageInfo.name} compiled to '$targetDirUri'.");
+      print("Package '${packageInfo.name}' compiled to '$targetDirUri'.");
     }
 
     final appDst = context.buildApplicationDirectory.uri;
