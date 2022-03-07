@@ -54,7 +54,7 @@ class ResourceControllerRuntimeImpl extends ResourceControllerRuntime {
 
   String compile(BuildContext ctx) =>
       getResourceControllerImplSource(ctx, this);
-
+  static late final _listType = reflectType(List);
   List<String> get directives {
     final directives = <String>[];
     operations.forEach((op) {
@@ -64,7 +64,13 @@ class ResourceControllerRuntimeImpl extends ResourceControllerRuntime {
         ivarParameters
       ]
           .expand((i) => i!)
-          .map((p) => reflectType(p.type).location?.sourceUri)
+          .map((p) {
+            final type = reflectType(p.type);
+            if (type.isSubtypeOf(_listType)) {
+              return type.typeArguments.first.location?.sourceUri;
+            }
+            return type.location?.sourceUri;
+          })
           .where((uri) =>
               uri != null &&
               (uri.scheme == "package" ||
