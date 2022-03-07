@@ -1,1 +1,1 @@
-../conduit/README.md
+../packages/conduit/README.md

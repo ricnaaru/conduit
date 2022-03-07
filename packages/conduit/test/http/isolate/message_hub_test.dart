@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -267,7 +268,7 @@ class HubChannel extends ApplicationChannel {
     router.route("/send").linkFunction((req) async {
       String msg = await req.body.decode();
       if (msg == "garbage") {
-        messageHub.add((x) => x);
+        messageHub.add(UserTag.defaultTag);
       } else {
         messageHub.add({"isolateID": server.identifier, "message": msg});
       }

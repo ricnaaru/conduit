@@ -6,7 +6,8 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
+  final port = await getUnusedPort();
   group("Agent instantiation", () {
     Application? app;
 
@@ -15,10 +16,12 @@ void main() {
     });
 
     test("Create from app, explicit port", () async {
-      app = Application<SomeChannel>()..options.port = 4111;
+      final portLocal = await getUnusedPort();
+
+      app = Application<SomeChannel>()..options.port = portLocal;
       await app!.startOnCurrentIsolate();
       final client = Agent(app);
-      expect(client.baseURL, "http://localhost:4111");
+      expect(client.baseURL, "http://localhost:$portLocal");
     });
 
     test("Create from app, assigned port", () async {
@@ -66,7 +69,7 @@ void main() {
   });
 
   group("Request building", () {
-    final server = MockHTTPServer(4040);
+    final server = MockHTTPServer(port);
     setUp(() async {
       await server.open();
     });
@@ -75,54 +78,56 @@ void main() {
       await server.close();
     });
 
-    test("Host created correctly", () {
-      final defaultTestClient = Agent.onPort(4040);
+    test("Host created correctly", () async {
+      final portLocal = await getUnusedPort();
+      final defaultTestClient = Agent.onPort(port);
       final portConfiguredClient =
-          Agent.fromOptions(ApplicationOptions()..port = 2121);
+          Agent.fromOptions(ApplicationOptions()..port = portLocal);
       final hostPortConfiguredClient = Agent.fromOptions(ApplicationOptions()
-        ..port = 2121
+        ..port = portLocal
         ..address = "foobar.com");
       final hostPortSSLConfiguredClient = Agent.fromOptions(
           ApplicationOptions()
-            ..port = 2121
+            ..port = portLocal
             ..address = "foobar.com",
           useHTTPS: true);
-      expect(defaultTestClient.baseURL, "http://localhost:4040");
-      expect(portConfiguredClient.baseURL, "http://localhost:2121");
-      expect(hostPortConfiguredClient.baseURL, "http://localhost:2121");
-      expect(hostPortSSLConfiguredClient.baseURL, "https://localhost:2121");
+      expect(defaultTestClient.baseURL, "http://localhost:$port");
+      expect(portConfiguredClient.baseURL, "http://localhost:$portLocal");
+      expect(hostPortConfiguredClient.baseURL, "http://localhost:$portLocal");
+      expect(
+          hostPortSSLConfiguredClient.baseURL, "https://localhost:$portLocal");
     });
 
     test("Request URLs are created correctly", () {
-      final defaultTestClient = Agent.onPort(4040);
+      final defaultTestClient = Agent.onPort(port);
 
       expect(defaultTestClient.request("/foo").requestURL,
-          "http://localhost:4040/foo");
+          "http://localhost:$port/foo");
       expect(defaultTestClient.request("foo").requestURL,
-          "http://localhost:4040/foo");
+          "http://localhost:$port/foo");
       expect(defaultTestClient.request("foo/bar").requestURL,
-          "http://localhost:4040/foo/bar");
+          "http://localhost:$port/foo/bar");
 
       expect(
           (defaultTestClient.request("/foo")..query = {"baz": "bar"})
               .requestURL,
-          "http://localhost:4040/foo?baz=bar");
+          "http://localhost:$port/foo?baz=bar");
       expect((defaultTestClient.request("/foo")..query = {"baz": 2}).requestURL,
-          "http://localhost:4040/foo?baz=2");
+          "http://localhost:$port/foo?baz=2");
       expect(
           (defaultTestClient.request("/foo")..query = {"baz": null}).requestURL,
-          "http://localhost:4040/foo?baz");
+          "http://localhost:$port/foo?baz");
       expect(
           (defaultTestClient.request("/foo")..query = {"baz": true}).requestURL,
-          "http://localhost:4040/foo?baz");
+          "http://localhost:$port/foo?baz");
       expect(
           (defaultTestClient.request("/foo")..query = {"baz": true, "boom": 7})
               .requestURL,
-          "http://localhost:4040/foo?baz&boom=7");
+          "http://localhost:$port/foo?baz&boom=7");
     });
 
     test("HTTP requests are issued", () async {
-      final defaultTestClient = Agent.onPort(4040);
+      final defaultTestClient = Agent.onPort(port);
       await defaultTestClient.request("/foo").get();
       Request msg = await server.next();
       expect(msg.path.string, "/foo");
@@ -162,7 +167,7 @@ void main() {
     });
 
     test("Default headers are added to requests", () async {
-      final defaultTestClient = Agent.onPort(4040)
+      final defaultTestClient = Agent.onPort(port)
         ..headers["X-Int"] = 1
         ..headers["X-String"] = "1";
 
@@ -175,7 +180,7 @@ void main() {
     });
 
     test("Default headers can be overridden", () async {
-      final defaultTestClient = Agent.onPort(4040)
+      final defaultTestClient = Agent.onPort(port)
         ..headers["X-Int"] = 1
         ..headers["X-String"] = "1";
 
@@ -191,8 +196,9 @@ void main() {
     });
 
     test("Client can expect array of JSON", () async {
-      final client = Agent.onPort(8888);
-      final server = await HttpServer.bind("localhost", 8888,
+      final portLocal = await getUnusedPort();
+      final client = Agent.onPort(portLocal);
+      final server = await HttpServer.bind("localhost", portLocal,
           v6Only: false, shared: false);
       final router = Router();
       router.route("/na").link(() => TestController());
@@ -207,7 +213,7 @@ void main() {
     });
 
     test("Query parameters are provided when using execute", () async {
-      final defaultTestClient = Agent.onPort(4040);
+      final defaultTestClient = Agent.onPort(port);
 
       await defaultTestClient.get("/foo", query: {"k": "v"});
 
@@ -217,7 +223,7 @@ void main() {
     });
 
     test("Basic authorization adds header to all requests", () async {
-      final defaultTestClient = Agent.onPort(4040)
+      final defaultTestClient = Agent.onPort(port)
         ..headers["k"] = "v"
         ..setBasicAuthorization("username", "password");
 
@@ -231,7 +237,7 @@ void main() {
     });
 
     test("Bearer authorization adds header to all requests", () async {
-      final defaultTestClient = Agent.onPort(4040)
+      final defaultTestClient = Agent.onPort(port)
         ..headers["k"] = "v"
         ..bearerAuthorization = "token";
 
@@ -252,7 +258,8 @@ void main() {
     });
 
     test("Responses have body", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4001);
+      final portLocal = await getUnusedPort();
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, portLocal);
       server.listen((req) {
         final resReq = Request(req);
         resReq.respond(Response.ok([
@@ -260,33 +267,35 @@ void main() {
         ]));
       });
 
-      final defaultTestClient = Agent.onPort(4001);
+      final defaultTestClient = Agent.onPort(portLocal);
       final response = await defaultTestClient.request("/foo").get();
       expect(response.body.as<List>().length, 1);
       expect(response.body.as<List>().first["a"], "b");
     });
 
     test("Responses with no body don't return one", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4002);
+      final portLocal = await getUnusedPort();
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, portLocal);
       server.listen((req) {
         req.response.statusCode = 200;
         req.response.close();
       });
 
-      final defaultTestClient = Agent.onPort(4002);
+      final defaultTestClient = Agent.onPort(portLocal);
       final response = await defaultTestClient.request("/foo").get();
       expect(response.body.isEmpty, true);
     });
 
     test("Request with accept adds header", () async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4003);
+      final portLocal = await getUnusedPort();
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, portLocal);
       server.listen((req) {
         final resReq = Request(req);
         resReq.respond(Response.ok(
             {"ACCEPT": req.headers.value(HttpHeaders.acceptHeader)}));
       });
 
-      final client = Agent.onPort(4003);
+      final client = Agent.onPort(portLocal);
       final req = client.request("/foo")
         ..accept = [ContentType.json, ContentType.text];
 

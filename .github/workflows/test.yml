@@ -13,11 +13,8 @@ jobs:
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
       POSTGRES_PORT: 15432
-      RUNNER_CMD: pub run test -r expanded
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runner_args: [-t cli, -x cli]
+      RUNNER_CMD: dart test -r expanded
+    runs-on: ubuntu-18.04
     services:
       postgres:
         image: postgres:9.6
@@ -47,8 +44,8 @@ jobs:
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
       POSTGRES_PORT: 15432
-      RUNNER_CMD: pub run test -r expanded
-    runs-on: ubuntu-18.04
+      RUNNER_CMD: dart test -r expanded
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         runner_args: [-t cli, -x cli]
@@ -93,17 +90,14 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
+      - name: Prep Packages
+        run: |
+          dart pub global activate melos
+          melos bootstrap
+          melos cache-source
       - name: Get Dependencies
         working-directory: ${{ env.TEST_DIR }}
         run: dart pub get
       - name: Run tests
         working-directory: ${{ env.TEST_DIR }}
-        run: |
-          dart pub global activate --source path ../codable
-          dart pub global activate --source path ../common
-          dart pub global activate --source path ../config
-          dart pub global activate --source path ../isolate_exec
-          dart pub global activate --source path ../open_api
-          dart pub global activate --source path ../password_hash
-          dart pub global activate --source path ../test_harness
-          export PATH=$PATH:$PUB_CACHE/bin:$PUB_CACHE && dart tool/generated_test_runner.dart
+        run: dart tool/generated_test_runner.dart
