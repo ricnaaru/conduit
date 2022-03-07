@@ -15,9 +15,6 @@ jobs:
       POSTGRES_PORT: 15432
       RUNNER_CMD: pub run test -r expanded
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        runner_args: [-t cli, -x cli]
     services:
       postgres:
         image: postgres:9.6
