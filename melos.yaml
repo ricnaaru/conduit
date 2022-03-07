@@ -4,8 +4,6 @@ packages:
   - packages/**
 ignore:
   - packages/conduit/templates/**
-  - packages/runtime_test_packages/**
-  - packages/isolate_exec_test_package/**
 command:
   version:
     linkToCommits: true
@@ -13,6 +11,8 @@ scripts:
   analyze: melos exec -- pub global run tuneup check
   cache-source:
     run: melos exec -- "cp -r '\$MELOS_PACKAGE_PATH' '$PUB_CACHE/hosted/pub.dartlang.org/\$MELOS_PACKAGE_NAME-\$MELOS_PACKAGE_VERSION'"
+    select-pacakge:
+      no-private: true
 environment:
   sdk: ">=2.12.0 <3.0.0"
   
