@@ -55,7 +55,8 @@ void main() {
 
     late HttpServer server;
     setUpAll(() async {
-      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4000);
+      server = await HttpServer.bind(InternetAddress.loopbackIPv4, 4000,
+          shared: true);
       server.listen((req) {
         req.response.statusCode = 200;
 
