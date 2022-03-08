@@ -13,7 +13,7 @@ jobs:
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
       POSTGRES_PORT: 15432
-      RUNNER_CMD: pub run test -r expanded
+      RUNNER_CMD: dart test -r expanded
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -44,7 +44,7 @@ jobs:
       POSTGRES_PASSWORD: conduit!
       POSTGRES_DB: conduit_test_db
       POSTGRES_PORT: 15432
-      RUNNER_CMD: pub run test -r expanded
+      RUNNER_CMD: dart test -r expanded
     runs-on: ubuntu-18.04
     strategy:
       matrix:
