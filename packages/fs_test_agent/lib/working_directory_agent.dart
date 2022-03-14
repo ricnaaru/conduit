@@ -111,12 +111,12 @@ class WorkingDirectoryAgent {
   }
 
   Future<ProcessResult> getDependencies({bool offline = true}) async {
-    final args = ["get"];
+    final args = ["pub", "get"];
     if (offline) {
       args.add("--offline");
     }
 
-    final cmd = Platform.isWindows ? "pub.bat" : "pub";
+    const cmd = "dart";
     final result = await Process.run(
       cmd,
       args,
