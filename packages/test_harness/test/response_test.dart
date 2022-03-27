@@ -4,12 +4,14 @@ import 'package:conduit_test/src/body_matcher.dart';
 import 'package:conduit_test/src/response_matcher.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
+  final port = await getUnusedPort();
+
   late MockHTTPServer server;
-  final agent = Agent.onPort(8000);
+  final agent = Agent.onPort(port);
 
   setUp(() async {
-    server = MockHTTPServer(8000);
+    server = MockHTTPServer(port);
     await server.open();
   });
 

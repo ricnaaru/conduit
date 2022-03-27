@@ -30,11 +30,6 @@ jobs:
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
-      - name: Prep Packages
-        run: |
-          dart pub global activate melos
-          melos bootstrap
-          melos cache-source
       - name: Get Dependencies
         working-directory: ${{ env.TEST_DIR }}
         run: dart pub get

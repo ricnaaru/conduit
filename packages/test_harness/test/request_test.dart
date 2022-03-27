@@ -5,12 +5,13 @@ import 'package:conduit/conduit.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
+  final port = await getUnusedPort();
   late MockHTTPServer server;
-  final agent = Agent.onPort(8000);
+  final agent = Agent.onPort(port);
 
   setUp(() async {
-    server = MockHTTPServer(8000);
+    server = MockHTTPServer(port);
     await server.open();
   });
 
@@ -82,28 +83,28 @@ void main() {
 
   test("Path and baseURL negotiate path delimeters", () async {
     var req = agent.request("/")
-      ..baseURL = "http://localhost:8000"
+      ..baseURL = "http://localhost:$port"
       ..path = "path";
-    expect(req.requestURL, "http://localhost:8000/path");
+    expect(req.requestURL, "http://localhost:$port/path");
 
     req = agent.request("/")
-      ..baseURL = "http://localhost:8000/"
+      ..baseURL = "http://localhost:$port/"
       ..path = "path";
-    expect(req.requestURL, "http://localhost:8000/path");
+    expect(req.requestURL, "http://localhost:$port/path");
 
     req = agent.request("/")
-      ..baseURL = "http://localhost:8000/"
+      ..baseURL = "http://localhost:$port/"
       ..path = "/path";
-    expect(req.requestURL, "http://localhost:8000/path");
+    expect(req.requestURL, "http://localhost:$port/path");
 
     req = agent.request("/")
-      ..baseURL = "http://localhost:8000/base/"
+      ..baseURL = "http://localhost:$port/base/"
       ..path = "path";
-    expect(req.requestURL, "http://localhost:8000/base/path");
+    expect(req.requestURL, "http://localhost:$port/base/path");
 
     req = agent.request("/")
-      ..baseURL = "http://localhost:8000/base/"
+      ..baseURL = "http://localhost:$port/base/"
       ..path = "/path";
-    expect(req.requestURL, "http://localhost:8000/base/path");
+    expect(req.requestURL, "http://localhost:$port/base/path");
   });
 }

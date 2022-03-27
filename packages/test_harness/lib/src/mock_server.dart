@@ -213,3 +213,11 @@ class _MockServerResponse {
     return null;
   }
 }
+
+Future<int> getUnusedPort() {
+  return ServerSocket.bind('0.0.0.0', 0).then((socket) {
+    final port = socket.port;
+    socket.close();
+    return port;
+  });
+}
