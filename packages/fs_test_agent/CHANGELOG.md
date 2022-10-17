@@ -1,3 +1,7 @@
+## 3.2.1
+
+ - **FIX**: setup auto publishing pipeline format fixes. ([44d6f2bb](https://github.com/conduit-dart/conduit/commit/44d6f2bb786e914117f7f79267b48ef14cb3065d))
+
 ## 3.2.0
 
  - **REFACTOR**: use melos for mono-repo management. ([125099c5](https://github.com/conduit-dart/conduit/commit/125099c58e34e0e282c6fd0ec0cf0ec233bf92a1))

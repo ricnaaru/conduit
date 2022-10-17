@@ -1,3 +1,7 @@
+## 3.2.2
+
+ - **FIX**: setup auto publishing pipeline format fixes. ([44d6f2bb](https://github.com/conduit-dart/conduit/commit/44d6f2bb786e914117f7f79267b48ef14cb3065d))
+
 ## 3.2.1
 
  - **FIX**: setup auto publishing pipeline format fixes. ([b6124ee9](https://github.com/conduit-dart/conduit/commit/b6124ee9c9a578b5042e3c641373ddb45b1a5f17))
