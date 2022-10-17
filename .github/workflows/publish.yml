@@ -8,21 +8,36 @@ on:
 jobs:
   publish:
     if: |
-      startsWith(github.event.head_commit.message, 'feat') 
+      startsWith(github.event.head_commit.message, 'feat')
       || startsWith(github.event.head_commit.message, 'fix')
       || startsWith(github.event.head_commit.message, 'BREAKING CHANGE')
     runs-on: ubuntu-latest
-    container:
-      image:  google/dart:latest
     steps:
     - uses: actions/checkout@v3
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: dev
     - name: Prepare pub credentials
-      run: echo '${{ secrets.PUB_CREDENTIALS }}' > "$XDG_CONFIG_HOME/dart/pub-credentials.json"
+      run: |
+        mkdir "$XDG_CONFIG_HOME/dart"
+        echo '${{ secrets.PUB_CREDENTIALS }}' > "$XDG_CONFIG_HOME/dart/pub-credentials.json"
+    - name: Git config
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
     - name: Install melos
       run: dart pub global activate melos
     - name: Strip overrides
       run: melos run strip-overrides
+    - name: Uptick versions
+      run: melos version --yes
     - name: Dry run
-      run: melos publish --dry-run
+      run: melos publish --dry-run --yes
+    - name: Push tags
+      uses: CasperWA/push-protected@v2
+      with:
+        token: ${{ secrets.CONDUIT_PAT }}
+        tags: true
+        branch: master
     - name: Publish package
-      run: melos publish --no-dry-run
+      run: melos publish --no-dry-run --git-tag-version --yes
