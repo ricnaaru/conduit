@@ -1,15 +1,21 @@
-name: Test Suite
+name: Release
 
 on:
-  release:
+  push:
+    branches:
+      - master
 
 jobs:
-  build:
+  publish:
+    if: |
+      startsWith(github.event.head_commit.message, 'feat') 
+      || startsWith(github.event.head_commit.message, 'fix')
+      || startsWith(github.event.head_commit.message, 'BREAKING CHANGE')
     runs-on: ubuntu-latest
     container:
       image:  google/dart:latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Prepare pub credentials
       run: echo '${{ secrets.PUB_CREDENTIALS }}' > "$XDG_CONFIG_HOME/dart/pub-credentials.json"
     - name: Install melos
