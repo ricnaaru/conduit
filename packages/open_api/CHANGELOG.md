@@ -1,3 +1,7 @@
+## 3.2.2
+
+ - **FIX**: Improve CI all unit tests ([#119](https://github.com/conduit-dart/conduit/issues/119)). ([8ce624b7](https://github.com/conduit-dart/conduit/commit/8ce624b7f14675c67c4940a456bb42895c70dbdc))
+
 ## 3.2.1
 
  - **FIX**: setup auto publishing pipeline format fixes. ([e94d6fb7](https://github.com/conduit-dart/conduit/commit/e94d6fb7f671c18ee347c851e62a85726db118ea))
