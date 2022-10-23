@@ -1,3 +1,7 @@
+## 3.2.5
+
+ - **FIX**: Fix build binary command ([#121](https://github.com/conduit-dart/conduit/issues/121)). ([b3f33628](https://github.com/conduit-dart/conduit/commit/b3f336282a4ff8fb39b980dbd0311ffd5972033a))
+
 ## 3.2.4
 
  - **FIX**: Upgrade to latest dependencies ([#120](https://github.com/conduit-dart/conduit/issues/120)). ([2be7f7aa](https://github.com/conduit-dart/conduit/commit/2be7f7aa6fb8085cd21956fead60dc8d10f5daf2))
