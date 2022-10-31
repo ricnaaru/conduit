@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Issuing Access Tokens - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Issuing Access Tokens";
+        var mkdocs_page_input_path = "auth/controllers.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Issuing Access Tokens</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#issue-refresh-and-exchange-tokens-with-authcontroller">Issue, Refresh and Exchange Tokens with AuthController</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#issue-authorization-codes-with-authcodecontroller">Issue Authorization Codes with AuthCodeController</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Authorization and OAuth 2.0 &raquo;</li>
+      <li>Issuing Access Tokens</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/auth/controllers.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="issue-access-tokens-with-authcontroller">Issue Access Tokens with AuthController</h1>
+<p>An application using Conduit's Auth framework must have endpoints to exchange credentials for access tokens. While a developer could implement these endpoints themselves and talk directly to an <code>AuthServer</code>, the OAuth 2.0 specification is where happiness goes to die. Therefore, there exist two <code>Controller</code>s in Conduit that handle granting and refreshing authorization tokens - <code>AuthController</code> and <code>AuthCodeController</code>.</p>
+<h2 id="issue-refresh-and-exchange-tokens-with-authcontroller">Issue, Refresh and Exchange Tokens with AuthController</h2>
+<p>An <code>AuthController</code> grants access tokens and refreshes them. It also exchanges authorization codes obtained from <code>AuthCodeController</code> for access tokens.</p>
+<p>Using an <code>AuthController</code> in an application is straightforward - hook it up to a <code>Router</code> and pass it an <code>AuthServer</code>.</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  router
+    .route(&quot;/auth/token&quot;)
+    .link(() =&gt; AuthController(authServer));
+
+  return router;
+}
+</code></pre>
+
+<p>To grant an access token, a client application sends a HTTP <code>POST</code> to the controller. The request must have:</p>
+<ul>
+<li>an Authorization header with the Client ID and Client Secret (if one exists) and,</li>
+<li>a <code>x-www-form-urlencoded</code> body with the username and password of the authenticating user.</li>
+</ul>
+<p>The body must also contain the key-value pair <code>grant_type=password</code>. For example, the following Dart code will initiate successful authentication:</p>
+<pre class="codehilite"><code class="language-dart">var clientID = &quot;com.app.demo&quot;;
+var clientSecret = &quot;mySecret&quot;;
+var body = &quot;username=bob@conduit.dart.com&amp;password=foobar&amp;grant_type=password&quot;;
+var clientCredentials = Base64Encoder().convert(&quot;$clientID:$clientSecret&quot;.codeUnits);
+
+var response = await http.post(
+  &quot;https://conduit.dart.com/auth/token&quot;,
+  headers: {
+    &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;,
+    &quot;Authorization&quot;: &quot;Basic $clientCredentials&quot;
+  },
+  body: body);
+</code></pre>
+
+<p>If the OAuth 2.0 client ID is public - that is, it does not have a client secret - the secret is omitted from the authorization header:</p>
+<pre class="codehilite"><code class="language-dart">// Notice that the separating colon (:) is still present.
+var clientCredentials = Base64Encoder().convert(&quot;$clientID:&quot;.codeUnits);
+</code></pre>
+
+<p>The response to a password token request is a JSON body that follows the OAuth 2.0 specification:</p>
+<pre class="codehilite"><code class="language-text">{
+  &quot;access_token&quot;: &quot;...&quot;
+  &quot;refresh_token&quot;: &quot;...&quot;,
+  &quot;expires_in&quot;: 3600,
+  &quot;token_type&quot;: &quot;bearer&quot;
+}
+</code></pre>
+
+<p>!!! warning "" The <code>expires_in</code> field is a computed property based on the delta of the issue date and expiration date. The unit is seconds. You should avoid manually editing the values for the columns <code>issuedate</code> and <code>expirationdate</code></p>
+<p>Tokens are refreshed through the same endpoint, but with a payload that only contains the refresh token and <code>grant_type=refresh_token</code>.</p>
+<pre class="codehilite"><code class="language-text">grant_type=refresh_token&amp;refresh_token=kjasdiuz9u3namnsd
+</code></pre>
+
+<p>See <a href="../cli/">Conduit Auth CLI</a> for more details on creating OAuth 2.0 client identifier and secrets.</p>
+<p>If a Conduit application is using scope, an additional <code>scope</code> parameter can contain a space-delimited list of requested authorization scope. Only allowed scopes are returned and granted, and if no scopes are allowed then the request fails. If scope is provided, granted scope will be available in the response body.</p>
+<p>It is important that an <code>Authorizer</code> <em>must not</em> protect instances of <code>AuthController</code>. The Authorization header is parsed and verified by <code>AuthController</code>.</p>
+<p>Once granted, an access token can be used to pass <code>Authorizer.bearer()</code>s in the application channel.</p>
+<h2 id="issue-authorization-codes-with-authcodecontroller">Issue Authorization Codes with AuthCodeController</h2>
+<p>An <code>AuthCodeController</code> manages the OAuth 2.0 authorization code flow. The authorization code flow is used when a Conduit application allows third party applications access to authorized resources.</p>
+<p>Let's say you've built a Conduit application that allows people to store notes for themselves. Now, a friend approaches you with their application that is a to-do list. Instead of building their own note-taking feature, your friend wants users of their application to access the notes the user has stored in your application. While trustworthy, you don't want your friend to have access to the username and passwords of your subscribers.</p>
+<p>Your friend adds a link to their application that takes the user to an HTML page hosted by your server. The user enters their credentials in this page, which sends a <code>POST</code> request to your server. Your server responds by redirecting the user's browser back into your friend's application. An <em>authorization code</em> is included in the query string of the redirect URL.</p>
+<p>Your friend's application parses the code from the URL and sends it to <em>their</em> server. Behind the scenes, their server exchanges this code with your server for an access token.</p>
+<p>An <code>AuthCodeController</code> responds to both <code>GET</code> and <code>POST</code> requests. When issued a <code>GET</code>, it serves up a HTML page with a login form. This login form's submit action sends a <code>POST</code> to the same endpoint with the username and password of the user. Upon success, the response from the <code>POST</code> is a 302 redirect with an authorization code.</p>
+<p>Setting up an <code>AuthCodeController</code> is nearly as simple as setting up an <code>AuthController</code>, but requires a function that renders the HTML login form. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  router
+    .route(&quot;/auth/code&quot;)
+    .link(() =&gt; AuthCodeController(
+      authServer, renderAuthorizationPageHTML: renderLogin));
+
+  return router;
+}
+
+Future&lt;String&gt; renderLogin(
+    AuthCodeController requestingController,
+    URI requestURI,
+    Map&lt;String, String&gt; queryParameters) {
+  var html = HTMLRenderer.templateWithSubstitutions(
+    &quot;web/login.html&quot;, requestURI, queryParameters);
+
+  return html;
+}
+</code></pre>
+
+<p>It is important that all values passed to HTML rendering function are sent in the form's query parameters - they contain necessary security components and scope information.</p>
+<p>When your friend's application links to your login page - <code>GET /auth/code</code> - they must include three query parameters: <code>state</code>, <code>client_id</code>, <code>response_type</code>. They may optionally include <code>scope</code>.</p>
+<pre class="codehilite"><code class="language-text">https://conduit.dart.com/auth/code?client_id=friend.app&amp;response_type=code&amp;state=87uijn3rkja
+</code></pre>
+
+<p>The value of <code>client_id</code> must be created specifically for your friend's application and stored in your database. (See more on generating client identifiers with <code>conduit auth</code> in <a href="../cli/">Conduit Auth CLI</a>.) The <code>response_type</code> must always be <code>code</code>. The <code>state</code> must be a value your friend's application creates - it is often some random value like a session cookie.</p>
+<p>When a user of your friend's application goes through this process, they are redirected back into your friend's application. Both the generated authorization code and the value for <code>state</code> will be query parameters in the URL. That redirect URL will look like:</p>
+<pre class="codehilite"><code class="language-text">https://friends.app/code_callback?code=abcd672kk&amp;state=87uijn3rkja
+</code></pre>
+
+<p>The redirect URL is pre-determined when generating the client identifier with <code>conduit auth</code>.</p>
+<p>Your friend's application verifies that <code>state</code> matches the <code>state</code> they sent in <code>GET /auth/code</code>. They then send the <code>code</code> to their server. The server then exchanges this code with your server by issuing a <code>POST</code> to an <code>AuthController</code> - <em>NOT</em> the <code>AuthCodeController</code> - with the following <code>application/x-www-form-urlencoded</code> body:</p>
+<pre class="codehilite"><code class="language-text">grant_type=authorization_code&amp;code=abcd672kk
+</code></pre>
+
+<p>An access token will be returned to the server which your friend then stores in their database. Whenever one of their users makes a request that requires accessing your application's data, they will execute requests with that access token.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../authorizer/" class="btn btn-neutral float-left" title="Protecting Routes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../cli/" class="btn btn-neutral float-right" title="Managing OAuth 2.0 Clients">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../authorizer/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../cli/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

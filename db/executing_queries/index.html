@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Basic Queries - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Basic Queries";
+        var mkdocs_page_input_path = "db/executing_queries.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Basic Queries</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#inserting-data-with-a-query">Inserting Data with a Query</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#updating-data-with-a-query">Updating Data with a Query</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deleting-data-with-a-query">Deleting Data with a Query</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fetching-data-with-a-query">Fetching Data with a Query</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sorting">Sorting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#property-selectors">Property Selectors</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#specifying-result-properties">Specifying Result Properties</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#exceptions-and-errors">Exceptions and Errors</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#statement-reuse">Statement Reuse</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Basic Queries</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/executing_queries.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="inserting-updating-deleting-and-fetching-objects">Inserting, Updating, Deleting and Fetching Objects</h1>
+<p>To send commands to a database - whether to fetch, insert, delete or update objects - you will create, configure and execute instances of <code>Query&lt;T&gt;</code>. The type argument must be a subclass of <code>ManagedObject</code>, which determines the table the query will operate on.</p>
+<p>A query compiles and executes a SQL query and requires a <a href="https://github.com/noojee/conduit/tree/3f4c01be85b7ff135772166173524e76a5f80c32/conduit/doc/source/source/docs/db/connecting.db">ManagedContext</a> to determine the database to connect to. Here's an example of a <code>Query&lt;T&gt;</code> that fetches all instances of <code>User</code>:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;User&gt;(context);
+final allUsers = await query.fetch();
+</code></pre>
+
+<p>A <code>Query&lt;T&gt;</code> has four basic execution methods: <code>fetch</code>, <code>update</code>, <code>insert</code>, <code>delete</code>.</p>
+<ul>
+<li><code>fetch</code> will retrieve data from a database (it is equivalent to the SQL operation <code>SELECT</code>).</li>
+<li><code>update</code> will modify existing data in a database (it is equivalent to the SQL operation <code>UPDATE</code>).</li>
+<li><code>insert</code> will add new data to a database (it is equivalent to the SQL operation <code>INSERT</code>).</li>
+<li><code>delete</code> will remove data from a database (it is equivalent to the SQL operation <code>DELETE</code>).</li>
+</ul>
+<p>A <code>Query&lt;T&gt;</code> has many configurable properties. These properties will impact which objects get fetched, the data that gets sent to the database, the order that data is returned in, and so on.</p>
+<p>In the following sections, assume that a <code>User</code> managed object subclass exists that is declared like so:</p>
+<pre class="codehilite"><code class="language-dart">class User extends ManagedObject&lt;_User&gt; implements _User {}
+class _User {
+  @primaryKey
+  int id;
+
+  @Column(indexed: true)
+  String email;
+
+  String name;
+}
+</code></pre>
+
+<h3 id="inserting-data-with-a-query">Inserting Data with a Query</h3>
+<p>To insert data with a query, you create a new <code>Query&lt;T&gt;</code> object, configure its <code>values</code> property and then call its <code>insert()</code> method.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;User&gt;(context)
+  ..values.name = &quot;Bob&quot;
+  ..values.email = &quot;bob@conduit.dart.com&quot;;  
+
+final user = await query.insert();
+</code></pre>
+
+<p>The <code>values</code> of a <code>Query&lt;T&gt;</code> is an instance of <code>T</code> (the managed object type you are inserting). You can configure individual properties of <code>values</code>, or you can assign <code>values</code> to an instance you have created elsewhere:</p>
+<pre class="codehilite"><code class="language-dart">final userValues = User()
+  ..name = &quot;Bob&quot;
+  ..email = &quot;bob@conduit.dart.com&quot;;
+final query = Query&lt;User&gt;(context)..values = userValues;
+final user = await query.insert();
+</code></pre>
+
+<p>Either way, this query is translated into the following SQL:</p>
+<pre class="codehilite"><code class="language-sql">INSERT INTO _user (name, email) VALUES ('Bob', 'bob@conduit.dart.com') RETURNING id, name, email;
+</code></pre>
+
+<p>Notice that only the values set on the <code>values</code> object are included in the SQL INSERT query. In this example, both <code>name</code> and <code>email</code> were set, but not <code>id</code> and therefore only <code>name</code> and <code>email</code> were included in the query. (In this case, the primary key is auto-incrementing and the database will generate it.)</p>
+<p>Values that are explicitly set to <code>null</code> will be sent as <code>NULL</code>. For example, consider the following <code>Query&lt;T&gt;</code> and its SQL:</p>
+<pre class="codehilite"><code class="language-dart">var query = Query&lt;User&gt;(context)
+  ..values.name = null
+  ..email = &quot;bob@conduit.dart.com&quot;;
+
+// INSERT INTO _user (name, email) VALUES (NULL, 'bob@conduit.dart.com') RETURNING id, name, email;
+await query.insert();
+</code></pre>
+
+<p>An insert query will return a managed object that represents the row that is inserted.</p>
+<p>!!! warning "Prefer the Inserted Object" After you insert an object, you should prefer to use the object returned by an insert query rather than the values you used to populate the query. The object returned from the query will be an accurate representation of the database row, while the object used to build the query may be incomplete or different. For example, an auto-incrementing primary key won't be available in your query-building instance, but will in the object returned from the successful query.</p>
+<p>There is one difference to note when choosing between assigning an instance to <code>values</code>, or configuring the properties of <code>values</code>. In an instance you create, a relationship property must be instantiated before accessing its properties. When accessing the relationship properties of <code>values</code>, an empty instance of the related object is created immediately upon access.</p>
+<pre class="codehilite"><code class="language-dart">final employee = Employee()
+  ..manager.id = 1; // this is a null pointer exception because manager is null
+
+final query = Query&lt;Employee&gt;(context)
+  ..values.manager.id = 1; // this is OK because of special behavior of Query
+</code></pre>
+
+<p>Once you assign an object to <code>values</code>, it will adopt the behavior of <code>values</code> and instantiate relationships when accessed. Also note that after assigning an object to <code>values</code>, changes to the original object are not reflected in <code>values</code>. In other words, the object is copied instead of referenced.</p>
+<p>For simple insertions and for inserting more than one object, you can use the methods on the context:</p>
+<pre class="codehilite"><code class="language-dart">final context = ManagedContext(...);
+final bob = User()..name = &quot;Bob&quot;;
+final jay = User()..name = &quot;Jay&quot;;
+
+final insertedObject = await context.insertObject(bob);
+final insertedObjects = await context.insertObjects([bob, jay]);
+</code></pre>
+
+<h3 id="updating-data-with-a-query">Updating Data with a Query</h3>
+<p>Updating rows with a <code>Query&lt;T&gt;</code> is similar to inserting data: you set the <code>Query.values</code> for properties you want to change. The type parameter for the <code>Query&lt;T&gt;</code> indicates which database table will get updated when the query is executed.</p>
+<p>An update query can - and likely should - be restricted to a single row or subset of rows. This is done by configuring the <code>Query.where</code> property - which gets translated into the <em>where clause</em> of the SQL command. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">// A Query that will change any user's whose name is 'Bob' to 'Fred'
+var query = Query&lt;User&gt;(context)
+  ..values.name = &quot;Fred&quot;
+  ..where((u) =&gt; u.name).equalTo(&quot;Bob&quot;);
+
+List&lt;User&gt; bobsThatAreNowFreds = await query.update();
+</code></pre>
+
+<p>Like <code>values</code>, <code>where</code> is also the same managed object type the query is being executed on. In the above example, then, both <code>values</code> and <code>where</code> and instances of <code>User</code>. This query executes the following SQL:</p>
+<pre class="codehilite"><code class="language-sql">UPDATE _user SET name='Fred' WHERE name='Bob';
+</code></pre>
+
+<p>The <code>where</code> property is a very powerful and flexible, and so there is an entire section dedicated to it later in this guide. For now, we'll stick to some of the things specific to <code>update()</code>.</p>
+<p>Like <code>insert()</code>, only the values set in the <code>values</code> property of a query get updated when executing <code>update()</code>. Values that are omitted are not included. Values that need to be set to <code>null</code> must explicitly be set to <code>null</code> in the query:</p>
+<pre class="codehilite"><code class="language-dart">// A Query that will remove names from anyone currently named Bob.
+var query = Query&lt;User&gt;(context)
+  ..values.name = null
+  ..where((u) =&gt; u.name).equalTo(&quot;Bob&quot;);
+</code></pre>
+
+<p>An update query returns every modified row as a result. If no rows are updated, the return value is an empty list.</p>
+<p>There is a variant to <code>Query&lt;T&gt;.update</code> named <code>updateOne</code>. The <code>updateOne</code> method will build and execute a SQL query in the same way a normal <code>update</code> does, however, it will only return the single instance that was updated instead of a list. This is convenience method for the caller to get back a single instance instead of a list:</p>
+<pre class="codehilite"><code class="language-dart">// Update user with id = 1 to have the name 'Fred'
+var query = Query&lt;User&gt;(context)
+  ..values.name = &quot;Fred&quot;
+  ..where((u) =&gt; u.id).equalTo(1);
+
+var updatedUser = await query.updateOne();
+</code></pre>
+
+<p>The <code>updateOne</code> method will return <code>null</code> if no rows were updated. It is important to note that if <code>updateOne</code> is used and more than one row is updated, <code>updateOne</code> will throw an exception and the changes to the data <em>are not reversible</em>. Because this is likely a mistake, this is considered an error, hence the exception is thrown. It is up to the programmer to recognize whether or not a particular <code>updateOne</code> query would impact multiple rows.</p>
+<p>Update queries have a safety feature that prevents you from accidentally updating every row. If you try to execute a <code>Query&lt;T&gt;</code> to do an update without configuring <code>where</code>, an exception is thrown prior to carrying out the request. If you actually want to update every row of a table, you must set the <code>Query.canModifyAllInstances</code> to <code>true</code> prior to execution. (This property defaults to <code>false</code>.)</p>
+<h3 id="deleting-data-with-a-query">Deleting Data with a Query</h3>
+<p>A <code>Query&lt;T&gt;</code> will delete rows from a database when using <code>delete()</code>. Like update queries, you should specify a row or rows using <code>where</code> properties of the <code>Query&lt;T&gt;</code>. The result of a delete operation will be a <code>Future&lt;int&gt;</code> with the number of rows deleted.</p>
+<pre class="codehilite"><code class="language-dart">var query = Query&lt;User&gt;(context)
+  ..where((u) =&gt; u.id).equalTo(1);
+
+int usersDeleted = await query.delete();
+</code></pre>
+
+<p>Also like update queries, delete queries have a safety feature that prevents you from accidentally deleting every row in a table with <code>canModifyAllInstances</code>.</p>
+<p>Any properties set in the query's <code>values</code> are ignored when executing a delete.</p>
+<h3 id="fetching-data-with-a-query">Fetching Data with a Query</h3>
+<p>Of the four basic operations of a <code>Query&lt;T&gt;</code>, fetching data is the most configurable. A simple <code>Query&lt;T&gt;</code> that would fetch every instance of some entity looks like this:</p>
+<pre class="codehilite"><code class="language-dart">var query = Query&lt;User&gt;(context);
+
+List&lt;User&gt; allUsers = await query.fetch();
+</code></pre>
+
+<p>Fetch queries can be limited to a number of instances with the <code>fetchLimit</code> property. You may also set the <code>offset</code> of a <code>Query&lt;T&gt;</code> to skip the first <code>offset</code> number of rows. Between <code>fetchLimit</code> and <code>offset</code>, you can implement naive paging. However, this type of paging suffers from a number of problems and so there is another paging mechanism covered in later sections.</p>
+<p>A fetch <code>Query&lt;T&gt;</code> uses its <code>where</code> property to filter the result set, just like delete and update queries. The <code>values</code> of a query are ignored when fetching objects. You may also fetch a single instance with <code>fetchOne</code>. If no instance is found, <code>null</code> is returned. Only use this method when the search criteria is guaranteed to be unique.</p>
+<pre class="codehilite"><code class="language-dart">var query = Query&lt;User&gt;(context)
+  ..where((u) =&gt; u.id).equalTo(1);
+
+User oneUser = await query.fetchOne();
+</code></pre>
+
+<p>When you are fetching an object by its primary key, you can use a shorthand method <code>ManagedContext.fetchObjectWithID</code>. The method must be able to infer the type of the object, or you must provide it:</p>
+<pre class="codehilite"><code class="language-dart">final object = await context.fetchObjectWithID&lt;User&gt;(1);
+</code></pre>
+
+<h3 id="sorting">Sorting</h3>
+<p>Results of a fetch can be sorted using the <code>sortBy</code> method of a <code>Query&lt;T&gt;</code>. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">var q = Query&lt;User&gt;(context)
+  ..sortBy((u) =&gt; u.dateCreated, QuerySortOrder.ascending);
+</code></pre>
+
+<p><code>sortBy</code> takes two arguments: a closure that returns which property to sort by and the order of the sort.</p>
+<p>A <code>Query&lt;T&gt;</code> results can be sorted by multiple properties. When multiple <code>sortBy</code>s are invoked on a <code>Query&lt;T&gt;</code>, later <code>sortBy</code>s are used to break ties in previous <code>sortBy</code>s. For example, the following query will sort by last name, then by first name:</p>
+<pre class="codehilite"><code class="language-dart">var q = Query&lt;User&gt;(context)
+  ..sortBy((u) =&gt; u.lastName, QuerySortOrder.ascending)
+  ..sortBy((u) =&gt; u.firstName, QuerySortOrder.ascending);
+</code></pre>
+
+<p>Thus, the following three names would be ordered like so: 'Sally Smith', 'John Wu', 'Sally Wu'.</p>
+<h3 id="property-selectors">Property Selectors</h3>
+<p>In the section on sorting, you saw the use of a <em>property selector</em> to select the property of the user to sort by. This syntax is used for many other query manipulations, like filtering and joining. A property selector is a closure that gives you an object of the type you are querying and must return a property of that object. The selector <code>(u) =&gt; u.lastName</code> in the previous section is a property selector that selects the last name of a user.</p>
+<p>The Dart analyzer will infer that the argument of a property selector, and it is always the same type as the object being queried. This enables IDE auto-completion, static error checking, and other tools like project-wide renaming.</p>
+<p>!!! tip "Live Templates" To speed up query building, create a Live Template in IntelliJ that generates a property selector when typing 'ps'. The source of the template is <code>(o) =&gt; o.$END$</code>. A downloadable settings configuration for IntelliJ exists <a href="">here</a> that includes this shortcut.</p>
+<h2 id="specifying-result-properties">Specifying Result Properties</h2>
+<p>When executing queries that return managed objects (i.e., <code>insert()</code>, <code>update()</code> and <code>fetch()</code>), the default properties for each object are fetched. The default properties of a managed object are properties that correspond to a database column - attributes declared in the table definition. A managed object's default properties can be modified when declaring its table definition:</p>
+<pre class="codehilite"><code class="language-dart">class _User {
+  @Column(omitByDefault: true)
+  String hashedPassword;
+}
+</code></pre>
+
+<p>Any property with <code>omitByDefault</code> set to true will not be fetched by default.</p>
+<p>A property that is <code>omitByDefault</code> can still be fetched. Likewise, a property that is in the defaults can still be omitted. Each <code>Query&lt;T&gt;</code> has a <code>returningProperties</code> method to adjust which properties do get returned from the query. Its usage looks like this:</p>
+<pre class="codehilite"><code class="language-dart">var query = Query&lt;User&gt;(context)
+  ..returningProperties((user) =&gt; [user.id, user.name]);
+</code></pre>
+
+<p><code>returningProperties</code> is a multiple property selector - instead of returning just one property, it returns a list of properties.</p>
+<p>You may include 'belongs-to' relationships in <code>returningProperties</code>, but you may not include 'has-many' or 'has-one' relationships. An exception will be thrown if you attempt to. To include properties from relationships like these, see <a href="../advanced_queries/">join in Advanced Queries</a>.</p>
+<p>Note that if you omit the primary key of a managed object from <code>returningProperties</code>, it will automatically be added. The primary key is necessary to transform the rows into instances of their <code>ManagedObject&lt;T&gt;</code> subclass.</p>
+<h3 id="exceptions-and-errors">Exceptions and Errors</h3>
+<p>When executing a query, it may fail for any number of reasons: the query is invalid, a database couldn't be reached, constraints were violated, etc. In many cases, this exception originates from the underlying database driver. When thrown in a controller, these exceptions will trigger a 500 Server Error response.</p>
+<p>Exceptions that are thrown in response to user input (e.g., violating a database constraint, invalid data type) are re-interpreted into a <code>QueryException</code> or <code>ValidationException</code>. Both of these exception types have an associated <code>Response</code> object that is sent instead of the default 500 Server error.</p>
+<p>For this reason, you don't need to catch database query exceptions in a controller; an appropriate response will be sent on your behalf.</p>
+<h3 id="statement-reuse">Statement Reuse</h3>
+<p>Conduit will parameterize and reuse queries when possible. This allows for significant speed and security improvements. Note that you do not have to do anything special to take advantage of this feature. However, currently at this time, you may not disable this feature.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../serialization/" class="btn btn-neutral float-left" title="Serialization and Deserialization"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../advanced_queries/" class="btn btn-neutral float-right" title="Advanced Queries">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../serialization/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../advanced_queries/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Creating a Conduit Executable - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Creating a Conduit Executable";
+        var mkdocs_page_input_path = "deploy/build.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Creating a Conduit Executable</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#beta-notes-and-known-issues">Beta Notes and Known Issues:</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#building-and-running-an-executable">Building and Running an Executable</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#building-cross-platform-with-docker">Building Cross-Platform with Docker</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Deployment &raquo;</li>
+      <li>Creating a Conduit Executable</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/deploy/build.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="creating-an-executable">Creating an Executable</h1>
+<h3 id="beta-notes-and-known-issues">Beta Notes and Known Issues:</h3>
+<p>This feature is currently in beta and there are known issues.</p>
+<ul>
+<li>Windows is not currently supported due to filesystem operations that have not been tested on the OS.</li>
+<li>Request body decoding methods, <code>RequestBody.as&lt;T&gt;</code> and <code>RequestBody.decode&lt;T&gt;</code>, have restrictions on the their type parameters when running as an executable. These types are limited to primitive types, such as <code>int</code>, <code>String</code>, <code>double</code>, <code>num</code>, <code>List</code> (of aforementioned primitives, or <code>Map&lt;String, dynamic&gt;</code>) and <code>Map</code> (keys must <code>String</code>, values may be any of the aforementioned primitive types).</li>
+<li>There are bugs! Please report them to <a href="https://github.com/conduit.dart/conduit/issues">the Conduit repository</a>.</li>
+</ul>
+<h2 id="building-and-running-an-executable">Building and Running an Executable</h2>
+<p>By default, Conduit runs in the Dart VM. A VM application optimizes over time and is very convenient for machines that already have Dart installed. However, VM applications are slower to startup, consume significantly more memory, and aren't as portable. Therefore, Conduit offers an option to build an executable version of your application. This is done by running the following command in your Conduit app's project directory:</p>
+<pre class="codehilite"><code class="language-text">conduit build
+</code></pre>
+
+<p>The output of this command is an executable that contains your application without the expensive VM. The name of the executable defaults to 'XXXXX' and is run from the command-line like any other executable:</p>
+<pre class="codehilite"><code class="language-text">  ./my_app
+</code></pre>
+
+<p>Executable's can only be run on the platform that created them. For example, you cannot create an executable in macOS and run it on Windows.</p>
+<h3 id="building-cross-platform-with-docker">Building Cross-Platform with Docker</h3>
+<p>TBD</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../cli/document/" class="btn btn-neutral float-left" title="Generating an OpenAPI/Swagger Specification"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../deploy_local/" class="btn btn-neutral float-right" title="Deploy Locally (VM)">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../cli/document/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../deploy_local/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

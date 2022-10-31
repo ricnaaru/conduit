@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Request Binding with Resource Controllers - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Request Binding with Resource Controllers";
+        var mkdocs_page_input_path = "http/resource_controller.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Request Binding with Resource Controllers</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#operation-methods">Operation Methods</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#routing-to-a-resourcecontroller">Routing to a ResourceController</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#request-bindings">Request Bindings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#optional-bindings">Optional Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#automatically-parsing-bindings">Automatically Parsing Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#header-bindings">Header Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#query-parameter-bindings">Query Parameter Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#path-variable-bindings">Path Variable Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#http-request-body-bindings">HTTP Request Body Bindings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#property-binding">Property Binding</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#other-resourcecontroller-behavior">Other ResourceController Behavior</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#request-and-response-bodies">Request and Response Bodies</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#more-specialized-resourcecontrollers">More Specialized ResourceControllers</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Handling HTTP Requests &raquo;</li>
+      <li>Request Binding with Resource Controllers</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/http/resource_controller.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="resourcecontroller">ResourceController</h1>
+<p>A <code>ResourceController</code> is a <a href="../controller/">controller</a> that provide conveniences for implementing endpoint controllers. A <code>ResourceController</code> must be subclassed, and in that subclass, you write a method for each operation on that type of resource. For example, a <code>UserController</code> might handle the following operations:</p>
+<ul>
+<li>creating a new user (<code>POST /users</code>)</li>
+<li>getting all users (<code>GET /users</code>)</li>
+<li>getting an individual user (<code>GET /users/:id</code>)</li>
+<li>updating an individual user (<code>PUT /users/:id</code>)</li>
+<li>deleting an individual user (<code>DELETE /users/:id</code>)</li>
+</ul>
+<p>These methods that are invoked for an operation are called <em>operation methods</em>.</p>
+<h2 id="operation-methods">Operation Methods</h2>
+<p>An operation method is an instance method of a <code>ResourceController</code> subclass that has an <code>@Operation</code> annotation. It must return an instance of <code>Future&lt;Response&gt;</code>. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @Operation.get()
+  Future&lt;Response&gt; getAllCities() async {
+    return Response.ok([&quot;Atlanta&quot;, &quot;Madison&quot;, &quot;Mountain View&quot;]);
+  }
+}
+</code></pre>
+
+<p>The above operation method will be invoked when <code>CityController</code> handles <code>GET</code> requests without path variables. To handle operation methods with path variables, the name of the path variable is added to the <code>@Operation</code> annotation:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @Operation.get()
+  Future&lt;Response&gt; getAllCities() async {
+    return Response.ok([&quot;Atlanta&quot;, &quot;Madison&quot;, &quot;Mountain View&quot;]);
+  }
+
+  @Operation.get('name')
+  Future&lt;Response&gt; getCityByName() async {
+    final id = request.path.variables['name'];
+    return Response.ok(fetchCityWithName(name));
+  }
+}
+</code></pre>
+
+<p>!!! note "Path Variables" This controller would be linked to the route specification <code>/cities/[:name]</code>, so that it can handle both of these operations. Read more about path variables in <a href="../routing/">Routing</a>.</p>
+<p>The named constructor of <code>Operation</code> tells us which HTTP method the operation method handles. The following named constructors exist:</p>
+<ul>
+<li><code>Operation.post()</code></li>
+<li><code>Operation.get()</code></li>
+<li><code>Operation.put()</code></li>
+<li><code>Operation.delete()</code></li>
+</ul>
+<p>The canonical <code>Operation()</code> constructor takes the HTTP method as its first argument for non-standard operations, e.g.:</p>
+<pre class="codehilite"><code class="language-dart">@Operation('PATCH', 'id')
+Future&lt;Response&gt; patchObjectWithID() async =&gt; ...;
+</code></pre>
+
+<p>All <code>Operation</code> constructors take a variable list of path variables. There can be multiple path variables for an operation. An operation method will only be invoked if all of its path variables are present in the request path. There can be multiple operation methods for a given HTTP method, as long as each expects a different set of path variables.</p>
+<p>Here's an example of an operation that requires two path variables:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get('userID', 'itemID')
+Future&lt;Response&gt; getUserItem() async {
+  final userID = request.path.variables['userID'];
+  final itemID = request.path.variables['itemID'];
+  return Response.ok(...);
+}
+</code></pre>
+
+<p>If no operation method exists for a request, a 405 Method Not Allowed response is automatically sent and no operation method is invoked.</p>
+<h2 id="routing-to-a-resourcecontroller">Routing to a ResourceController</h2>
+<p>A <code>ResourceController</code> subclass must be preceded by a <code>Router</code> in the application channel. The <code>Router</code> will parse path variables so that the controller can use them to determine which operation method should be invoked. A typical route to a <code>ResourceController</code> contains an optional identifying path variable:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route(&quot;/cities/[:name]&quot;)
+  .link(() =&gt; CityController());
+</code></pre>
+
+<p>This route would allow <code>CityController</code> to implement operation methods for all HTTP methods with both no path variables and the 'name' path variable.</p>
+<p>It is considered good practice to break sub-resources into their own controller. For example, the following is preferred:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route(&quot;/cities/[:name]&quot;)
+  .link(() =&gt; CityController());
+
+router
+  .route(&quot;/cities/:name/attractions/[:id]&quot;)
+  .link(() =&gt; CityAttractionController());
+</code></pre>
+
+<p>By contrast, the route <code>/cities/[:name/[attractions/[:id]]]</code>, while valid, makes controller logic much more unwieldy.</p>
+<h2 id="request-bindings">Request Bindings</h2>
+<p>Operation methods may <em>bind</em> properties of an HTTP request to its parameters. When the operation method is invoked, the value of that property is passed as an argument to the operation method. For example, the following binds the header named 'X-API-Key' to the argument <code>apiKey</code>:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get('name')
+Future&lt;Response&gt; getCityByName(@Bind.header('x-api-key') String apiKey) async {
+  if (!isValid(apiKey)) {
+    return Response.unauthorized();
+  }
+
+  return Response.ok(...);
+}
+</code></pre>
+
+<p>The following table shows the possible types of bindings:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Property</th>
+<th align="left">Binding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Path Variable</td>
+<td align="left"><code>@Bind.path(pathVariableName)</code></td>
+</tr>
+<tr>
+<td align="left">URL Query Parameter</td>
+<td align="left"><code>@Bind.query(queryParameterName)</code></td>
+</tr>
+<tr>
+<td align="left">Header</td>
+<td align="left"><code>@Bind.header(headerName)</code></td>
+</tr>
+<tr>
+<td align="left">Request Body</td>
+<td align="left"><code>@Bind.body()</code></td>
+</tr>
+</tbody>
+</table>
+<p>You may bind any number of HTTP request properties to a single operation method.</p>
+<h3 id="optional-bindings">Optional Bindings</h3>
+<p>Bindings can be made optional. If a binding is optional, the operation method will still be called even if the binding isn't in a request. To make a binding optional, wrap it in curly brackets.</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get()
+Future&lt;Response&gt; getAllCities({@Bind.header('x-api-key') String apiKey}) async {
+  if (apiKey == null) {
+    // No X-API-Key in request
+    ...
+  }
+  ...
+}
+</code></pre>
+
+<p>The curly bracket syntax is a Dart language feature for optional method parameters (<a href="https://www.dartlang.org/guides/language/language-tour#optional-parameters">see more here</a>). If there are multiple optional parameters, use only one pair of curly brackets and list each optional parameter in those brackets.</p>
+<p>A bound parameter will be null if is not present in the request. You can provide a default value for optional parameters.</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get()
+Future&lt;Response&gt; getAllCities({@Bind.header(&quot;x-api-key&quot;) String apiKey: &quot;public&quot;}) async {
+  ...
+}
+</code></pre>
+
+<h3 id="automatically-parsing-bindings">Automatically Parsing Bindings</h3>
+<p>Query, header and path bindings can automatically be parsed into other types, such as <code>int</code> or <code>DateTime</code>. Simply declare the bound parameter's type to the desired type:</p>
+<pre class="codehilite"><code class="language-dart">Future&lt;Response&gt; getCityByID(@Bind.query('id') int cityID)
+</code></pre>
+
+<p>The type of a bound parameter may be <code>String</code> or any type that implements <code>parse</code> (e.g., <code>int</code>, <code>DateTime</code>). Query parameters may also be bound to <code>bool</code> parameters; a boolean query parameter will be true if the query parameter has no value (e.g. <code>/path?boolean</code>).</p>
+<p>If parsing fails for any reason, an error response is sent and the operation method is not called. For example, the above example binds <code>int cityID</code> - if the path variable 'id' can't be parsed into an <code>int</code>, a 404 Not Found response is sent. If a query parameter or header value cannot be parsed, a 400 Bad Request response is sent.</p>
+<p>You may also bind <code>List&lt;T&gt;</code> parameters to headers and query parameters, where <code>T</code> must meet the same criteria as above. Query parameters and headers may appear more than once in a request. For example, the value of <code>ids</code> is <code>[1, 2]</code> if the request URL ends with <code>/path?id=1&amp;id=2</code> and the operation method looks like this:</p>
+<pre class="codehilite"><code class="language-dart">Future&lt;Response&gt; getCitiesByIDs(@Bind.query('id') List&lt;int&gt; ids)
+</code></pre>
+
+<p>Note that if a parameter is <em>not</em> bound to a list and there are multiple occurrences of that property in the request, a 400 Bad Request response will be sent. If you want to allow multiple values, you must bind to a <code>List&lt;T&gt;</code>.</p>
+<h3 id="header-bindings">Header Bindings</h3>
+<p>The following operation method binds the header named <code>X-API-Key</code> to the <code>apiKey</code> parameter:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @Operation.get()
+  Future&lt;Response&gt; getAllCities(@Bind.header('x-api-key') String apiKey) async {
+    if (!isValid(apiKey)) {
+      return Response.unauthorized();
+    }
+
+    return Response.ok(['Atlanta', 'Madison', 'Mountain View']);
+  }
+}
+</code></pre>
+
+<p>If an <code>X-API-Key</code> header is present in the request, its value will be available in <code>apiKey</code>. If it is not, <code>getAllCities(apiKey)</code> would not be called and a 400 Bad Request response will be sent. If <code>apiKey</code> were optional, the method is called as normal and <code>apiKey</code> is null or a default value.</p>
+<p>Header names are case-insensitive per the HTTP specification. Therefore, the header name may be 'X-API-KEY', 'X-Api-Key' 'x-api-key', etc. and <code>apiKey</code> will be bound in all cases.</p>
+<h3 id="query-parameter-bindings">Query Parameter Bindings</h3>
+<p>The following operation methods binds the query parameter named 'name' to the parameter <code>cityName</code>:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @Operation.get()
+  Future&lt;Response&gt; getAllCities(@Bind.query('name') String cityName) async {
+    return Response.ok(cities.where((c) =&gt; c.name == cityName).toList());
+  }
+}
+</code></pre>
+
+<p>Query parameters can be required or optional. If required, a 400 Bad Request response is sent and no operation method is called if the query parameter is not present in the request URL. If optional, the bound variable is null or a default value.</p>
+<p>Query parameters are case-sensitive; this binding will only match the query parameter 'name', but not 'Name' or 'NAME'.</p>
+<p>Query parameters may also bound for query strings in the request body when the content-type is 'application/x-www-form-urlencoded'.</p>
+<h3 id="path-variable-bindings">Path Variable Bindings</h3>
+<p>The following operation method binds the path variable 'id' to the parameter <code>cityID</code>:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @Operation.get('id')
+  Future&lt;Response&gt; getCityByID(@Bind.path('id') String cityID) async {
+    return Response.ok(cities.where((c) =&gt; c.id == cityID).toList());
+  }
+}
+</code></pre>
+
+<p>Path variables are made available when creating <a href="../routing/">routes</a>. A <code>Router</code> must have a route that includes a path variable and that path variable must be listed in the <code>Operation</code> annotation. Path variables are case-sensitive and may not be optional.</p>
+<p>If you attempt to bind a path variable that is not present in the <code>Operation</code>, you will get a runtime exception at startup. You do not have to bind path variables for an operation method to be invoked.</p>
+<h3 id="http-request-body-bindings">HTTP Request Body Bindings</h3>
+<p>The body of an HTTP request can also be bound to a parameter:</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  CityController(this.context);
+
+  final ManagedContext context;
+
+  @Operation.post()
+  Future&lt;Response&gt; addCity(@Bind.body() City city) async {
+    final insertedCity = await context.insertObject(city);
+
+    return Response.ok(insertedCity);
+  }
+}
+</code></pre>
+
+<p>Since there is only one request body, <code>Bind.body()</code> doesn't take any identifying arguments (however, it does take optional arguments for ignoring, requiring or rejecting keys; this matches the behavior of <code>Serializable.read</code> and only works when the bound type is a <code>Serializable</code> or list of).</p>
+<p>The bound parameter type (<code>City</code> in this example) must implement <code>Serializable</code>. Conduit will automatically decode the request body from it's content-type, create a new instance of the bound parameter type, and invoke its <code>read</code> method. In the above example, a valid request body would be the following JSON:</p>
+<pre class="codehilite"><code class="language-javascript">{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;Atlanta&quot;
+}
+</code></pre>
+
+<p>!!! note "HTTP Body Decoding" Request bodies are decoded according to their content-type prior to being deserialized. For more information on request body decoding, including decoding content-types other than JSON, see <a href="../request_and_response/">this guide</a>.</p>
+<p>If parsing fails or <code>read</code> throws an exception, a 400 Bad Request response will be sent and the operation method won't be called.</p>
+<p>You may also bind <code>List&lt;Serializable&gt;</code> parameters to the request body. Consider the following JSON that contains a list of cities:</p>
+<pre class="codehilite"><code class="language-javascript">[
+  {&quot;id&quot;: 1, &quot;name&quot;: &quot;Atlanta&quot;},
+  {&quot;id&quot;: 2, &quot;name&quot;: &quot;Madison&quot;}
+]
+</code></pre>
+
+<p>This body can be bound by declaring the bound parameter to be a <code>List</code> of the desired type:</p>
+<pre class="codehilite"><code class="language-dart">Future&lt;Response&gt; addCity(@Bind.body() List&lt;City&gt; cities)
+</code></pre>
+
+<p>!!! tip "List vs Object" An endpoint should either take a single object or a list of objects, but not both. If the request body is a JSON list and the bound variable is not a list, a 400 Bad Request response will be sent (and vice versa). Declaring a body binding of the appropriate type validates the expected value and aids in automatically generating an OpenAPI specification for your application.</p>
+<p>Note that if the request's <code>Content-Type</code> is 'x-www-form-urlencoded', its must be bound with <code>Bind.query</code> and not <code>Bind.body</code>.</p>
+<p>!!! tip "Key Filters in Bind.body()" Filters can be applied to keys of the object being read. Filters can ignore keys, require keys or throw an error if a key is found. See more <a href="../request_and_response/">here</a>.</p>
+<h3 id="property-binding">Property Binding</h3>
+<p>The properties of an <code>ResourceController</code>s may also have <code>Bind.query</code> and <code>Bind.header</code> metadata. This binds values from the request to the <code>ResourceController</code> instance itself, making them accessible from <em>all</em> operation methods.</p>
+<pre class="codehilite"><code class="language-dart">class CityController extends ResourceController {
+  @requiredBinding
+  @Bind.header(&quot;x-timestamp&quot;)
+  DateTime timestamp;
+
+  @Bind.query(&quot;limit&quot;)
+  int limit;
+
+  @Operation.get()
+  Future&lt;Response&gt; getCities() async {
+      // can use both limit and timestamp
+  }
+}
+</code></pre>
+
+<p>In the above, both <code>timestamp</code> and <code>limit</code> are bound prior to <code>getCities</code> being invoked. By default, a bound property is optional. Adding an <code>requiredBinding</code> annotation changes a property to required. If required, any request without the required property fails with a 400 Bad Request status code and none of the operation methods are invoked.</p>
+<h2 id="other-resourcecontroller-behavior">Other ResourceController Behavior</h2>
+<p>Besides binding, <code>ResourceController</code>s have some other behavior that is important to understand.</p>
+<h3 id="request-and-response-bodies">Request and Response Bodies</h3>
+<p>A <code>ResourceController</code> can limit the content type of HTTP request bodies it accepts. By default, a <code>ResourceController</code> will accept only <code>application/json</code> request bodies for its <code>POST</code> and <code>PUT</code> methods. This can be modified by setting the <code>acceptedContentTypes</code> property in the constructor.</p>
+<pre class="codehilite"><code class="language-dart">class UserController extends ResourceController {
+  UserController() {
+    acceptedContentTypes = [ContentType.JSON, ContentType.XML];
+  }
+}
+</code></pre>
+
+<p>If a request is made with a content type other than the accepted content types, the controller automatically responds with a 415 Unsupported Media Type response.</p>
+<p>The body of an HTTP request is decoded if the content type is accepted and there exists a operation method to handle the request. The body is not decoded if there is not a matching operation method for the request. The body is decoded by <code>ResourceController</code> prior to your operation method being invoked. Therefore, you can always use the synchronous <code>RequestBody.as</code> method to access the body from within an operation method:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.post()
+Future&lt;Response&gt; createThing() async {
+  // do this:
+  Map&lt;String, dynamic&gt; bodyMap = request.body.as();
+
+  // no need to do this:
+  Map&lt;String, dynamic&gt; bodyMap = await request.body.decode();
+
+  return ...;
+}
+</code></pre>
+
+<p>A <code>ResourceController</code> can also have a default content type for its responses. By default, this is <code>application/json</code>. This default can be changed by changing <code>responseContentType</code> in the constructor:</p>
+<pre class="codehilite"><code class="language-dart">class UserController extends ResourceController {
+  UserController() {
+    responseContentType = ContentType.XML;
+  }
+}
+</code></pre>
+
+<p>The <code>responseContentType</code> is the <em>default</em> response content type. An individual <code>Response</code> may set its own <code>contentType</code>, which takes precedence over the <code>responseContentType</code>. For example, the following controller returns JSON by default, but if the request specifically asks for XML, that's what it will return:</p>
+<pre class="codehilite"><code class="language-dart">class UserController extends ResourceController {
+  UserController() {
+    responseContentType = ContentType.JSON;
+  }
+
+  @Operation.get('id')
+  Future&lt;Response&gt; getUserByID(@Bind.path('id') int id) async {
+    var response = Response.ok(...);
+
+    if (request.headers.value(Bind.headers.ACCEPT).startsWith(&quot;application/xml&quot;)) {
+      response.contentType = ContentType.XML;
+    }
+
+    return response;
+  }
+}
+</code></pre>
+
+<h3 id="more-specialized-resourcecontrollers">More Specialized ResourceControllers</h3>
+<p>Many <code>ResourceController</code> subclasses will execute <a href="../../db/executing_queries/">queries</a>. There are helpful <code>ResourceController</code> subclasses for reducing boilerplate code.</p>
+<p>A <code>QueryController&lt;T&gt;</code> builds a <code>Query&lt;T&gt;</code> based on the incoming request. If the request has a body, this <code>Query&lt;T&gt;</code>'s <code>values</code> property is read from that body. If the request has a path variable, the <code>Query&lt;T&gt;</code> assigns an expression to the primary key value. For example, in a normal <code>ResourceController</code> that responds to a PUT request, you might write the following:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.put('id')
+Future&lt;Response&gt; updateUser(@Bind.path('id') int id, @Bind.body() User user) async {
+  var query = Query&lt;User&gt;(context)
+    ..where((u) =&gt; u.id).equalTo(id)
+    ..values = user;
+
+  return Response.ok(await query.updateOne());
+}
+</code></pre>
+
+<p>A <code>QueryController&lt;T&gt;</code> builds this query before a operation method is invoked, storing it in the inherited <code>query</code> property. A <code>ManagedObject&lt;T&gt;</code> subclass is the type argument to <code>QueryController&lt;T&gt;</code>.</p>
+<pre class="codehilite"><code class="language-dart">class UserController extends QueryController&lt;User&gt; {
+  UserController(ManagedContext context) : super(context);
+
+  @Operation.put('id')
+  Future&lt;Response&gt; updateUser(@Bind.path('id') int id) async {
+    // query already exists and is identical to the snippet above
+    var result = await query.updateOne();
+    return Response.ok(result);
+  }
+}
+</code></pre>
+
+<p>A <code>ManagedObjectController&lt;T&gt;</code> is significantly more powerful; you don't even need to subclass it. It does all the things a CRUD endpoint does without any code. Here's an example usage:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route(&quot;/users/[:id]&quot;)
+  .link(() =&gt; ManagedObjectController&lt;User&gt;(context));
+</code></pre>
+
+<p>This controller has the following behavior:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Request</th>
+<th align="left">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">POST /users</td>
+<td align="left">Inserts a user into the database with values from the request body</td>
+</tr>
+<tr>
+<td align="left">GET /users</td>
+<td align="left">Fetches all users in the database</td>
+</tr>
+<tr>
+<td align="left">GET /users/:id</td>
+<td align="left">Fetches a single user by id</td>
+</tr>
+<tr>
+<td align="left">DELETE /users/:id</td>
+<td align="left">Deletes a single user by id</td>
+</tr>
+<tr>
+<td align="left">PUT /users/:id</td>
+<td align="left">Updated a single user by id, using values from the request body</td>
+</tr>
+</tbody>
+</table>
+<p>The objects returned from getting the collection - e.g, <code>GET /users</code> - can be modified with query parameters. For example, the following request will return the users sorted by their name in ascending order:</p>
+<pre class="codehilite"><code class="language-text">GET /users?sortBy=name,asc
+</code></pre>
+
+<p>The results can be paged (see <a href="../../db/advanced_queries/">Paging in Advanced Queries</a>) with query parameters <code>offset</code>, <code>count</code>, <code>pageBy</code>, <code>pageAfter</code> and <code>pagePrior</code>.</p>
+<p>A <code>ManagedObjectController&lt;T&gt;</code> can also be subclassed. A subclass allows for callbacks to be overridden to adjust the query before execution, or the results before sending the respond. Each operation - fetch, update, delete, etc. - has a pair of methods to do this. For example, the following subclass alters the query and results before any update via <code>PUT</code>:</p>
+<pre class="codehilite"><code class="language-dart">class UserController extends ManagedObjectController&lt;User&gt; {
+  UserController(ManagedContext context) : super(context);
+
+  Future&lt;Query&lt;User&gt;&gt; willUpdateObjectWithQuery(
+      Query&lt;User&gt; query) async {
+    query.values.lastUpdatedAt = DateTime.now().toUtc();
+    return query;
+  }
+
+  Future&lt;Response&gt; didUpdateObject(User object) async {
+    object.removePropertyFromBackingMap(&quot;private&quot;);
+    return Response.ok(object);
+  }
+}
+</code></pre>
+
+<p>See the chapter on <a href="../../db/validations/">validations</a>, which are powerful when combined with <code>ManagedObjectController&lt;T&gt;</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../routing/" class="btn btn-neutral float-left" title="Routing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../serving_files/" class="btn btn-neutral float-right" title="Serving Files and Caching">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../routing/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../serving_files/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Transactions - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Transactions";
+        var mkdocs_page_input_path = "db/transactions.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Transactions</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#transactions">Transactions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#returning-values">Returning Values</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rollbacks">Rollbacks</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Transactions</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/transactions.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="database-transactions">Database Transactions</h1>
+<p>Learn how to execute multiple <code>Query&lt;T&gt;</code>s in a database transaction.</p>
+<h2 id="transactions">Transactions</h2>
+<p>A transaction is a series of queries that are executed together. If one of the queries in that set fails, then all of the queries fail and their changes are reversed if they had already been executed.</p>
+<p>Consider an application that stores employee records. Each employee belongs to a department. Management decides to combine two departments into a totally new department. To do this, the application must insert a new department, set each employee's foreign key reference to that department, and then delete the old departments. An straightforward (but problematic) implementation would look like this:</p>
+<pre class="codehilite"><code class="language-dart">// Create the new department
+final newDepartment = await ctx.insertObject(Department()..name = &quot;New Department&quot;);
+
+// Set employee's departments to the new one
+final changeDepartmentQuery = Query&lt;Employee&gt;(ctx)
+  ..where((e) =&gt; e.department.id).oneOf([1, 2])      
+  ..values.department.id = newDepartment.id;
+await changeDepartmentQuery.update();
+
+// Delete the old ones
+final deleteDepartmentQuery = Query&lt;Department&gt;(ctx)
+  ..where((e) =&gt; e.department.id).oneOf([1, 2]);
+await deleteDepartmentQuery.delete();
+</code></pre>
+
+<p>This change to your database is three separate queries, but they all most complete for the 'transfer' to be successful. If one of them fails, our database can be left in an inconsistent state. For example, if deleting the departments succeeds, but the employees failed to be transferred to the new department, then a lot of employees would be without a department.</p>
+<p>A database transaction combines queries together as a single unit. If a query in a transaction fails, the previous queries in that transaction are reverted and the remaining queries are aborted. You create transactions by invoking <code>ManagedContext.transaction</code> and writing your queries in its closure argument.</p>
+<pre class="codehilite"><code class="language-dart">await context.transaction((transaction) async {
+  // note that 'transaction' is the context for each of these queries.
+  final newDepartment = await transaction.insertObject(Department()..name = &quot;New Department&quot;);
+
+  final changeDepartmentQuery = Query&lt;Employee&gt;(transaction)
+    ..where((e) =&gt; e.department.id).oneOf([1, 2])      
+    ..values.department.id = newDepartment.id;
+  await changeDepartmentQuery.update();
+
+  final deleteDepartmentQuery = Query&lt;Department&gt;(transaction)
+    ..where((e) =&gt; e.department.id).oneOf([1, 2]);
+  await deleteDepartmentQuery.delete();      
+});
+</code></pre>
+
+<p>The closure has a <code>transaction</code> object that all queries in the transaction must use as their context. Queries that use this transaction context will be grouped in the same transaction. Once they have all succeeded, the <code>transaction</code> method's future completes. If an exception is thrown in the closure, the transaction is rolled back and the <code>transaction</code> method re-throws that exception.</p>
+<p>!!! warning "Failing to Use the Transaction Context will Deadlock your Application" If you use the transaction's parent context in a query inside a transaction closure, the database connection will deadlock and will stop working.</p>
+<h3 id="returning-values">Returning Values</h3>
+<p>The value returned from a transaction closure is returned to the caller, so values created within the transaction closure can escape its scope.</p>
+<pre class="codehilite"><code class="language-dart">final employees = [...];
+final insertedEmployees = await context.transaction((transaction) async {
+  return Future.wait(employees.map((e) =&gt; transaction.insertObject(e)));
+});
+</code></pre>
+
+<h3 id="rollbacks">Rollbacks</h3>
+<p>You can cancel a transaction and revert its changes at anytime within the transaction closure by throwing a <code>Rollback</code> object.</p>
+<pre class="codehilite"><code class="language-dart">try {
+  await context.transaction((t) async {
+    // do something
+
+    if (somethingIsTrue) {
+      throw Rollback(&quot;something was true&quot;);    
+    }
+
+    // do something
+  });
+} on Rollback catch (rollback) {
+  print(&quot;${rollback.reason}&quot;); // prints 'something was true'
+}
+</code></pre>
+
+<p>When you rollback, your transaction fails, the transaction closure is aborted and all changes are reverted. The <code>transaction</code> method completes with an error, where the error object is the <code>Rollback</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../advanced_queries/" class="btn btn-neutral float-left" title="Advanced Queries"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../validations/" class="btn btn-neutral float-right" title="Validations">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../advanced_queries/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../validations/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

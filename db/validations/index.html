@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Validations - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Validations";
+        var mkdocs_page_input_path = "db/validations.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Validations</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#built-in-validators">Built-in Validators</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validating-relationships">Validating Relationships</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#custom-validators">Custom Validators</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validation-behavior">Validation Behavior</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#other-validator-behavior">Other Validator Behavior</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#skipping-validations">Skipping Validations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#update-and-insert-callbacks">Update and Insert Callbacks</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Validations</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/validations.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="validating-data">Validating Data</h1>
+<p>Data is added to a database through <code>update</code> and <code>insert</code> queries. As part of these two operations, a <code>ManagedObject&lt;T&gt;</code> will ensure that its properties have valid values. For example, a <code>Person</code> object might ensure that its name starts with a capital letter and that its phone number has only numeric values. If one or more validation fails, the update or insert operation will fail and the data is not sent to the database. A validation failure will throw a <code>QueryException</code> that returns an HTTP response with error messaging to help the client correct their request.</p>
+<p>The preferred way of setting a validation is to add <code>Validate</code> metadata to properties of a table definition. Here's an example of a validation that ensures a tweet is less than 140 characters:</p>
+<pre class="codehilite"><code class="language-dart">class Tweet extends ManagedObject&lt;_Tweet&gt; implements _Tweet {}
+class _Tweet {
+  @primaryKey
+  int id;
+
+  @Validate.length(lessThan: 140)
+  String message;
+}
+</code></pre>
+
+<h2 id="built-in-validators">Built-in Validators</h2>
+<p>There are a handful of built-in validations for common operations. For example, it is common to apply a regular expression to a value to ensure it is formatted correctly or to restrict the possible values to a list of available options. Common validators are available as named constructors of the <code>Validate</code> class. Here is an example:</p>
+<pre class="codehilite"><code class="language-dart">class _Story {
+  @primaryKey
+  int id;
+
+  @Validate.oneOf(const [&quot;started&quot;, &quot;accepted&quot;, &quot;rejected&quot;, &quot;delivered&quot;])
+  String state;
+}
+</code></pre>
+
+<p>A built-in validator is useful because it automatically generates an error message that is returned in an HTTP response. For example, the previous code snippet indicates that the <code>state</code> property must be one of the four listed strings. If a value other than one of those four strings is used, the error message returned to the HTTP client would be:</p>
+<pre class="codehilite"><code class="language-text">&quot;The value `invalidValue` is not valid for `state`. Valid values are: 'started', 'accepted', 'rejected', 'delivered'.&quot;.
+</code></pre>
+
+<p>See the API reference for <code>Validate</code> and its named constructors for possible options.</p>
+<p><code>Validate</code> annotations on properties declared in a managed object subclass (transient properties) have no effect.</p>
+<h2 id="validating-relationships">Validating Relationships</h2>
+<p>Validations are only valid for properties declared in a table definition. Validators applied to relationship properties are applied to the primary key of the related object (i.e. the foreign key value). Validation logic is only ran on the properties of the managed object being validated - validations on properties of a related object are <em>not</em> run. When validating a graph of managed objects, you must initiate validation on any related objects manually.</p>
+<p>!!! warning "Validating Related Objects" The behavior of a validation is different when an object is being validated as a relationship. In other words, a validation applied to the primary key of an object likely requires different behavior when being applied to a foreign key reference to that object.</p>
+<h2 id="custom-validators">Custom Validators</h2>
+<p>There will be times where the built-in validators are not sufficient for your application's use case. You may create subclasses of <code>Validate</code> to provide custom validation behavior. For example, if there were a <code>ValidatePhoneNumber</code> class:</p>
+<pre class="codehilite"><code class="language-dart">class _Person {
+  @primaryKey
+  int id;
+
+  @ValidatePhoneNumber()
+  String phoneNumber;
+}
+</code></pre>
+
+<p>A subclass of <code>Validate</code> must override <code>Validate.validate()</code> and call the superclass' primary constructor when instantiated. Here's an example of that phone number validator:</p>
+<pre class="codehilite"><code class="language-dart">class ValidatePhoneNumber extends Validate {
+  ValidatePhoneNumber({bool onUpdate: true, bool onInsert: true}) :
+    super(onUpdate: onUpdate, onInsert: onInsert);
+
+  @override
+  void validate(ValidationContext context, dynamic value) {  
+    if (value.length != 15) {
+      context.addError(&quot;must be 15 digits&quot;);      
+    }
+
+    if (containsNonNumericValues(value)) {
+      context.addError(&quot;must contain characters 0-9 only.&quot;);      
+    }
+  }
+}
+</code></pre>
+
+<p>If <code>value</code> is doesn't meet the validation criteria, this method adds an error string to the <code>ValidationContext</code> it is passed. Error messages should be brief and indicate the successful criteria that failed. Information about the property being validated will automatically be added to the error message, so you do not need to include that information. If the context has no errors at the end of validation, the validation succeeds; otherwise, it fails.</p>
+<p>A <code>ValidationContext</code> also has information about the property being validated, and whether the validation is running for an object being inserted or an object being updated.</p>
+<h2 id="validation-behavior">Validation Behavior</h2>
+<p>A property may have more than one <code>Validate</code> metadata. In this case, all of the validations for a property must pass. The order in which multiple validations are performed is undefined and subject to change. Here's an example of validations that ensure a property's value is 10 characters long and only contains 10 alphabetic capital letters:</p>
+<pre class="codehilite"><code class="language-dart">@Validate.length(equalTo: 10)
+@Validate.matches(r&quot;$[A-Z]+^&quot;)
+String tenCapitalLetters;
+</code></pre>
+
+<p>By default, validations are executed when a <code>Query&lt;T&gt;</code>'s <code>insert</code> or <code>update</code> method is invoked. A validator can be restricted to only run on <code>insert</code> or <code>update</code> by passing values for its optional constructor arguments <code>onUpdate</code> and <code>onInsert</code>:</p>
+<pre class="codehilite"><code class="language-dart">@Validate.matches(r&quot;^[A-Z]+$&quot;, onInsert: true, onUpdate: false)
+String validateOnInsertOnly;
+</code></pre>
+
+<p>It is important to understand how validations work when a value for a property is <em>not</em> specified in an insert or update query. For example, consider a <code>Person</code> with a <code>name</code> and <code>email</code> property and then inserted in a query where <code>email</code> hasn't been set:</p>
+<pre class="codehilite"><code class="language-dart">var query = new Query&lt;Person&gt;(context)
+  ..values.name = &quot;Bob&quot;;
+
+await query.insert();
+</code></pre>
+
+<p>Because <code>email</code> was not set on <code>Query.values</code>, validations will not be run on that property.</p>
+<p>There are two special validators that can require a property to be set, or require that a property <em>not</em> be set. <code>Validate.present()</code> requires that the associated property must have a value. A property with this validator must be provided each time the object is inserted or updated. For example, the following declaration requires that <code>email</code> is set on insertion, but doesn't have to be for updates:</p>
+<pre class="codehilite"><code class="language-dart">@Validate.present(onUpdate: false, onInsert: true)
+String email;
+</code></pre>
+
+<p>The inverse of <code>Validate.present()</code> is <code>Validate.absent()</code>. This validation prevents a property from being set. This is useful when a value should be included during insertion, but can't be updated. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">@Validate.absent(onUpdate: true, onInsert: false)
+String canOnlyBeSetOnce;
+</code></pre>
+
+<p>In the above declaration, the validator is only run on update operations and ensures that the property <code>canOnlyBeSetOnce</code> does not have a value. Because this validator is not run on insert operations, there is no restriction when the object is first inserted.</p>
+<p>Validators are not run when a value is null. For example, the following insertion explicitly inserts <code>null</code> for the property <code>email</code>:</p>
+<pre class="codehilite"><code class="language-dart">var query = new Query&lt;Person&gt;(context)
+  ..values.email = null
+  ..values.name = &quot;Bob&quot;;
+
+await query.insert();
+</code></pre>
+
+<p>Nullability is enforced by <code>Column.isNullable</code> property. Consider the following declaration:</p>
+<pre class="codehilite"><code class="language-dart">@Column(nullable: false)
+@Validate.length(greaterThan: 10)
+String name;
+</code></pre>
+
+<p>Here, the property <code>name</code> must not be null and must be greater than 10 characters long. The behavior of inserting or updating this property is shown in the following table.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Input Value for Name</th>
+<th align="left">Validation Runs?</th>
+<th align="left">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Insert value longer than 10 characters</td>
+<td align="left">Yes</td>
+<td align="left">Successful database insert</td>
+</tr>
+<tr>
+<td align="left">Insert value shorter than 10 characters</td>
+<td align="left">Yes</td>
+<td align="left">Database insert not executed, exception thrown</td>
+</tr>
+<tr>
+<td align="left">Insert value not specified</td>
+<td align="left">No</td>
+<td align="left">Database insert fails with non-null violation, exception thrown</td>
+</tr>
+<tr>
+<td align="left">Insert value is null</td>
+<td align="left">No</td>
+<td align="left">Database insert fails with non-null violation, exception thrown</td>
+</tr>
+<tr>
+<td align="left">Update value longer than 10 characters</td>
+<td align="left">Yes</td>
+<td align="left">Successful database update</td>
+</tr>
+<tr>
+<td align="left">Update value shorter than 10 characters</td>
+<td align="left">Yes</td>
+<td align="left">Database update not executed, exception thrown</td>
+</tr>
+<tr>
+<td align="left">Update value not specified</td>
+<td align="left">No</td>
+<td align="left">Successful database update</td>
+</tr>
+<tr>
+<td align="left">Update value is explicit null</td>
+<td align="left">No</td>
+<td align="left">Successful database update</td>
+</tr>
+</tbody>
+</table>
+<p>This behavior allows <code>ManagedObject&lt;T&gt;</code> instances to be partially updated, which also allows for partial PUTs. Partial PUTs can be prevented by adding <code>Validate.present()</code> metadata to all properties.</p>
+<p>This also means that any custom validator can assert that a value passed to <code>Validate.validate()</code> is non-null.</p>
+<h2 id="other-validator-behavior">Other Validator Behavior</h2>
+<p>For validators that can't be built by subclassing <code>Validate</code>, you may override <code>ManagedObject&lt;T&gt;.validate()</code>. This method is useful when a validation involves more than one property. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">class Person extends ManagedObject&lt;_Person&gt; implements _Person {
+  @override
+  ValidationContext validate({Validating forEvent: Validating.insert}) {
+   final ctx = super.validate(forEvent: forEvent);
+
+    if (a + b &gt; 10) {
+      ctx.addError(&quot;a + b must be greater than 10&quot;);
+    }
+
+    return ctx;
+  }
+}
+</code></pre>
+
+<p>When overriding this method, the <code>super</code> implementation must be invoked to run validations managed by annotations. You must return the <code>ValidationContext</code> created by the superclass' implementation.</p>
+<h2 id="skipping-validations">Skipping Validations</h2>
+<p>Validations are only run when values are set via <code>Query&lt;T&gt;.values</code>. Values set via <code>Query&lt;T&gt;.valueMap</code> are not validated and is useful for inserting data without validation. Here's an example of skipping validation:</p>
+<pre class="codehilite"><code class="language-dart">var query = new Query&lt;Person&gt;(context)
+  ..valueMap = {
+    &quot;name&quot; : &quot;xyz&quot;,
+    &quot;email&quot; : &quot;whatever&quot;
+  };
+</code></pre>
+
+<h2 id="update-and-insert-callbacks">Update and Insert Callbacks</h2>
+<p><code>ManagedObject&lt;T&gt;</code> subclasses may override <code>willUpdate</code> and <code>willInsert</code> to make changes prior to being updated or inserted. For example, a managed object may have updated and created dates that can be guaranteed to be set when inserted or updated:</p>
+<pre class="codehilite"><code class="language-dart">class Person extends ManagedObject&lt;_Person&gt; implements _Person {
+  @override
+  void willUpdate() {
+    updatedAt = new DateTime.now().toUtc();
+  }
+
+  @override
+  void willInsert() {
+    createdAt = new DateTime.now().toUtc();
+  }
+}
+class _Person {
+  @primaryKey
+  int id;
+
+  String name;
+  DateTime createdAt;
+  DateTime updatedAt;
+}
+</code></pre>
+
+<p>Both <code>willUpdate</code> and <code>willInsert</code> are run before any validation occurs. Like validations, <code>willUpdate</code> and <code>willInsert</code> are skipped when using <code>Query.valueMap</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../transactions/" class="btn btn-neutral float-left" title="Transactions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../db_tools/" class="btn btn-neutral float-right" title="Migration and Tooling">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../transactions/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../db_tools/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

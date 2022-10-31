@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Configuring an Application and its Environment - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuring an Application and its Environment";
+        var mkdocs_page_input_path = "application/configure.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Configuring an Application and its Environment</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#configuration-files">Configuration Files</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration-conventions-and-deployment-options">Configuration Conventions and Deployment Options</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#preventing-resource-leaks">Preventing Resource Leaks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuring-cors-headers">Configuring CORS Headers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuring-https">Configuring HTTPS</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Application Configuration and Behavior &raquo;</li>
+      <li>Configuring an Application and its Environment</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/application/configure.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuring-an-application-and-its-environment">Configuring an Application and its Environment</h1>
+<p>This guide covers configuring a Conduit application.</p>
+<h2 id="configuration-files">Configuration Files</h2>
+<p>Conduit applications use YAML configuration files to provide environment-specific values like database connection information. Use separate configuration files for testing and different deployment environments.</p>
+<p>The path of a configuration file is available to an <code>ApplicationChannel</code> through its <code>options</code> property.</p>
+<pre class="codehilite"><code class="language-dart">class TodoAppChannel extends ApplicationChannel {
+  @override
+  Future prepare() async {
+    var config = TodoConfiguration(options.configurationFilePath);
+    ...
+  }
+}
+</code></pre>
+
+<p>The default value is <code>config.yaml</code>.</p>
+<p>The best practice for reading a configuration file is to subclass <code>Configuration</code>. A <code>Configuration</code> declares a property for each key in a configuration file. For example, see the following <code>Configuration</code> subclass:</p>
+<pre class="codehilite"><code class="language-dart">class TodoConfiguration extends Configuration {
+  TodoConfiguration(String fileName) : super.fromFile(File(fileName));
+
+  DatabaseConnectionConfiguration database;
+  String apiBaseURL;
+
+  @optionalConfiguration
+  int identifier;
+}
+</code></pre>
+
+<p>This would read a YAML file like this:</p>
+<pre class="codehilite"><code class="language-text">database:
+  username: fred
+  password: fredspassword
+  host: db.myapp.com
+  port: 5432
+  databaseName: fredsdb
+apiBaseURL: /api
+identifier: 2
+</code></pre>
+
+<p>If required properties are omitted from the YAML file being read, application startup will fail and throw an informative error.</p>
+<h3 id="environment-variables">Environment Variables</h3>
+<p>A configuration file can use an environment variable instead of a literal value. In <code>config.yaml</code>, use a <code>$</code>-prefixed environment variable name instead of a value:</p>
+<pre class="codehilite"><code class="language-text">database: $DATABASE_CONNECTION_URL
+apiBaseURL: /api
+</code></pre>
+
+<p>If the environment variable <code>DATABASE_CONNECTION_URL</code>'s value were <code>"postgres://user:password@localhost:5432/test"</code>, the value of <code>TodoConfiguration.database</code> will be that string at runtime.</p>
+<p>The <a href="https://pub.dartlang.org/packages/safe_config">safe_config package</a> has instructions for more additional usages.</p>
+<h3 id="configuration-conventions-and-deployment-options">Configuration Conventions and Deployment Options</h3>
+<p>Conduit uses two configuration files for a project: <code>config.yaml</code> and <code>config.src.yaml</code>. The latter is the <em>configuration source file</em>. The configuration source file declares key-value pairs that will be used when running the application tests. Deployed instances use <code>config.yaml</code>.</p>
+<p>This pattern is used for two reasons:</p>
+<ul>
+<li>It is the template for the <code>config.yaml</code> that will be read on deployed applications, providing documentation for your application's configuration.</li>
+<li>It has the configuration values used during testing to inject mock dependencies.</li>
+</ul>
+<p>For example, a production API instance might have the following <code>config.yaml</code> file with connection info for a production database:</p>
+<pre class="codehilite"><code class="language-text">database: postgres://app_user:$%4jlkn#an*@mOZkea2@somedns.name.com:5432/production_db
+</code></pre>
+
+<p>Whereas <code>config.src.yaml</code> would have connection info for a local, test database:</p>
+<pre class="codehilite"><code class="language-text">database: postgres://test:test@localhost:5432/temporary_db
+</code></pre>
+
+<p>The source configuration file should be checked into version control. Whether or not <code>config.yaml</code> is checked in depends on how you are deploying your code. If you are using environment variables to control application configuration, you should check <code>config.yaml</code> into source control and provide <code>$</code>-prefixed environment variable values. If you are using managing configuration files on each deployed instance, do not check <code>config.yaml</code> into source control because it'll be a different file for each instance.</p>
+<p>It can sometimes makes sense to have a <code>local.yaml</code> with values for running the application locally, e.g. when doing client testing. Use <code>--config-path</code> with <code>conduit serve</code> to use a non-default name.</p>
+<h2 id="preventing-resource-leaks">Preventing Resource Leaks</h2>
+<p>When a Conduit application starts, the application and its <code>ApplicationChannel</code>s will likely create services that they use to respond to requests. In order for application tests to complete successfully, these services must be "closed" when the application stops. For built-in services, like <code>PostgreSQLPersistentStore</code>, this happens automatically when <code>Application.stop()</code> is invoked.</p>
+<p>A <code>ServiceRegistry</code> automatically stops registered services. Registration looks like this:</p>
+<pre class="codehilite"><code class="language-dart">var connection = new ConnectionOfSomeKind();
+await connection.open();
+ServiceRegistry.defaultInstance
+  .register&lt;ConnectionOfSomeKind&gt;(connection, (c) =&gt; c.close());
+</code></pre>
+
+<p>This method takes the service to be closed and a closure that closes it. The service is passed as an argument to the closure. If the closure returns a <code>Future</code>, <code>ServiceRegistry.close</code> will not complete until the <code>Future</code> completes. <code>ServiceRegistry.defaultInstance</code> is closed in <code>Application.stop()</code>, any registries created by the programmer must be closed manually.</p>
+<p>The return type of <code>ServiceRegistry.register</code> is the object being registered. This makes registration syntax a bit more palatable:</p>
+<pre class="codehilite"><code class="language-dart">var connection = ServiceRegistry.defaultInstance
+  .register&lt;ConnectionOfSomeKind&gt;(
+    new ConnectionOfSomeKind(), (c) =&gt; c.close());
+
+await connection.open();
+</code></pre>
+
+<h2 id="configuring-cors-headers">Configuring CORS Headers</h2>
+<p>All controllers have built-in behavior for handling CORS requests from a browser. When a preflight request is received from a browser (an OPTIONS request with Access-Control-Request-Method header and Origin headers), the response is created by evaluating the policy of the <code>Controller</code> that will respond to the real request.</p>
+<p>In practice, this means that the policy of the last controller in a channel is used. For example, the policy of <code>FooController</code> generates the preflight response:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route(&quot;/foo&quot;)
+  .link(() =&gt; new Authorizer(...))
+  .link(() =&gt; new FooController());
+</code></pre>
+
+<p>Every <code>Controller</code> has a <code>policy</code> property (a <code>CORSPolicy</code> instance). The <code>policy</code> has properties for configuring CORS options for that particular endpoint. By having a <code>policy</code>, every <code>Controller</code> automatically implements logic to respond to preflight requests without any additional code.</p>
+<p>Policies can be set at the controller level or at the application level. The static property <code>CORSPolicy.defaultPolicy</code> can be modified at initialization time to set the CORS options for every controller.</p>
+<pre class="codehilite"><code class="language-dart">class MyApplicationChannel extends ApplicationChannel {
+  @override
+  Future prepare() async {
+    CORSPolicy.defaultPolicy.allowedOrigins = [&quot;http://mywebsite.com/&quot;];
+  }
+}
+</code></pre>
+
+<p>The default policy is very permissive: POST, PUT, DELETE and GET are allowed methods. All origins are valid (*).</p>
+<p>Each individual controller can override or replace the default policy by modifying its own <code>policy</code> in its constructor.</p>
+<pre class="codehilite"><code class="language-dart">class MyResourceController extends ResourceController {
+  MyResourceController() {
+    policy.allowedMethods = [&quot;POST&quot;];
+  }
+}
+</code></pre>
+
+<h2 id="configuring-https">Configuring HTTPS</h2>
+<p>By default, a Conduit application does not use HTTPS. In many cases, a Conduit application sits behind an SSL-enabled load balancer or some other proxy. The traffic from the load balancer is sent to the Conduit application unencrypted over HTTP.</p>
+<p>However, Conduit may be configured to manage HTTPS connections itself. By passing the value private key and SSL certificate paths as options to <code>--ssl-key-path</code> <em>and</em> <code>--ssl-certificate-path</code> in <code>conduit serve</code>, a Conduit application will configure itself to only allow HTTPS connections.</p>
+<pre class="codehilite"><code class="language-bash">conduit serve --ssl-key-path server.key.pem --ssl-certificate-path server.cert.pem
+</code></pre>
+
+<p>Both the key and certificate file must be unencrypted PEM files, and both must be provided to this command. These files are typically issued by a "Certificate Authority", such as <a href="https://github.com/noojee/conduit/tree/3f4c01be85b7ff135772166173524e76a5f80c32/conduit/doc/source/source/docs/application/letsencrypt.org">letsencrypt.org</a>.</p>
+<p>When an application is started with these options, the <code>certificateFilePath</code> and <code>keyFilePath</code> are set on the <code>ApplicationOptions</code> your application is being run with. (If you are not using <code>conduit serve</code>, you can set these values directly when instantiating <code>ApplicationOptions</code>.)</p>
+<p>For more granular control over setting up an HTTPS server, you may override <code>securityContext</code> in <code>ApplicationChannel</code>. By default, this property will create a <code>SecurityContext</code> from the <code>certificateFilePath</code> and <code>keyFilePath</code> in the channels's <code>options</code>. A <code>SecurityContext</code> allows for password-encrypted credential files, configuring client certificates and other less used HTTPS schemes.</p>
+<pre class="codehilite"><code class="language-dart">class MyApplicationChannel extends ApplicationChannel {
+  @override
+  SecurityContext get securityContext {
+    return new SecurityContext()
+      ..usePrivateKey(&quot;server.key&quot;, password: &quot;1234&quot;)
+      ..useCertificateChain(&quot;server.crt&quot;, password: &quot;1234&quot;);
+  }
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../channel/" class="btn btn-neutral float-left" title="Starting and Stopping Applications"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../structure/" class="btn btn-neutral float-right" title="Application and Project Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../channel/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../structure/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

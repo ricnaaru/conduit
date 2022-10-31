@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Connecting to a Database - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Connecting to a Database";
+        var mkdocs_page_input_path = "db/connecting.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Connecting to a Database</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#creating-a-database">Creating a Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-managedcontext-to-connect-to-a-database">Using ManagedContext to Connect to a Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#using-a-configuration-file">Using a Configuration File</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#connection-behavior">Connection Behavior</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Connecting to a Database</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/connecting.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="connecting-to-a-database-from-conduit">Connecting to a Database from Conduit</h1>
+<p>The purpose of this document is to guide you through creating a new PostgreSQL database and setting up a Conduit application that connects to it.</p>
+<h2 id="creating-a-database">Creating a Database</h2>
+<p>To use the Conduit ORM, you must have a PostgreSQL database server and create a database for your application. When developing locally, use <a href="https://postgresapp.com">Postgres.app</a> to set up a development database server quickly. After running this application, create or select a new database server from the left-hand menu, and then double-click any of the database icons to open the <code>psql</code> command-line tool. (If you are not using <code>Postgres.app</code>, make sure <code>psql</code> is in your <code>$PATH</code> and run it from the command-line.)</p>
+<p>Inside <code>psql</code>, enter the following commands to create a database and a database user for your application:</p>
+<pre class="codehilite"><code class="language-sql">CREATE DATABASE my_app_name;
+CREATE USER my_app_name_user WITH PASSWORD 'password';
+GRANT ALL ON DATABASE my_app_name TO my_app_name_user;
+</code></pre>
+
+<h2 id="using-managedcontext-to-connect-to-a-database">Using ManagedContext to Connect to a Database</h2>
+<p>The interface to a database from Conduit is an instance of <code>ManagedContext</code> that contains the following two objects:</p>
+<ul>
+<li>a <code>ManagedDataModel</code> that describes your application's data model</li>
+<li>a <code>PersistentStore</code> that manages a connection to a single database</li>
+</ul>
+<p>A <code>ManagedContext</code> uses these two objects to coordinate moving data to and from your application and a database. A <code>Query&lt;T&gt;</code> object uses a context's persistent store to determine which database to send commands to, and a data model to map database rows to objects and vice versa.</p>
+<p>A context, like all service objects, is created in <code>ApplicationChannel.prepare</code>.</p>
+<pre class="codehilite"><code class="language-dart">class MyApplicationChannel extends ApplicationChannel {
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    var dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    var psc = PostgreSQLPersistentStore.fromConnectionInfo(
+        &quot;my_app_name_user&quot;, &quot;password&quot;, &quot;localhost&quot;, 5432, &quot;my_app_name&quot;);
+
+    context = ManagedContext(dataModel, psc);
+  }
+}
+</code></pre>
+
+<p>The <code>ManagedDataModel.fromCurrentMirrorSystem</code> finds every <code>ManagedObject&lt;T&gt;</code> subclass in your application's code. Optionally, you may specify an exact list:</p>
+<pre class="codehilite"><code class="language-dart">var dataModel = ManagedDataModel([User, Post, Friendship]);
+</code></pre>
+
+<p>!!! note "Finding ManagedObjects" A managed object subclass must be directly or transitively imported into your application channel file. A file in your project directory that is not imported will not be found. There is typically no need to import a managed object subclass file directly: your application is initialized in your channel, which imports all of your controllers and services, which in turn import the managed object subclasses they use. As long as you are using your managed object declarations in your application, they'll be found.</p>
+<p>Controllers that need to execute database queries must have a reference to a context; this is typically accomplished by passing the context to a controller's constructor:</p>
+<pre class="codehilite"><code class="language-dart">class MyApplicationChannel extends ApplicationChannel {
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    context = ManagedContext(...);
+  }
+
+  @override
+  Controller get entryPoint {
+    return Router()
+      ..route(&quot;/users/[:id]&quot;).link(() =&gt; UserController(context));
+  }
+}
+</code></pre>
+
+<h2 id="using-a-configuration-file">Using a Configuration File</h2>
+<p>Connection information for a database is most often read from a configuration file. This allows you to create configurations for different environments (production, development, etc.), without having to modify code. This is very important for testing, because you will want to run your automated tests against an empty database. (<a href="../../application/configure/">See more on configuration files.</a>.)</p>
+<pre class="codehilite"><code class="language-dart">class MyConfiguration extends Configuration {
+  MyConfiguration(String configPath) : super.fromFile(configPath);
+
+  DatabaseConfiguration database;
+}
+
+class MyApplicationChannel extends ApplicationChannel {
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    final config = MyConfiguration(options.configurationFilePath);
+
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final psc = PostgreSQLPersistentStore.fromConnectionInfo(
+        config.database.username,
+        config.database.password,
+        config.database.host,
+        config.database.port,
+        config.database.databaseName);        
+
+    context = ManagedContext(dataModel, psc);
+  }
+}
+</code></pre>
+
+<p>The declaration of <code>MyConfiguration</code> requires that a YAML file must have the following structure:</p>
+<pre class="codehilite"><code class="language-text">database:
+  username: bob
+  password: bobspassword
+  host: localhost
+  port: 5432
+  databaseName: my_app
+</code></pre>
+
+<h3 id="connection-behavior">Connection Behavior</h3>
+<p>A persistent store manages one database connection. This connection is automatically maintained - the first time a query is executed, the connection is opened. If the connection is lost, the next query will reopen the connection. If a connection fails to open, an exception is thrown when trying to execute a query. This connection will return a 503 response if left uncaught.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../http/file_upload/" class="btn btn-neutral float-left" title="Uploading Files"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../modeling_data/" class="btn btn-neutral float-right" title="Modeling Data and Relationships">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../http/file_upload/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../modeling_data/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

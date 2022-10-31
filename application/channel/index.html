@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Starting and Stopping Applications - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Starting and Stopping Applications";
+        var mkdocs_page_input_path = "application/channel.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Starting and Stopping Applications</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#initializing-applicationchannel-controllers">Initializing ApplicationChannel Controllers</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initializing-service-objects">Initializing Service Objects</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#application-channel-configuration">Application Channel Configuration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#multi-threaded-conduit-applications">Multi-threaded Conduit Applications</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initialization-callbacks">Initialization Callbacks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#application-channel-file">Application Channel File</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lazy-services">Lazy Services</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-application-object">The Application Object</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Application Configuration and Behavior &raquo;</li>
+      <li>Starting and Stopping Applications</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/application/channel.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="starting-and-stopping-an-application">Starting and Stopping an Application</h1>
+<p>Learn how an application is initialized so it can serve requests.</p>
+<h2 id="overview">Overview</h2>
+<p>Applications are started by running <code>conduit serve</code> or <code>dart bin/main.script</code> in a Conduit project directory. Either way, a number of threads are created and your <code>ApplicationChannel</code> subclass is instantiated on each thread. The channel subclass initializes application behavior which is often the following:</p>
+<ul>
+<li>reads configuration data for environment specific setup</li>
+<li>initializes service objects like <a href="./">database connections</a></li>
+<li>sets up <a href="../../http/controller/">controller</a> objects to handle requests</li>
+</ul>
+<h3 id="initializing-applicationchannel-controllers">Initializing ApplicationChannel Controllers</h3>
+<p>Each application channel has an <em>entry point</em> - a controller that handles all incoming requests. This controller is often a router that routes requests to an appropriate handler. Every controller that will be used in the application is linked to either the entry point in some way. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+
+    router
+      .route(&quot;/users&quot;)
+      .link(() =&gt; Authorizer())
+      .link(() =&gt; UserController());
+
+    return router;
+  }
+}
+</code></pre>
+
+<p>This method links together a <code>Router</code> -&gt; <code>Authorizer</code> -&gt; <code>UserController</code>. Because the router is returned from this method, it handles all incoming requests. It will pass a request to an <code>Authorizer</code> when the request path is <code>/users</code>, which will then pass that request to a <code>UserController</code> if it is authorized.</p>
+<p>All controllers in your application will be linked to the entry point, either directly or indirectly.</p>
+<p>!!! note "Linking Controllers" The <code>link()</code> method takes a closure that creates a new controller. Some controllers get instantiated for each request, and others get reused for every request. See <a href="../../http/controller/">the chapter on controllers</a> for more information.</p>
+<h2 id="initializing-service-objects">Initializing Service Objects</h2>
+<p>Controllers often need to get (or create) information from outside the application. The most common example is database access, but it could be anything: another REST API, a connected device, etc. A <em>service object</em> encapsulates the information and behavior needed to work with an external system. This separation of concerns between controllers and service objects allows for better structured and more testable code.</p>
+<p>Service objects are instantiated by overriding <code>ApplicationChannel.prepare</code>.</p>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  PostgreSQLConnection database;
+
+  @override
+  Future prepare() async {
+    database = PostgreSQLConnection();
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+
+    router
+      .route(&quot;/users&quot;)
+      .link(() =&gt; new Authorizer())
+      .link(() =&gt; new UserController(database));
+
+    return router;
+  }
+}
+</code></pre>
+
+<p>This methods gets invoked before <code>entryPoint</code>. You store created services in instance variables so that you can inject them into controllers in <code>entryPoint</code>. Services are injected through a controller's constructor arguments. For example, the above shows a <code>database</code> service that is injected into <code>UserController</code>.</p>
+<h2 id="application-channel-configuration">Application Channel Configuration</h2>
+<p>A benefit to using service objects is that they can be altered depending on the environment the application is running in without requiring changes to code. For example, the database an application will connect to will be different when running in production than when running tests.</p>
+<p>Besides service configuration, there may be other types of initialization an application wants to take. Common tasks include adding codecs to <code>CodecRegistry</code> or setting the default <code>CORSPolicy</code>. All of this initialization is done in <code>prepare()</code>.</p>
+<p>Some of the information needed to configure an application will come from a configuration file or environment variables. For more information on using a configuration file and environment variables to guide initialization, see <a href="../configure/">this guide</a>.</p>
+<h2 id="multi-threaded-conduit-applications">Multi-threaded Conduit Applications</h2>
+<p>Conduit applications can - and should - be spread across a number of threads. This allows an application to take advantage of multiple CPUs and serve requests faster. In Dart, threads are called <em>isolates</em>. An instance of your <code>ApplicationChannel</code> is created for each isolate. When your application receives an HTTP request, the request is passed to one of these instances' entry points. These instances are replicas of one another and it doesn't matter which instance processes the request. This isolate-channel architecture is very similar to running multiple servers that run the same application.</p>
+<p>The number of isolates an application will use is configurable at startup when using the <a href="">conduit serve</a> command.</p>
+<p>An isolate can't share memory with another isolate. If an object is created on one isolate, it <em>cannot</em> be referenced by another. Therefore, each <code>ApplicationChannel</code> instance has its own set of services that are configured in the same way. This behavior also makes design patterns like connection pooling implicit; instead of a pool of database connections, there is a pool of application channels that each have their own database connection.</p>
+<p>This architecture intentionally prevents you from keeping state in your application. When you scale to multiple servers, you can trust that your cluster works correctly because you are already effectively clustering on a single server node. For further reading on writing multi-threaded applications, see <a href="../threading/">this guide</a>.</p>
+<h2 id="initialization-callbacks">Initialization Callbacks</h2>
+<p>Both <code>prepare()</code> and <code>entryPoint</code> are part of the initialization process of an application channel. Most applications only ever need these two methods. Another method, that is rarely used, is <code>willStartReceivingRequests()</code>. This method is called after <code>prepare()</code> and <code>entryPoint</code> have been executed, and right before your application will start receiving requests.</p>
+<p>These three initialization callbacks are called once per isolate to initialize the channel running on that isolate. For initialization that should only occur <em>once per application start</em> (regardless of how many isolates are running), an <code>ApplicationChannel</code> subclass can implement a static method named <code>initializeApplication()</code>.</p>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  static Future initializeApplication(ApplicationOptions options) async {
+    ... do one time setup ...
+  }
+
+  ...
+}
+</code></pre>
+
+<p>This method is invoked before any <code>ApplicationChannel</code> instances are created. Any changes made to <code>options</code> will be available in each <code>ApplicationChannel</code>'s <code>options</code> property.</p>
+<p>For example:</p>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+
+  static Future initializeApplication(ApplicationOptions options) async {        
+    options.context[&quot;special item&quot;] = &quot;xyz&quot;;
+  }  
+
+  Future prepare() async {
+    var parsedConfigValues = options.context[&quot;special item&quot;]; // == xyz
+    ...
+  }
+}
+</code></pre>
+
+<p>Each isolate has its own heap. <code>initializeApplication</code> is executed in the main isolate, whereas each <code>ApplicationChannel</code> is instantiated in its own isolate. This means that any values stored in <code>ApplicationOptions</code> must be safe to pass across isolates - i.e., they can't contain references to closures.</p>
+<p>Additionally, any global variables or static properties that are set in the main isolate <em>will not be set</em> in other isolates. Configuration types like <code>CodecRegistry</code> do not share values across isolates, because they use a static property to hold a reference to the repository of codecs. Therefore, they must be set up in <code>ApplicationChannel.prepare()</code>.</p>
+<p>Also, because static methods cannot be overridden in Dart, it is important that you ensure the name and signature of <code>initializeApplication</code> exactly matches what is shown in these code samples. The analyzer can't help you here, unfortunately.</p>
+<h2 id="application-channel-file">Application Channel File</h2>
+<p>An <code>ApplicationChannel</code> subclass is most often declared in its own file named <code>lib/channel.dart</code>. This file must be exported from the application library file. For example, if the application is named <code>wildfire</code>, the application library file is <code>lib/wildfire.dart</code>. Here is a sample directory structure:</p>
+<pre class="codehilite"><code class="language-text">wildfire/
+  lib/
+    wildfire.dart
+    channel.dart
+    controllers/
+      user_controller.dart      
+    ...
+</code></pre>
+
+<p>See <a href="../structure/">this guide</a> for more details on how a Conduit application's files are structured.</p>
+<h2 id="lazy-services">Lazy Services</h2>
+<p>Many service objects will establish a persistent network connection. A network connection can sometimes be interrupted and have to re-establish itself. If these connections are only opened when the application first starts, the application will not be able to reopen these connections without restarting the application. This would be very bad.</p>
+<p>For that reason, services should manage their own connectivity behavior. For example, a database connection should connect it when it is asked to execute a query. If it already has a valid connection, it will go ahead and execute the query. Otherwise, it will establish the connection and then execute the query. The caller doesn't care - it gets a <code>Future</code> with the desired result.</p>
+<p>The pseudo-code looks something like this:</p>
+<pre class="codehilite"><code class="language-dart">Future execute(String sql) async {
+  if (connection == null || !connection.isAvailable) {
+    connection = new Connection(...);
+    await connection.open();
+  }
+
+  return connection.executeSQL(sql);
+}
+</code></pre>
+
+<h2 id="the-application-object">The Application Object</h2>
+<p>Hidden in all of this discussion is the <code>Application&lt;T&gt;</code> object. Because the <code>conduit serve</code> command manages creating an <code>Application&lt;T&gt;</code> instance, your code rarely concerns itself with this type.</p>
+<p>An <code>Application&lt;T&gt;</code> is the top-level object in a Conduit application; it sets up HTTP listeners and directs requests to <code>ApplicationChannel</code>s. The <code>Application&lt;T&gt;</code> itself is just a generic container for <code>ApplicationChannel</code>s; it doesn't do much other than kick everything off.</p>
+<p>The application's <code>start</code> method will initialize at least one instance of the application's <code>ApplicationChannel</code>. If something goes wrong during this initialization process, the application will throw an exception and halt starting the server. For example, setting up an invalid route in a <code>ApplicationChannel</code> subclass would trigger this type of startup exception.</p>
+<p>An <code>Application&lt;T&gt;</code> has a number of options that determine how it will listen for HTTP requests, such as which port it is listening on or the SSL certificate it will use. These values are available in the channel's <code>options</code> property, an instance of <code>ApplicationOptions</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../snippets/test/" class="btn btn-neutral float-left" title="Testing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configure/" class="btn btn-neutral float-right" title="Configuring an Application and its Environment">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../snippets/test/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../configure/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

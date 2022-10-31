@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>1. Getting Started - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "1. Getting Started";
+        var mkdocs_page_input_path = "tut/getting-started.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">1. Getting Started</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#creating-a-project">Creating a Project</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#handling-http-requests">Handling HTTP Requests</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#controller-objects-handle-requests">Controller Objects Handle Requests</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#screenshot-of-heroes-application">Screenshot of Heroes Application</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linking-controllers">Linking Controllers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#advanced-routing">Advanced Routing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resourcecontrollers-and-operation-methods">ResourceControllers and Operation Methods</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#request-binding">Request Binding</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-more-you-know-multi-threading-and-application-state">The More You Know: Multi-threading and Application State</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Tutorial &raquo;</li>
+      <li>1. Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/tut/getting-started.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="getting-started">Getting Started</h1>
+<p>By the end of this tutorial, you will have created a Conduit application that serves fictional heroes from a PostgreSQL database. You will learn the following:</p>
+<ul>
+<li>Run a Conduit application</li>
+<li>Route HTTP requests to the appropriate handler in your code</li>
+<li>Store and retrieve database data</li>
+<li>Write automated tests for each endpoint</li>
+<li>Require authorization for HTTP requests</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Make sure that your system has the latest stable version of dart installed. Find the version suited for your operating system here: <a href="https://dart.dev/get-dart">https://dart.dev/get-dart</a></p>
+<p>Install the <code>conduit</code> command line tool by running the following command in your shell:</p>
+<pre class="codehilite"><code class="language-text">pub global activate conduit
+</code></pre>
+
+<h2 id="creating-a-project">Creating a Project</h2>
+<p>Create a new project named <code>heroes</code> by entering the following in your shell:</p>
+<pre class="codehilite"><code class="language-text">conduit create heroes
+</code></pre>
+
+<p>This creates a <code>heroes</code> project directory with a default server implementation populating it.</p>
+<h2 id="handling-http-requests">Handling HTTP Requests</h2>
+<p>In your browser, navigate to <a href="http://conduit-tutorial.conduit.dart.io">http://conduit-tutorial.conduit.dart.io</a>. This browser application is a 'Hero Manager' - it allows a user to view, create, delete and update heroes. (It is a slightly modified version of the <a href="https://webdev.dartlang.org/angular/tutorial">AngularDart Tour of Heroes Tutorial</a>.) It will make HTTP requests to <code>http://localhost:8888</code> to fetch and manipulate hero data. The application you will build in this tutorial respond to those requests.</p>
+<p>!!! warning "Running the Browser Application Locally" The browser application is served over HTTP so that it can access your Conduit application when it runs locally on your machine. Your browser may warn you about navigating to an insecure webpage, because it is in fact insecure. You can run this application locally by grabbing the source code from <a href="https://github.com/conduit.dart/tour-of-heroes-dart">here</a>.</p>
+<p>In this first chapter, you will write code to handle two requests: one to get a list of heroes, and the other to get a single hero by its identifier. Those requests are:</p>
+<ol>
+<li><code>GET /heroes</code> to the list of heroes</li>
+<li><code>GET /heroes/:id</code> to get an individual hero</li>
+</ol>
+<p>!!! tip "HTTP Operation Shorthand" The term <code>GET /heroes</code> is called an operation. It is the combination of the HTTP method and the path of the request. Each operation is unique to an application, so your code is segmented into units for each operation. Sections with a colon, like the ':id' segment, are variable: they can be 1, 2, 3, and so on.</p>
+<h3 id="controller-objects-handle-requests">Controller Objects Handle Requests</h3>
+<p>Requests are handled by <em>controller objects</em>. A controller object can respond to a request. It can also take other action and let another controller respond. For example, it might check if the request is authorized, or send analytical data to some other service. Controllers are composed together, and each controller in the composition performs its logic in order. This allows for some controllers to be reused, and for better code organization. A composition of controllers is called a <em>channel</em> because requests flow in one direction through the controllers.</p>
+<p>Our application will link two controllers:</p>
+<ul>
+<li>a <code>Router</code> that makes sure the request path is <code>/heroes</code> or <code>/heroes/:id</code></li>
+<li>a <code>HeroesControllers</code> that responds with hero objects</li>
+</ul>
+<p>Your application starts with a channel object called the <em>application channel</em>. You link the controllers in your application to this channel.</p>
+<p><img alt="ApplicationChannel entryPoint" src="../.gitbook/assets/entrypoint.png" /></p>
+<p>Each application has a subclass of <code>ApplicationChannel</code> that you override methods in to set up your controllers. This type is already declared in <code>lib/channel.dart</code> - open this file and find <code>ApplicationChannel.entryPoint</code>:</p>
+<pre class="codehilite"><code class="language-dart">  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router
+      .route('/example')
+      .linkFunction((request) async {
+        return Response.ok({'key': 'value'});
+      });
+
+    return router;
+  }
+</code></pre>
+
+<p>When your application gets a request, the <code>entryPoint</code> controller is the first to handle it. In our case, this is a <code>Router</code> - a subclass of <code>Controller</code>.</p>
+<p>!!! tip "Controller Subclassing" Every controller you use will be a subclass of <code>Controller</code>. There are some controller subclasses already in Conduit for common behaviors.</p>
+<p>You use the <code>route</code> method on a router to attach a controller to a <em>route</em>. A route is a string syntax that matches the path of a request. In our current implementation, the route will match every request with the path <code>/example</code>. When that request is received, a linked function runs and returns a 200 OK response with an example JSON object body.</p>
+<p>We need to route the path <code>/heroes</code> to a controller of our own, so we can control what happens. Let's create a <code>HeroesController</code>. Create a new file in <code>lib/controller/heroes_controller.dart</code> and add the following code (you will need to create the subdirectory <code>lib/controller/</code>):</p>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+import 'package:heroes/heroes.dart';
+
+class HeroesController extends Controller {
+  final _heroes = [
+    {'id': 11, 'name': 'Mr. Nice'},
+    {'id': 12, 'name': 'Narco'},
+    {'id': 13, 'name': 'Bombasto'},
+    {'id': 14, 'name': 'Celeritas'},
+    {'id': 15, 'name': 'Magneta'},    
+  ];
+
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    return Response.ok(_heroes);
+  }
+}
+</code></pre>
+
+<p>Notice that <code>HeroesController</code> is a subclass of <code>Controller</code>; this is what makes it a controller object. It overrides its <code>handle</code> method by returning a <code>Response</code> object. This response object has a 200 OK status code, and it body contains a JSON-encoded list of hero objects. When a controller returns a <code>Response</code> object from its <code>handle</code> method, it is sent to the client.</p>
+<p>Right now, our <code>HeroesController</code> isn't hooked up to the application channel. We need to link it to the router. First, import our new file at the top of <code>channel.dart</code>.</p>
+<pre class="codehilite"><code class="language-dart">import 'controller/heroes_controller.dart';
+</code></pre>
+
+<p>Then link this <code>HeroesController</code> to the <code>Router</code> for the path <code>/heroes</code>:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  router
+    .route('/heroes')
+    .link(() =&gt; HeroesController());
+
+  router
+    .route('/example')
+    .linkFunction((request) async {
+      return Response.ok({'key': 'value'});
+    });
+
+  return router;
+}
+</code></pre>
+
+<p>We now have a application that will return a list of heroes. In the project directory, run the following command from the command-line:</p>
+<pre class="codehilite"><code class="language-text">conduit serve
+</code></pre>
+
+<p>This will start your application running locally. Reload the browser page <code>http://conduit-tutorial.conduit.dart.io</code>. It will make a request to <code>http://localhost:8888/heroes</code> and your application will serve it. You'll see your heroes in your web browser:</p>
+<h4 id="screenshot-of-heroes-application">Screenshot of Heroes Application</h4>
+<p><img alt="Conduit Heroes First Run" src="../.gitbook/assets/run1%20%281%29.png" /></p>
+<p>You can also see the actual response of your request by entering the following into your shell:</p>
+<pre class="codehilite"><code class="language-bash">curl -X GET http://localhost:8888/heroes
+</code></pre>
+
+<p>You'll get JSON output like this:</p>
+<pre class="codehilite"><code class="language-javascript">[
+  {&quot;id&quot;:11,&quot;name&quot;:&quot;Mr. Nice&quot;},
+  {&quot;id&quot;:12,&quot;name&quot;:&quot;Narco&quot;},
+  {&quot;id&quot;:13,&quot;name&quot;:&quot;Bombasto&quot;},
+  {&quot;id&quot;:14,&quot;name&quot;:&quot;Celeritas&quot;},
+  {&quot;id&quot;:15,&quot;name&quot;:&quot;Magneta&quot;}
+]
+</code></pre>
+
+<p>You'll also see this request logged in the shell that you started <code>conduit serve</code> in.</p>
+<h2 id="linking-controllers">Linking Controllers</h2>
+<p>When a controller handles a request, it can either send a response or let one of its linked controllers handle the request. By default, a <code>Router</code> will send a 404 Not Found response for any request. Adding a route to a <code>Router</code> creates an entry point to a new channel that controllers can be linked to. In our application, <code>HeroesController</code> is linked to the route <code>/heroes</code>.</p>
+<p>Controllers come in two different flavors: endpoint and middleware. Endpoint controllers, like <code>HeroesController</code>, always send a response. They implement the behavior that a request is seeking. Middleware controllers, like <code>Router</code>, handles requests before they reach an endpoint controller. A router, for example, handles a request by directing it to the right controller. Controllers like <code>Authorizer</code> verify the authorization of the request. You can create all kinds of controllers to provide any behavior you like.</p>
+<p>A channel can have zero or many middleware controllers, but must end in an endpoint controller. Most controllers can only have one linked controller, but a <code>Router</code> allows for many. For example, a larger application might look like this:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  router
+    .route('/users')
+    .link(() =&gt; APIKeyValidator())
+    .link(() =&gt; Authorizer.bearer())
+    .link(() =&gt; UsersController());
+
+  router
+    .route('/posts')
+    .link(() =&gt; APIKeyValidator())
+    .link(() =&gt; PostsController());
+
+  return router;
+}
+</code></pre>
+
+<p>Each of these objects is a subclass of <code>Controller</code>, giving them the ability to be linked together to handle requests. A request goes through controllers in the order they are linked. A request for the path <code>/users</code> will go through an <code>APIKeyValidator</code>, an <code>Authorizer</code> and finally a <code>UsersController</code>. Each of these controllers has an opportunity to respond, preventing the next controller from receiving the request.</p>
+<h2 id="advanced-routing">Advanced Routing</h2>
+<p>Right now, our application handles <code>GET /heroes</code> requests. The browser application uses the this list to populate its hero dashboard. If we click on an individual hero, the browser application will display an individual hero. When navigating to this page, the browser application makes a request to our server for an individual hero. This request contains the unique id of the selected hero in the path, e.g. <code>/heroes/11</code> or <code>/heroes/13</code>.</p>
+<p>Our server doesn't handle this request yet - it only handles requests that have exactly the path <code>/heroes</code>. Since a request for individual heroes will have a path that changes depending on the hero, we need our route to include a <em>path variable</em>.</p>
+<p>A path variable is a segment of route that matches a value for the same segment in the incoming request path. A path variable is a segment prefixed with a colon (<code>:</code>). For example, the route <code>/heroes/:id</code> contains a path variable named <code>id</code>. If the request path is <code>/heroes/1</code>, <code>/heroes/2</code>, and so on, the request will be sent to our <code>HeroesController</code>. The <code>HeroesController</code> will have access to the value of the path variable to determine which hero to return.</p>
+<p>There's one hiccup. The route <code>/heroes/:id</code> no longer matches the path <code>/heroes</code>. It'd be a lot easier to organize our code if both <code>/heroes</code> and <code>/heroes/:id</code> went to our <code>HeroesController</code>; it does heroic stuff. For this reason, we can declare the <code>:id</code> portion of our route to be optional by wrapping it in square brackets. In <code>channel.dart</code>, modify the <code>/heroes</code> route:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route('/heroes/[:id]')
+  .link(() =&gt; HeroesController());
+</code></pre>
+
+<p>Since the second segment of the path is optional, the path <code>/heroes</code> still matches the route. If the path contains a second segment, the value of that segment is bound to the path variable named <code>id</code>. We can access path variables through the <code>Request</code> object. In <code>heroes_controller.dart</code>, modify <code>handle</code>:</p>
+<pre class="codehilite"><code class="language-dart">// In just a moment, we'll replace this code with something even better,
+// but it's important to understand where this information comes from first!
+@override
+Future&lt;RequestOrResponse&gt; handle(Request request) async {
+  if (request.path.variables.containsKey('id')) {
+    final id = int.parse(request.path.variables['id']);
+    final hero = _heroes.firstWhere((hero) =&gt; hero['id'] == id, orElse: () =&gt; null);
+    if (hero == null) {
+      return Response.notFound();
+    }
+
+    return Response.ok(hero);
+  }
+
+  return Response.ok(_heroes);
+}
+</code></pre>
+
+<p>In your shell currently running the application, hit Ctrl-C to stop the application. Then, run <code>conduit serve</code> again. In the browser application, click on a hero and you will be taken to a detail page for that hero.</p>
+<p><img alt="Screenshot of Hero Detail Page" src="../.gitbook/assets/run2.png" /></p>
+<p>You can verify that your server is responding correctly by executing <code>curl -X GET http://localhost:8888/heroes/11</code> to view the single hero object. You can also trigger a 404 Not Found response by getting a hero that doesn't exist.</p>
+<h2 id="resourcecontrollers-and-operation-methods">ResourceControllers and Operation Methods</h2>
+<p>Our <code>HeroesController</code> is OK right now, but it'll soon run into a problem: what happens when we want to create a new hero? Or update an existing hero's name? Our <code>handle</code> method will start to get unmanageable, quickly.</p>
+<p>That's where <code>ResourceController</code> comes in. A <code>ResourceController</code> allows you to create a distinct method for each operation that we can perform on our heroes. One method will handle getting a list of heroes, another will handle getting a single hero, and so on. Each method has an annotation that identifies the HTTP method and path variables the request must have to trigger it.</p>
+<p>In <code>heroes_controller.dart</code>, replace <code>HeroesController</code> with the following:</p>
+<pre class="codehilite"><code class="language-dart">class HeroesController extends ResourceController {
+  final _heroes = [
+    {'id': 11, 'name': 'Mr. Nice'},
+    {'id': 12, 'name': 'Narco'},
+    {'id': 13, 'name': 'Bombasto'},
+    {'id': 14, 'name': 'Celeritas'},
+    {'id': 15, 'name': 'Magneta'},
+  ];
+
+  @Operation.get()
+  Future&lt;Response&gt; getAllHeroes() async {
+    return Response.ok(_heroes);
+  }
+
+  @Operation.get('id')
+  Future&lt;Response&gt; getHeroByID() async {
+    final id = int.parse(request.path.variables['id']);
+    final hero = _heroes.firstWhere((hero) =&gt; hero['id'] == id, orElse: () =&gt; null);
+    if (hero == null) {
+      return Response.notFound();
+    }
+
+    return Response.ok(hero);
+  }
+}
+</code></pre>
+
+<p>Notice that we didn't have to override <code>handle</code> in <code>ResourceController</code>. A <code>ResourceController</code> implements this method to call one of our <em>operation methods</em>. An operation method - like <code>getAllHeroes</code> and <code>getHeroByID</code> - must have an <code>Operation</code> annotation. The named constructor <code>Operation.get</code> means these methods get called when the request's method is GET. An operation method must also return a <code>Future&lt;Response&gt;</code>.</p>
+<p><code>getHeroByID</code>'s annotation also has an argument - the name of our path variable <code>id</code>. If that path variable exists in the request's path, <code>getHeroByID</code> will be called. If it doesn't exist, <code>getAllHeroes</code> will be called.</p>
+<p>!!! tip "Naming Operation Methods" The plain English phrase for an operation - like 'get hero by id' - is a really good name for an operation method and a good name will be useful when you generate OpenAPI documentation from your code.</p>
+<p>Reload the application by hitting Ctrl-C in the terminal that ran <code>conduit serve</code> and then run <code>conduit serve</code> again. The browser application should still behave the same.</p>
+<p>!!! tip "Browser Clients" In addition to <code>curl</code>, you can create a SwaggerUI browser application that executes requests against your locally running application. In your project directory, run <code>conduit document client</code> and it will generate a file named <code>client.html</code>. Open this file in your browser for a UI that constructs and executes requests that your application supports.</p>
+<h2 id="request-binding">Request Binding</h2>
+<p>In our <code>getHeroByID</code> method, we make a dangerous assumption that the path variable 'id' can be parsed into an integer. If 'id' were something else, like a string, <code>int.parse</code> would throw an exception. When exceptions are thrown in operation methods, the controller catches it and sends a 500 Server Error response. 500s are bad, they don't tell the client what's wrong. A 404 Not Found is a better response here, but writing the code to catch that exception and create this response is cumbersome.</p>
+<p>Instead, we can rely on a feature of operation methods called <em>request binding</em>. An operation method can declare parameters and <em>bind</em> them to properties of the request. When our operation method gets called, it will be passed values from the request as arguments. Request bindings automatically parse values into the type of the parameter (and return a better error response if parsing fails). Change the method <code>getHeroByID()</code>:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get('id')
+Future&lt;Response&gt; getHeroByID(@Bind.path('id') int id) async {
+  final hero = _heroes.firstWhere((hero) =&gt; hero['id'] == id, orElse: () =&gt; null);
+
+  if (hero == null) {
+    return Response.notFound();
+  }
+
+  return Response.ok(hero);
+}
+</code></pre>
+
+<p>The value of the path variable <code>id</code> will be parsed as an integer and be available to this method in the <code>id</code> parameter. The <code>@Bind</code> annotation on an operation method parameter tells Conduit the value from the request we want bound. Using the named constructor <code>Bind.path</code> binds a path variable, and the name of that variable is indicated in the argument to this constructor.</p>
+<p>You can bind path variables, headers, query parameters and bodies. When binding path variables, we have to specify which path variable with the argument to <code>@Bind.path(pathVariableName)</code>.</p>
+<p>!!! tip "Bound Parameter Names" The name of a bound parameter doesn't have to match the name of the path variable. We could have declared it as <code>@Bind.path('id') int heroID</code>. Only the argument to <code>Bind</code>'s constructor must match the actual name of the path variable. This is valuable for other types of bindings, like headers, that may contain characters that aren't valid Dart variable names, e.g. <code>X-API-Key</code>.</p>
+<h2 id="the-more-you-know-multi-threading-and-application-state">The More You Know: Multi-threading and Application State</h2>
+<p>In this simple exercise, we used a constant list of heroes as our source of data. For a simple getting-your-feet-wet demo, this is fine. However, in a real application, you'd store this data in a database. That way you could add data to it and not risk losing it when the application was restarted.</p>
+<p>More generally, a web server should never hang on to data that can change. While previously just a best practice, stateless web servers are becoming a requirement with the prevalence of containerization and tools like Kubernetes. Conduit makes it a bit easier to detect violations of this rule with its multi-threading strategy.</p>
+<p>When you run a Conduit application, it creates multiple threads. Each of these threads has its own isolated heap in memory; meaning data that exists on one thread can't be accessed from other threads. In Dart, these isolated threads are called <em>isolates</em>.</p>
+<p>An instance of your application channel is created for each isolate. Each HTTP request is given to just one of the isolates to be handled. In a sense, your one application behaves the same as running your application on multiple servers behind a load balancer. (It also makes your application substantially faster.)</p>
+<p>If you are storing any data in your application, you'll find out really quickly. Why? A request that changes data will only change that data in one of your application's isolates. When you make a request to get that data again, its unlikely that you'll see the changes - another isolate with different data will probably handle that request.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../best_practices/" class="btn btn-neutral float-left" title="Best Practices"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../executing-queries/" class="btn btn-neutral float-right" title="2. Reading from a Database">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../../best_practices/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../executing-queries/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

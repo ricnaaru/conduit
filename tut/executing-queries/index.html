@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>2. Reading from a Database - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "2. Reading from a Database";
+        var mkdocs_page_input_path = "tut/executing-queries.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">2. Reading from a Database</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#object-relational-mapping">Object-Relational Mapping</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#building-a-data-model">Building a Data Model</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#defining-a-context">Defining a Context</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#executing-queries">Executing Queries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-a-database">Setting Up a Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#query-parameters-and-http-headers">Query Parameters and HTTP Headers</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Tutorial &raquo;</li>
+      <li>2. Reading from a Database</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/tut/executing-queries.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="reading-from-a-database">Reading from a Database</h1>
+<p>We will continue to build on the last chapter's project, <code>heroes</code>, by storing our heroes in a database. This will let us to edit our heroes and keep the changes when we restart the application.</p>
+<h2 id="object-relational-mapping">Object-Relational Mapping</h2>
+<p>A relational database management system (like PostgreSQL or MySQL) stores its data in the form of tables. A table represents some sort of entity - like a person or a bank account. Each table has columns that describe the attributes of that entity - like a name or a balance. Every row in a table is an instance of that entity - like a single person named Bob or a bank account.</p>
+<p>In an object-oriented framework like Conduit, we have representations for tables, columns and rows. A class represents a table, its instances are rows, and instance properties are column values. An ORM translates rows in a database to and from objects in an application.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Conduit</th>
+<th align="left">Database</th>
+<th align="left">Example #1</th>
+<th align="left">Example #2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><strong>Class</strong></td>
+<td align="left"><strong>Table</strong></td>
+<td align="left">Person</td>
+<td align="left">Bank Account</td>
+</tr>
+<tr>
+<td align="left"><strong>Instance</strong></td>
+<td align="left"><strong>Row</strong></td>
+<td align="left">A person named Bob</td>
+<td align="left">Sally's Bank Account</td>
+</tr>
+<tr>
+<td align="left"><strong>Property</strong></td>
+<td align="left"><strong>Column</strong></td>
+<td align="left">Person's Name</td>
+<td align="left">Bank Account Balance</td>
+</tr>
+</tbody>
+</table>
+<p>In Conduit, each database table-class pairing is called an <em>entity</em>. Collectively, an application's entities are called its <em>data model</em>.</p>
+<h2 id="building-a-data-model">Building a Data Model</h2>
+<p>In our <code>heroes</code> application, we will have one type of entity - a "hero". To create a new entity, we subclass <code>ManagedObject&lt;T&gt;</code>. Create a new directory <code>lib/model/</code> and then add a new file to this directory named <code>hero.dart</code>. Add the following code:</p>
+<pre class="codehilite"><code class="language-dart">import 'package:heroes/heroes.dart';
+
+class Hero extends ManagedObject&lt;_Hero&gt; implements _Hero {}
+
+class _Hero {
+  @primaryKey
+  int id;
+
+  @Column(unique: true)
+  String name;
+}
+</code></pre>
+
+<p>This declares a <code>Hero</code> entity. Entities are always made up of two classes.</p>
+<p>The <code>_Hero</code> class is a direct mapping of a database table. This table's name will have the same name as the class: <code>_Hero</code>. Every property declared in this class will have a corresponding column in this table. Therefore, the <code>_Hero</code> table will have two columns - <code>id</code> and <code>name</code>. The <code>id</code> column is this table's primary key (a unique identifier for each hero). The name of each hero must be unique.</p>
+<p>The other class, <code>Hero</code>, is what we work with in our code - when we fetch heroes from a database, they will be instances of <code>Hero</code>.</p>
+<p>The <code>Hero</code> class is called the <em>instance type</em> of the entity, because that's what we have instances of. <code>_Hero</code> is the <em>table definition</em> of the entity. You won't use the table definition for anything other than describing the database table.</p>
+<p>An instance type must <em>implement</em> its table definition; this gives our <code>Hero</code> all of the properties of <code>_Hero</code>. An instance type must <em>extend</em> <code>ManagedObject&lt;T&gt;</code>, where <code>T</code> is also the table definition. <code>ManagedObject&lt;T&gt;</code> has behavior for automatically transferring objects to the database and back (among other things).</p>
+<p>!!! tip "Transient Properties" Properties declared in the instance type aren't stored in the database. This is different than properties in the table definition. For example, a database table might have a <code>firstName</code> and <code>lastName</code>, but it's useful in some places to have a <code>fullName</code> property. Declaring the <code>fullName</code> property in the instance type means we have easy access to the full name, but we still store the first and last name individually.</p>
+<h2 id="defining-a-context">Defining a Context</h2>
+<p>Our application needs to know two things to execute database queries:</p>
+<ol>
+<li>What is the data model (our collection of entities)?</li>
+<li>What database are we connecting to?</li>
+</ol>
+<p>Both of these things are set up when an application is first started. In <code>channel.dart</code>, add a new property <code>context</code> and update <code>prepare()</code>:</p>
+<pre class="codehilite"><code class="language-dart">class HeroesChannel extends ApplicationChannel {
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    logger.onRecord.listen((rec) =&gt; print(&quot;$rec ${rec.error ?? &quot;&quot;} ${rec.stackTrace ?? &quot;&quot;}&quot;));
+
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final persistentStore = PostgreSQLPersistentStore.fromConnectionInfo(
+      &quot;heroes_user&quot;, &quot;password&quot;, &quot;localhost&quot;, 5432, &quot;heroes&quot;);
+
+    context = ManagedContext(dataModel, persistentStore);
+  }
+
+  @override
+  Controller get entryPoint {
+    ...
+</code></pre>
+
+<p><code>ManagedDataModel.fromCurrentMirrorSystem()</code> will find all of our <code>ManagedObject&lt;T&gt;</code> subclasses and 'compile' them into a data model. A <code>PostgreSQLPersistentStore</code> takes database connection information that it will use to connect and send queries to a database. Together, these objects are packaged in a <code>ManagedContext</code>.</p>
+<p>!!! tip "Configuring a Database Connection" This tutorial hardcodes the information needed to connect to a database. In a future chapter, we will move these values to a configuration file so that we can change them during tests and various deployment environments.</p>
+<p>The context will coordinate with these two objects to execute queries and translate objects to and from the database. Controllers that make database queries need a reference to the context. So, we'll want <code>HeroesController</code> to have access to the context.</p>
+<p>In <code>heroes_controller.dart</code>, add a property and create a new constructor:</p>
+<pre class="codehilite"><code class="language-dart">class HeroesController extends ResourceController {
+  HeroesController(this.context);
+
+  final ManagedContext context;  
+  ...
+</code></pre>
+
+<p>Now that <code>HeroesController</code> requires a context in its constructor, we need to pass it the context we created in <code>prepare()</code>. Update <code>entryPoint</code> in <code>channel.dart</code>.</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  router
+    .route(&quot;/heroes/[:id]&quot;)
+    .link(() =&gt; HeroesController(context));
+
+  router
+    .route(&quot;/example&quot;)
+    .linkFunction((request) async {
+      return new Response.ok({&quot;key&quot;: &quot;value&quot;});
+  });
+
+  return router;
+}
+</code></pre>
+
+<p>Now that we've 'injected' this context into our <code>HeroesController</code> constructor, each <code>HeroesController</code> can execute database queries.</p>
+<p>!!! note "Service Objects and Dependency Injection" Our context is an example of a <em>service object</em>. A service encapsulates logic and state into a single object that can be reused in multiple controllers. A typical service object accesses another server, like a database or another REST API. Some service objects may simply provide a simplified interface to a complex process, like applying transforms to an image. Services are passed in a controller's constructor; this is called <em>dependency injection</em>. Unlike many frameworks, Conduit does not require a complex dependency injection framework; this is because you write the code to create instances of your controllers and can pass whatever you like in their constructor.</p>
+<h2 id="executing-queries">Executing Queries</h2>
+<p>Our operation methods in <code>HeroesController</code> currently return heroes from an in-memory list. To fetch data from a database instead of this list, we create and execute instances of <code>Query&lt;T&gt;</code> in our <code>ManagedContext</code>.</p>
+<p>Let's start by replacing <code>getAllHeroes</code> in <code>heroes_controller.dart</code>. Make sure to import your <code>model/hero.dart</code> file at the top:</p>
+<pre class="codehilite"><code class="language-dart">import 'package:heroes/heroes.dart';
+import 'package:heroes/model/hero.dart';
+
+class HeroesController extends ResourceController {
+  HeroesController(this.context);
+
+  final ManagedContext context;
+
+  @Operation.get()
+  Future&lt;Response&gt; getAllHeroes() async {
+    final heroQuery = Query&lt;Hero&gt;(context);
+    final heroes = await heroQuery.fetch();
+
+    return Response.ok(heroes);
+  }
+
+...
+</code></pre>
+
+<p>Here, we create an instance of <code>Query&lt;Hero&gt;</code> and then execute its <code>fetch()</code> method. The type argument to <code>Query&lt;T&gt;</code> is an instance type; it lets the query know which table to fetch rows from and the type of objects that are returned by the query. The context argument tells it which database to fetch it from. The <code>fetch()</code> execution method returns a <code>List&lt;Hero&gt;</code>. We write that list to the body of the response.</p>
+<p>Now, let's update <code>getHeroByID</code> to fetch a single hero from the database.</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get('id')
+Future&lt;Response&gt; getHeroByID(@Bind.path('id') int id) async {
+  final heroQuery = Query&lt;Hero&gt;(context)
+    ..where((h) =&gt; h.id).equalTo(id);    
+
+  final hero = await heroQuery.fetchOne();
+
+  if (hero == null) {
+    return Response.notFound();
+  }
+  return Response.ok(hero);
+}
+</code></pre>
+
+<p>This query does two interesting things. First, it uses the <code>where</code> method to filter heroes that have the same <code>id</code> as the path variable. For example, <code>/heroes/1</code> will fetch a hero with an <code>id</code> of <code>1</code>. This works because <code>Query.where</code> adds a SQL WHERE clause to the query. We'd get the following SQL:</p>
+<pre class="codehilite"><code class="language-sql">SELECT id, name FROM _question WHERE id = 1;
+</code></pre>
+
+<p>The <code>where</code> method uses the <em>property selector</em> syntax. This syntax is a closure that takes an argument of the type being queried, and must return a property of that object. This creates an expression object that targets the selected property. By invoking methods like <code>equalTo</code> on this expression object, a boolean expression is added to the query.</p>
+<p>!!! tip "Property Selectors" Many query configuration methods use the property selector syntax. Setting up a keyboard shortcut (called a Live Template in IntelliJ) to enter the syntax is beneficial. A downloadable settings configuration for IntelliJ exists <a href="">here</a> that includes this shortcut.</p>
+<p>The <code>fetchOne()</code> execution method will fetch a single object that fulfills all of the expressions applied to the query. If no database row meets the criteria, <code>null</code> is returned. Our controller returns a 404 Not Found response in that scenario.</p>
+<p>We have now written code that fetches heroes from a database instead of from in memory, but we don't have a database - yet.</p>
+<p>!!! tip "fetchObjectWithID, fetchOne() and Unique Properties" You can also fetch an object by its primary key with the method <code>ManagedContext.fetchObjectWithID</code>. When fetching with <code>fetchOne</code>, make sure the search criteria is guaranteed to be unique.</p>
+<h2 id="setting-up-a-database">Setting Up a Database</h2>
+<p>For development, you'll need to install a PostgreSQL server on your local machine. If you are on macOS, use <a href="http://postgresapp.com">Postgres.app</a>. This native macOS application manages starting and stopping PostgreSQL servers on your machine. For other platforms, see <a href="https://www.postgresql.org/download/">this page</a>.</p>
+<p>!!! warning "9.6 or Greater" The minimum version of PostgreSQL needed to work with Conduit is 9.6.</p>
+<p>If you installed Postgres.app, open the application and select the <code>+</code> button on the bottom left corner of the screen to create a new database server. Choose a version (at least 9.6, but the most recent version is best), name the server whatever you like, and leave the rest of the options unchanged before clicking <code>Create Server</code>. Once the server has been created, click <code>Start</code>.</p>
+<p>A list of databases available on this server will be shown as named, database icons. Double-click on any of them to open the <code>psql</code> command-line tool.</p>
+<p>!!! tip "psql" For other platforms, <code>psql</code> should be available in your <code>$PATH</code>. You can also add <code>Postgres.app</code>'s <code>psql</code> to your path with the directions <a href="https://postgresapp.com/documentation/cli-tools.html">here</a>.</p>
+<p>In <code>psql</code>, create a new database and a user to manage it.</p>
+<pre class="codehilite"><code class="language-sql">CREATE DATABASE heroes;
+CREATE USER heroes_user WITH createdb;
+ALTER USER heroes_user WITH password 'password';
+GRANT all ON database heroes TO heroes_user;
+</code></pre>
+
+<p>Next, we need to create the table where heroes are stored in this database. From your project directory, run the following command:</p>
+<pre class="codehilite"><code class="language-text">conduit db generate
+</code></pre>
+
+<p>This command will create a new <em>migration file</em>. A migration file is a Dart script that runs a series of SQL commands to alter a database's schema. It is created in a new directory in your project named <code>migrations/</code>. Open <code>migrations/00000001_initial.migration.dart</code>, it should look like this:</p>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+import 'dart:async';
+
+class Migration1 extends Migration {
+  @override
+  Future upgrade() async {
+    database.createTable(SchemaTable(
+      &quot;_Hero&quot;, [
+        SchemaColumn(&quot;id&quot;, ManagedPropertyType.bigInteger,
+            isPrimaryKey: true, autoincrement: true, isIndexed: false, isNullable: false, isUnique: false),
+        SchemaColumn(&quot;name&quot;, ManagedPropertyType.string,
+            isPrimaryKey: false, autoincrement: false, isIndexed: false, isNullable: false, isUnique: true),
+      ],
+    ));
+  }
+
+  @override
+  Future downgrade() async {}
+
+  @override
+  Future seed() async {}
+}
+</code></pre>
+
+<p>In a moment, we'll execute this migration file. That will create a new table named <code>_Hero</code> with columns for <code>id</code> and <code>name</code>. Before we run it, we should seed the database with some initial heroes. In the <code>seed()</code> method, add the following:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Future seed() async {
+  final heroNames = [&quot;Mr. Nice&quot;, &quot;Narco&quot;, &quot;Bombasto&quot;, &quot;Celeritas&quot;, &quot;Magneta&quot;];
+
+  for (final heroName in heroNames) {    
+    await database.store.execute(&quot;INSERT INTO _Hero (name) VALUES (@name)&quot;, substitutionValues: {
+      &quot;name&quot;: heroName
+    });
+  }
+}
+</code></pre>
+
+<p>Apply this migration file to our locally running <code>heroes</code> database with the following command in the project directory:</p>
+<pre class="codehilite"><code class="language-dart">conduit db upgrade --connect postgres://heroes_user:password@localhost:5432/heroes
+</code></pre>
+
+<p>Re-run your application with <code>conduit serve</code>. Then, reload <a href="http://conduit-tutorial.conduit.dart.io">http://conduit-tutorial.conduit.dart.io</a>. Your dashboard of heroes and detail page for each will still show up - but this time, they are sourced from a database.</p>
+<p>!!! warning "ManagedObjects and Migration Scripts" In our migration's <code>seed()</code> method, we executed SQL queries instead of using the Conduit ORM. <em>It is very important that you do not use</em> <code>Query&lt;T&gt;</code>, <code>ManagedObject&lt;T&gt;</code> or other elements of the Conduit ORM in migration files. Migration files represent an ordered series of historical steps that describe your database schema. If you replay those steps (which is what executing a migration file does), you will end up with the same database schema every time. However, a <code>ManagedObject&lt;T&gt;</code> subclass changes over time - the definition of a managed object is not historical, it only represents the current point in time. Since a <code>ManagedObject&lt;T&gt;</code> subclass can change, using one in our migration file would mean that our migration file could change.</p>
+<h2 id="query-parameters-and-http-headers">Query Parameters and HTTP Headers</h2>
+<p>In the browser application, the dashboard has a text field for searching heroes. When you enter text into it, it will send the search term to the server by appending a query parameter to <code>GET /heroes</code>. For example, if you entered the text <code>abc</code>, it'd make this request:</p>
+<pre class="codehilite"><code class="language-text">GET /heroes?name=abc
+</code></pre>
+
+<p><img alt="Conduit Tutorial Run 4" src="../.gitbook/assets/run4.png" /></p>
+<p>Our Conduit application can use this value to return a list of heroes that contains the search string. In <code>heroes_controller.dart</code>, modify <code>getAllHeroes()</code> to bind the 'name' query parameter:</p>
+<pre class="codehilite"><code class="language-dart">@Operation.get()
+Future&lt;Response&gt; getAllHeroes({@Bind.query('name') String name}) async {
+  final heroQuery = Query&lt;Hero&gt;(context);
+  if (name != null) {
+    heroQuery.where((h) =&gt; h.name).contains(name, caseSensitive: false);
+  }
+  final heroes = await heroQuery.fetch();
+
+  return Response.ok(heroes);
+}
+</code></pre>
+
+<p>You can re-run your Conduit application and use the search bar in the client application.</p>
+<p>The <code>@Bind.query('name')</code> annotation will bind the value of the 'name' query parameter if it is included in the request URL. Otherwise, <code>name</code> will be null.</p>
+<p>Notice that <code>name</code> is an <em>optional parameter</em> (it is surrounded by curly brackets). An optional parameter in an operation method is also optional in the HTTP request. If we removed the curly brackets from this binding, the 'name' query parameter would become required and the request <code>GET /heroes</code> without <code>?name=x</code> would fail with a 400 Bad Request.</p>
+<p>!!! tip "ResourceController Binding" There is even more to bindings than we've shown (like automatically parsing bound values into types like <code>int</code> and <code>DateTime</code>). For more information, see <a href="../../http/resource_controller/">ResourceControllers</a>.</p>
+<p>Binding query and header parameters in a operation method is a good way to make your code more intentional and avoid boilerplate parsing code. Conduit is able to generate better documentation when using bindings.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../getting-started/" class="btn btn-neutral float-left" title="1. Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../storing-data/" class="btn btn-neutral float-right" title="3. Storing Data in a Database">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../getting-started/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../storing-data/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

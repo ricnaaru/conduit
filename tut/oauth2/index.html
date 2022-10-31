@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>5. Authentication and Authorization - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "5. Authentication and Authorization";
+        var mkdocs_page_input_path = "tut/oauth2.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">5. Authentication and Authorization</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-basics-of-oauth-20">The Basics of OAuth 2.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-oauth-20-creating-a-user-type">Setting up OAuth 2.0: Creating a User Type</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-oauth-20-authserver-and-its-delegate">Setting up OAuth 2.0: AuthServer and its Delegate</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-oauth-20-registering-users">Setting up OAuth 2.0: Registering Users</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-oauth-20-authenticating-users">Setting up OAuth 2.0: Authenticating Users</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-up-oauth-20-securing-routes">Setting up OAuth 2.0: Securing Routes</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Tutorial &raquo;</li>
+      <li>5. Authentication and Authorization</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/tut/oauth2.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="authentication-and-authorization-with-oauth-20">Authentication and Authorization with OAuth 2.0</h1>
+<p>Our <code>heroes</code> application lets anyone create or view the same set of heroes. We will continue to build on the last chapter's project, <code>heroes</code>, requiring a user to log in before viewing or creating heroes.</p>
+<p>!!! note "We're Done With the Browser App" We're at the point now where using the browser application to test our Conduit app gets a bit cumbersome. From here on out, we'll use <code>curl</code>, <code>conduit document client</code> and tests.</p>
+<h2 id="the-basics-of-oauth-20">The Basics of OAuth 2.0</h2>
+<p><a href="https://tools.ietf.org/html/rfc6749">OAuth 2.0</a> is an authorization framework that also contains guidance on authentication. Authentication is the process of proving you are a particular user, typically through a username and password. Authorization is the process of ensuring that a user can access a particular resource or collection of resources. In our application, a user will have to be authenticated before being authorized to view or create heroes.</p>
+<p>In a simple authentication and authorization scheme, each HTTP request contains the username and password (credentials) of the user in an <code>Authorization</code> header. There are a number of security risks involved in doing this, so OAuth 2.0 takes another approach: you send your credentials once, and get a 'access token' in return. You then send this access token in each request. Because the server grants the token, it knows that you've already entered your credentials (you've <em>authenticated</em>) and it remembers who the token belongs to. It's effectively the same thing as sending your credentials each time, except that the token has a time limit and can be revoked when things go wrong.</p>
+<p>Conduit has a built-in OAuth 2.0 implementation that leverages the ORM. This implementation is part of the <code>conduit</code> package, but it is a separate library named <code>conduit/managed_auth</code>. It takes a few steps to set up that might be difficult to understand if you are not familiar with OAuth 2.0, but you'll get a well-tested, secure authorization implementation.</p>
+<h2 id="setting-up-oauth-20-creating-a-user-type">Setting up OAuth 2.0: Creating a User Type</h2>
+<p>Our application needs some concept of a 'user' - a person who logs into the application to manage heroes. This user will have a username and password. In a later exercise, a user will also have a list of heroes that belong to them. Create a new file <code>model/user.dart</code> and enter the following code:</p>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/managed_auth.dart';
+import 'package:heroes/heroes.dart';
+import 'package:heroes/model/hero.dart';
+
+class User extends ManagedObject&lt;_User&gt; implements _User, ManagedAuthResourceOwner&lt;_User&gt; {}
+
+class _User extends ResourceOwnerTableDefinition {}
+</code></pre>
+
+<p>The imported library <code>package:conduit/managed_auth.dart</code> contains types that use the ORM to store users, tokens and other OAuth 2.0 related data. One of those types is <code>ResourceOwnerTableDefinition</code>, the superclass of our user's table definition. This type contains all of the required fields that Conduit needs to implement authentication.</p>
+<p>!!! tip "Resource Owners" A <em>resource owner</em> is a more general term for a 'user' that comes from the OAuth 2.0 specification. In the framework, you'll see types and variables using some variant of <em>resource owner</em>, but for all intents and purposes, you can consider this a 'user'.</p>
+<p>If you are curious, <code>ResourceOwnerTableDefinition</code> looks like this:</p>
+<pre class="codehilite"><code class="language-dart">class ResourceOwnerTableDefinition {
+  @primaryKey
+  int id;
+
+  @Column(unique: true, indexed: true)
+  String username;
+
+  @Column(omitByDefault: true)
+  String hashedPassword;
+
+  @Column(omitByDefault: true)
+  String salt;
+
+  ManagedSet&lt;ManagedAuthToken&gt; tokens;
+}
+</code></pre>
+
+<p>Because these fields are in <code>User</code>'s table definition, our <code>User</code> table has all of these database columns.</p>
+<p>!!! note "ManagedAuthResourceOwner" Note that <code>User</code> implements <code>ManagedAuthResourceOwner&lt;_User&gt;</code> - this is a requirement of any OAuth 2.0 resource owner type when using <code>package:conduit/managed_auth</code>.</p>
+<h2 id="setting-up-oauth-20-authserver-and-its-delegate">Setting up OAuth 2.0: AuthServer and its Delegate</h2>
+<p>Now that we have a user, we need some way to create new users and authenticate them. Authentication is fairly tricky, especially in OAuth 2.0, so there is a service object that does the hard part for us called an <code>AuthServer</code>. This type has all of the logic needed to authentication and authorize users. For example, an <code>AuthServer</code> can generate a new token if given valid user credentials.</p>
+<p>In <code>channel.dart</code>, add the following imports to the top of your file:</p>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/managed_auth.dart';
+import 'package:heroes/model/user.dart';
+</code></pre>
+
+<p>Then, declare a new <code>authServer</code> property in your channel and initialize it in <code>prepare</code>:</p>
+<pre class="codehilite"><code class="language-dart">class HeroesChannel extends ApplicationChannel {
+  ManagedContext context;
+
+  // Add this field
+  AuthServer authServer;
+
+  Future prepare() async {
+    logger.onRecord.listen((rec) =&gt; print(&quot;$rec ${rec.error ?? &quot;&quot;} ${rec.stackTrace ?? &quot;&quot;}&quot;));
+
+    final config = HeroConfig(options.configurationFilePath);
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final persistentStore = PostgreSQLPersistentStore.fromConnectionInfo(
+      config.database.username,
+      config.database.password,
+      config.database.host,
+      config.database.port,
+      config.database.databaseName);
+
+    context = ManagedContext(dataModel, persistentStore);
+
+    // Add these two lines:
+    final authStorage = ManagedAuthDelegate&lt;User&gt;(context);
+    authServer = AuthServer(authStorage);
+  }
+  ...
+</code></pre>
+
+<p>While an <code>AuthServer</code> handles the logic of authentication and authorization, it doesn't know how to store or fetch the data it uses for those tasks. Instead, it relies on a <em>delegate</em> object to handle storing and fetching data from a database. In our application, we use <code>ManagedAuthDelegate&lt;T&gt;</code> - from <code>package:conduit/managed_auth</code> - as the delegate. This type uses the ORM for these tasks; the type argument must be our application's user object.</p>
+<p>!!! tip "Delegation" Delegation is a design pattern where an object has multiple callbacks that are grouped into an interface. Instead of defining a closure for each callback, a type implements methods that get called by the delegating object. It is a way of organizing large amounts of related callbacks into a tidy class.</p>
+<p>By importing <code>conduit/managed_auth</code>, we've added a few more managed objects to our application (to store tokens and other authentication data) and we also have a new <code>User</code> managed object. It's a good time to run a database migration. From your project directory, run the following commands:</p>
+<pre class="codehilite"><code class="language-text">conduit db generate
+conduit db upgrade --connect postgres://heroes_user:password@localhost:5432/heroes
+</code></pre>
+
+<h2 id="setting-up-oauth-20-registering-users">Setting up OAuth 2.0: Registering Users</h2>
+<p>Now that we have the concept of a user, our database and application are set up to handle authentication, we can start creating new users. Let's create a new controller for registering users. This controller will accept <code>POST</code> requests that contain a username and password in the body. It will insert a new user into the database and securely hash the user's password.</p>
+<p>Before we create this controller, there is something we need to consider: our registration endpoint will require the user's password, but we store the user's password as a cryptographic hash. This prevents someone with access to your database from knowing a user's password. In order to bind the body of a request to a <code>User</code> object, it needs a password field, but we don't want to store the password in the database without first hashing it.</p>
+<p>We can accomplish this with <em>transient properties</em>. A transient property is a property of a managed object that isn't stored in the database. They are declared in the managed object subclass instead of the table definition. By default, a transient property is not read from a request body or encoded into a response body; unless we add the <code>Serialize</code> annotation to it. Add this property to your <code>User</code> type:</p>
+<pre class="codehilite"><code class="language-dart">class User extends ManagedObject&lt;_User&gt; implements _User, ManagedAuthResourceOwner&lt;_User&gt; {
+  @Serialize(input: true, output: false)
+  String password;
+}
+</code></pre>
+
+<p>This declares that a <code>User</code> has a transient property <code>password</code> that can be read on input (from a request body), but is not sent on output (to a response body). We don't have to run a database migration because transient properties are not stored in a database.</p>
+<p>Now, create the file <code>controller/register_controller.dart</code> and enter the following code:</p>
+<pre class="codehilite"><code class="language-dart">import 'dart:async';
+
+import 'package:conduit/conduit.dart';
+import 'package:heroes/model/user.dart';
+
+class RegisterController extends ResourceController {
+  RegisterController(this.context, this.authServer);
+
+  final ManagedContext context;
+  final AuthServer authServer;
+
+  @Operation.post()
+  Future&lt;Response&gt; createUser(@Bind.body() User user) async {
+    // Check for required parameters before we spend time hashing
+    if (user.username == null || user.password == null) {
+      return Response.badRequest(
+        body: {&quot;error&quot;: &quot;username and password required.&quot;});
+    }
+
+    user
+      ..salt = generateRandomSalt()
+      ..hashedPassword = authServer.hashPassword(user.password, user.salt);
+
+    return Response.ok(await Query(context, values: user).insert());
+  }
+}
+</code></pre>
+
+<p>This controller takes POST requests that contain a user. A user has many fields (username, password, hashedPassword, salt), but we will calculate the latter two and only require that the request contain the first two. The controller generates a salt and hash of the password before storing it in the database. In <code>channel.dart</code>, let's link this controller - don't forget to import it!</p>
+<pre class="codehilite"><code class="language-dart">import 'package:heroes/controller/register_controller.dart';
+
+...
+
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router
+      .route('/heroes/[:id]')
+      .link(() =&gt; HeroesController(context));
+
+    router
+      .route('/register')
+      .link(() =&gt; RegisterController(context, authServer));
+
+    return router;
+  }
+}
+</code></pre>
+
+<p>Let's run the application and create a new user using <code>curl</code> from the command-line. (We'll specify <code>-n1</code> to designate using one isolate and speed up startup.)</p>
+<pre class="codehilite"><code class="language-text">conduit serve -n1
+</code></pre>
+
+<p>Then, issue a request to your server:</p>
+<pre class="codehilite"><code class="language-dart">curl -X POST http://localhost:8888/register -H 'Content-Type: application/json' -d '{&quot;username&quot;:&quot;bob&quot;, &quot;password&quot;:&quot;password&quot;}'
+</code></pre>
+
+<p>You'll get back the new user object and its username:</p>
+<pre class="codehilite"><code class="language-text">{&quot;id&quot;:1,&quot;username&quot;:&quot;bob&quot;}
+</code></pre>
+
+<h2 id="setting-up-oauth-20-authenticating-users">Setting up OAuth 2.0: Authenticating Users</h2>
+<p>Now that we have a user with a password, we can create an endpoint that takes user credentials and returns an access token. The good news is that this controller already exists in Conduit, you just have to hook it up to a route. Update <code>entryPoint</code> in <code>channel.dart</code> to add an <code>AuthController</code> for the route <code>/auth/token</code>:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Controller get entryPoint {
+  final router = Router();
+
+  // add this route
+  router
+    .route('/auth/token')
+    .link(() =&gt; AuthController(authServer));
+
+  router
+    .route('/heroes/[:id]')
+    .link(() =&gt; HeroesController(context));
+
+  router
+    .route('/register')
+    .link(() =&gt; RegisterController(context, authServer));
+
+  return router;
+}
+</code></pre>
+
+<p>An <code>AuthController</code> follows the OAuth 2.0 specification for granting access tokens when given valid user credentials. To understand how a request to this endpoint must be structured, we need to discuss OAuth 2.0 <em>clients</em>. In OAuth 2.0, a client is an application that is allowed to access your server on behalf of a user. A client can be a browser application, a mobile application, another server, a voice assistant, etc. A client always has an identifier string, typically something like 'com.conduit.dart.account_app.mobile'.</p>
+<p>When authenticating, a user is always authenticated through a client. This client information must be attached to every authentication request, and the server must validate that the client had been previously registered. Therefore, we need to register a new client for our application. A client is stored in our application's database using the <code>conduit auth add-client</code> CLI. Run the following command from your project directory:</p>
+<pre class="codehilite"><code class="language-text">conduit auth add-client --id com.heroes.tutorial --connect postgres://heroes_user:password@localhost:5432/heroes
+</code></pre>
+
+<p>!!! note "OAuth 2.0 Clients" A client must have an identifier, but it may also have a secret, redirect URI and list of allowed scopes. See the <a href="./">guides on OAuth 2.0</a> for how these options impacts authentication. Most notably, a client identifier must have a secret to issue a <em>refresh token</em>. Clients are stored in an application's database.</p>
+<p>This will insert a new row into an OAuth 2.0 client table created by our last round of database migration and allow us to make authentication requests. An authentication request must meet all of the following criteria:</p>
+<ul>
+<li>the client identifier (and secret, if it exists) are included as a basic <code>Authorization</code> header.</li>
+<li>the username and password are included in the request body</li>
+<li>the key-value <code>grant_type=password</code> is included in the request body</li>
+<li>the request body content-type is <code>application/x-www-form-urlencoded</code>; this means the request body is effectively a query string (e.g. <code>username=bob&amp;password=pw&amp;grant_type=password</code>)</li>
+</ul>
+<p>In Dart code, this would look like this:</p>
+<pre class="codehilite"><code class="language-dart">import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/http.dart'
+    as http; // Must include http: any package in your pubspec.yaml
+
+Future&lt;void&gt; main() async {
+  const clientID = &quot;org.hasenbalg.zeiterfassung&quot;;
+  const body = &quot;username=bob&amp;password=password&amp;grant_type=password&quot;;
+
+// Note the trailing colon (:) after the clientID.
+// A client identifier secret would follow this, but there is no secret, so it is the empty string.
+  final String clientCredentials =
+      const Base64Encoder().convert(&quot;$clientID:&quot;.codeUnits);
+
+  final http.Response response =
+      await http.post(&quot;http://localhost:8888/auth/token&quot;,
+          headers: {
+            &quot;Content-Type&quot;: &quot;application/x-www-form-urlencoded&quot;,
+            &quot;Authorization&quot;: &quot;Basic $clientCredentials&quot;
+          },
+          body: body);
+  print(response.body);
+}
+</code></pre>
+
+<p>You can execute that code or you can use the following <code>curl</code>:</p>
+<pre class="codehilite"><code class="language-text">curl -X POST http://localhost:8888/auth/token -H 'Authorization: Basic Y29tLmhlcm9lcy50dXRvcmlhbDo=' -H 'Content-Type: application/x-www-form-urlencoded' -d 'username=bob&amp;password=password&amp;grant_type=password'
+</code></pre>
+
+<p>If you were successful, you'll get the following response containing an access token:</p>
+<pre class="codehilite"><code class="language-text">{&quot;access_token&quot;:&quot;687PWKFHRTQ9MveQ2dKvP95D4cWie1gh&quot;,&quot;token_type&quot;:&quot;bearer&quot;,&quot;expires_in&quot;:86399}
+</code></pre>
+
+<p>Hang on to this access token, we'll use it in a moment.</p>
+<h2 id="setting-up-oauth-20-securing-routes">Setting up OAuth 2.0: Securing Routes</h2>
+<p>Now that we can create and authenticate users, we can protect our heroes from anonymous users by requiring an access token for hero requests. In <code>channel.dart</code>, link an <code>Authorizer</code> in the middle of the <code>/heroes</code> channel:</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route('/heroes/[:id]')
+  .link(() =&gt; Authorizer.bearer(authServer))
+  .link(() =&gt; HeroesController(context));
+</code></pre>
+
+<p>An <code>Authorizer</code> protects a channel from unauthorized requests by validating the <code>Authorization</code> header of a request. When created with <code>Authorizer.bearer</code>, it ensures that the authorization header contains a valid access token. Restart your application and try and access the <code>/heroes</code> endpoint without including any authorization:</p>
+<pre class="codehilite"><code class="language-text">curl -X GET --verbose http://localhost:8888/heroes
+</code></pre>
+
+<p>You'll get a 401 Unauthorized response. Now, include your access token in a bearer authorization header (note that your token will be different):</p>
+<pre class="codehilite"><code class="language-text">curl -X GET http://localhost:8888/heroes -H 'Authorization: Bearer 687PWKFHRTQ9MveQ2dKvP95D4cWie1gh'
+</code></pre>
+
+<p>You'll get back your list of heroes!</p>
+<p>!!! note "Other Uses of Authorizer" An <code>Authorizer</code> can validate access token scopes and basic authorization credentials. You'll see examples of these in a later exercise.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../writing-tests/" class="btn btn-neutral float-left" title="4. Configuration and Testing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../snippets/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../writing-tests/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../snippets/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

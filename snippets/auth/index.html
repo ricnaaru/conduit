@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Authentication and Authorization - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Authentication and Authorization";
+        var mkdocs_page_input_path = "snippets/auth.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Authentication and Authorization</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#enable-oauth-20">Enable OAuth 2.0</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-oauth-20-clients-to-database">Add OAuth 2.0 Clients to Database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#require-oauth-20-scope-to-access-routes">Require OAuth 2.0 Scope to Access Routes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-authentication">Basic Authentication</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#add-oauth-20-authorization-code-flow">Add OAuth 2.0 Authorization Code Flow</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Snippets &raquo;</li>
+      <li>Authentication and Authorization</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/snippets/auth.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="conduit-authorization-and-authentication-snippets">Conduit Authorization and Authentication Snippets</h1>
+<h2 id="enable-oauth-20">Enable OAuth 2.0</h2>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+import 'package:conduit/managed_auth.dart';
+
+class AppChannel extends ApplicationChannel {
+  AuthServer authServer;
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    final dataModel = new ManagedDataModel.fromCurrentMirrorSystem();
+    final psc = new PostgreSQLPersistentStore(
+        &quot;username&quot;,
+        &quot;password&quot;,
+        &quot;localhost&quot;,
+        5432
+        &quot;my_app&quot;);
+
+    context = new ManagedContext(dataModel, psc);
+
+    final delegate = new ManagedAuthDelegate&lt;User&gt;(context);
+    authServer = new AuthServer(delegate);
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = Router();
+    router.route(&quot;/auth/token&quot;).link(() =&gt; AuthController(authServer));  
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="add-oauth-20-clients-to-database">Add OAuth 2.0 Clients to Database</h2>
+<pre class="codehilite"><code class="language-text">conduit auth add-client \
+  --id com.app.test \
+  --secret supersecret \
+  --allowed-scopes 'profile kiosk:location raw_db_access.readonly' \
+  --connect postgres://username:password@localhost:5432/my_app
+</code></pre>
+
+<h2 id="require-oauth-20-scope-to-access-routes">Require OAuth 2.0 Scope to Access Routes</h2>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+import 'package:conduit/managed_auth.dart';
+
+class AppChannel extends ApplicationChannel {
+  AuthServer authServer;
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final psc = PostgreSQLPersistentStore(
+        &quot;username&quot;,
+        &quot;password&quot;,
+        &quot;localhost&quot;,
+        5432
+        &quot;my_app&quot;);
+
+    context = new ManagedContext(dataModel, psc);
+
+    final delegate = ManagedAuthDelegate&lt;User&gt;(context);
+    authServer = AuthServer(delegate);
+  }
+
+  @override
+  Controller get entryPoint {
+    router.route(&quot;/auth/token&quot;).link(() =&gt; AuthController(authServer));
+
+    router
+      .route(&quot;/profile&quot;)
+      .link(() =&gt; Authorizer.bearer(authServer, scopes: [&quot;profile.readonly&quot;]))
+      .link(() =&gt; ProfileController(context));
+  }
+}
+
+class ProfileController extends ResourceController {
+  ProfileController(this.context);
+
+  final ManagedContext context;
+
+  @Operation.get()
+  Future&lt;Response&gt; getProfile() async {
+    final id = request.authorization.ownerID;
+    final query = new Query&lt;User&gt;(context)
+      ..where((u) =&gt; u.id).equalTo(id);
+
+    return new Response.ok(await query.fetchOne());
+  }
+}
+</code></pre>
+
+<h2 id="basic-authentication">Basic Authentication</h2>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+
+class AppChannel extends ApplicationChannel {
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+    router
+      .route(&quot;/profile&quot;)
+      .link(() =&gt; Authorizer.basic(PasswordVerifier()))
+      .linkFunction((req) async =&gt; new Response.ok(null));
+
+    return router;
+  }
+}
+
+class PasswordVerifier extends AuthValidator {
+  @override
+  FutureOr&lt;Authorization&gt; validate&lt;T&gt;(AuthorizationParser&lt;T&gt; parser, T authorizationData, {List&lt;AuthScope&gt; requiredScope}) {
+    if (!isPasswordCorrect(authorizationData)) {
+      return null;
+    }
+
+    return Authorization(null, authorizationData.username, this);
+  }
+}
+</code></pre>
+
+<h2 id="add-oauth-20-authorization-code-flow">Add OAuth 2.0 Authorization Code Flow</h2>
+<pre class="codehilite"><code class="language-dart">import 'package:conduit/conduit.dart';
+import 'package:conduit/managed_auth.dart';
+
+class AppChannel extends ApplicationChannel {
+  AuthServer authServer;
+  ManagedContext context;
+
+  @override
+  Future prepare() async {
+    final dataModel = ManagedDataModel.fromCurrentMirrorSystem();
+    final psc = PostgreSQLPersistentStore(
+        &quot;username&quot;,
+        &quot;password&quot;,
+        &quot;localhost&quot;,
+        5432
+        &quot;my_app&quot;);
+
+    context = new ManagedContext(dataModel, psc);
+
+    final delegate = new ManagedAuthDelegate&lt;User&gt;(context);
+    authServer = new AuthServer(delegate);
+  }  
+
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+
+    router.route(&quot;/auth/token&quot;).link(() =&gt; AuthController(authServer));  
+
+    router.route(&quot;/auth/code&quot;).link(() =&gt; AuthCodeController(authServer, delegate: this));
+
+    return router;
+  }
+
+  Future&lt;String&gt; render(AuthCodeController forController, Uri requestUri, String responseType, String clientID,
+      String state, String scope) async {
+    return &quot;&quot;&quot;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Login&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div class=&quot;container&quot;&gt;
+    &lt;h1&gt;Login&lt;/h1&gt;
+    &lt;form action=&quot;${requestUri.path}&quot; method=&quot;POST&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;state&quot; value=&quot;$state&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;client_id&quot; value=&quot;$clientID&quot;&gt;
+        &lt;input type=&quot;hidden&quot; name=&quot;response_type&quot; value=&quot;$responseType&quot;&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;username&quot;&gt;User Name&lt;/label&gt;
+            &lt;input type=&quot;text&quot; class=&quot;form-control&quot; name=&quot;username&quot; placeholder=&quot;Please enter your user name&quot;&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;form-group&quot;&gt;
+            &lt;label for=&quot;password&quot;&gt;Password&lt;/label&gt;
+            &lt;input type=&quot;password&quot; class=&quot;form-control&quot; name=&quot;password&quot; placeholder=&quot;Please enter your password&quot;&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;Login&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+    &quot;&quot;&quot;;    
+  }
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../orm/" class="btn btn-neutral float-left" title="ORM"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../test/" class="btn btn-neutral float-right" title="Testing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../orm/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../test/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

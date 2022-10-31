@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Handling Requests and Sending Response - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Handling Requests and Sending Response";
+        var mkdocs_page_input_path = "http/controller.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Handling Requests and Sending Response</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linking-controllers">Linking Controllers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#subclassing-controller-to-handle-requests">Subclassing Controller to Handle Requests</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modifying-a-response-with-middleware">Modifying a Response with Middleware</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#linking-functions">Linking Functions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#controller-instantiation-and-recycling">Controller Instantiation and Recycling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#exception-handling">Exception Handling</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#throwing-responses">Throwing Responses</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#throwing-handlerexceptions">Throwing HandlerExceptions</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cors-headers-and-preflight-requests">CORS Headers and Preflight Requests</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Handling HTTP Requests &raquo;</li>
+      <li>Handling Requests and Sending Response</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/http/controller.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="handling-requests-fundamentals">Handling Requests: Fundamentals</h1>
+<p>In Conduit, HTTP requests and responses are instances of <code>Request</code>s and <code>Response</code>s. For each HTTP request an application receives, an instance of <code>Request</code> is created. A <code>Response</code> must be created for each request. Responses are created by <a href="./">controller objects</a>. This guide discusses the behavior and initialization of controllers. You can read more about request and response objects <a href="../request_and_response/">here</a>.</p>
+<h2 id="overview">Overview</h2>
+<p>A controller is the basic building block of a Conduit application. A controller handles an HTTP request in some way. For example, a controller could return a 200 OK response with a JSON-encoded list of city names. A controller could also check a request to make sure it had the right credentials in its authorization header.</p>
+<p>Controllers are linked together to compose their behaviors into a <em>channel</em>. A channel handles a request by performing each of its controllers' behavior in order. For example, a channel might verify the credentials of a request and then return a list of city names by composing two controllers that take each of these actions.</p>
+<p><img alt="Conduit Channel" src="../.gitbook/assets/simple_controller_diagram%20%281%29.png" /></p>
+<p>You subclass controllers to provide their request handling logic, and there are common controller subclasses in Conduit for your use.</p>
+<h2 id="linking-controllers">Linking Controllers</h2>
+<p>Controllers are linked with their <code>link</code> method. This method takes a closure that returns the next controller in the channel. The following shows a channel composed of two controllers:</p>
+<pre class="codehilite"><code class="language-dart">final controller = VerifyController();
+controller.link(() =&gt; ResponseController());
+</code></pre>
+
+<p>In the above, <code>VerifyController</code> links <code>ResponseController</code>. A request handled by the verifying controller can either respond to the request or let the response controller handle it. If the verifying controller sends a respond, the response controller will never receive the request. Any number of controllers can be linked, but the last controller linked must respond to a request. Controllers that always respond to request are called <em>endpoint controllers</em>. <em>Middleware controllers</em> verify or modify the request, and typically only respond when an error is encountered.</p>
+<p>Linking occurs in an <a href="../../application/channel/">application channel</a>, and is finalized during startup of your application (i.e., once you have set up your controllers, the cannot be changed once the application starts receiving requests).</p>
+<h2 id="subclassing-controller-to-handle-requests">Subclassing Controller to Handle Requests</h2>
+<p>Every <code>Controller</code> implements its <code>handle</code> method to handle a request. You override this method in your controllers to provide the logic for your controllers. The following is an example of an endpoint controller, because it always sends a response:</p>
+<pre class="codehilite"><code class="language-dart">class NoteController extends Controller {
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    final notes = await fetchNotesFromDatabase();
+
+    return Response.ok(notes);
+  }
+}
+</code></pre>
+
+<p>This <code>handle</code> method returns a <code>Response</code> object. Any time a controller returns a response, Conduit sends a response to the client and terminates the request so that no other controllers can handle it.</p>
+<p>A middleware controller returns a response when it can provide the response or for error conditions. For example, an <code>Authorizer</code> controller returns a <code>401 Unauthorized</code> response if the request's credentials are invalid. To let the request pass to the next controller, you must return the request object.</p>
+<p>As an example, the pseudo-code for an <code>Authorizer</code> looks like this:</p>
+<pre class="codehilite"><code class="language-dart">class Authorizer extends Controller {
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    if (isValid(request)) {
+      return request;
+    }
+
+    return Response.unauthorized();
+  }
+}
+</code></pre>
+
+<p>!!! tip "Endpoint Controllers" In most cases, endpoint controllers are created by subclassing <a href="../resource_controller/">ResourceController</a>. This controller allows you to declare more than one handler method in a controller to better organize logic. For example, one method might handle POST requests, while another handles GET requests.</p>
+<h3 id="modifying-a-response-with-middleware">Modifying a Response with Middleware</h3>
+<p>A middleware controller can add a <em>response modifier</em> to a request. When an endpoint controller eventually creates a response, these modifiers are applied to the response before it is sent. Modifiers are added by invoking <code>addResponseModifier</code> on a request.</p>
+<pre class="codehilite"><code class="language-dart">class Versioner extends Controller {
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    request.addResponseModifier((response) {
+      response.headers[&quot;x-api-version&quot;] = &quot;2.1&quot;;
+    });
+
+    return request;
+  }
+}
+</code></pre>
+
+<p>Any number of controllers can add a response modifier to a request; they will be processed in the order that they were added. Response modifiers are applied before the response body is encoded, allowing the body object to be manipulated. Response modifiers are invoked regardless of the response generated by the endpoint controller. If an uncaught error is thrown while adding response modifiers, any remaining response modifiers are not called and a 500 Server Error response is sent.</p>
+<h2 id="linking-functions">Linking Functions</h2>
+<p>For simple behavior, functions with the same signature as <code>handle</code> can be linked to controllers:</p>
+<pre class="codehilite"><code class="language-dart">  router
+    .route(&quot;/path&quot;)
+    .linkFunction((req) async =&gt; req);
+    .linkFunction((req) async =&gt; Response.ok(null));
+</code></pre>
+
+<p>Linking a function has all of the same behavior as <code>Controller.handle</code>: it can return a request or response, automatically handles exceptions, and can have controllers (and functions) linked to it.</p>
+<h2 id="controller-instantiation-and-recycling">Controller Instantiation and Recycling</h2>
+<p>It is important to understand why <code>link</code> takes a closure, instead of a controller object. Conduit is an object oriented framework. Objects have both state and behavior. An application will receive multiple requests that will be handled by the same type of controller. If a mutable controller object were reused to handle multiple requests, it could retain some of its state between requests. This would create problems that are difficult to debug.</p>
+<p>Most controllers are immutable - in other words, all of their properties are final and they have no setters. This (mostly) ensures that the controller won't change behavior between requests. When a controller is immutable, the <code>link</code> closure is invoked once to create and link the controller object, and then the closure is discarded. The same controller object will be reused for every request.</p>
+<p>Controllers can be mutable, with the caveat that they cannot be reused for multiple requests. For example, a <code>ResourceController</code> can have properties that are bound to the values of a request, and therefore these properties will change and a new instance must be created for each request.</p>
+<p>A mutable <code>Controller</code> subclass must implement <code>Recyclable&lt;T&gt;</code>. The <code>link</code> closure will be invoked for each request, creating a new instance of the recyclable controller to handle the request. If a controller has an expensive initialization process, the results of that initialization can be calculated once and reused for each controller instance by implementing the methods from <code>Recyclable&lt;T&gt;</code>.</p>
+<pre class="codehilite"><code class="language-dart">class MyControllerState {
+  dynamic stuff;
+}
+
+class MyController extends Controller implements Recyclable&lt;MyControllerState&gt; {
+  @override
+  MyControllerState get recycledState =&gt; expensiveCalculation();
+
+  @override
+  void restore(MyControllerState state) {
+    _restoredState = state;
+  }
+
+  MyControllerState _restoredState;
+
+  @override
+  FutureOr&lt;RequestOrResponse&gt; handle(Request request) async {
+    /* use _restoredState */
+    return new Response.ok(...);
+  }
+}
+</code></pre>
+
+<p>The <code>recycledState</code> getter is called once, when the controller is first linked. Each new instance of a recyclable controller has its <code>restore</code> method invoked prior to handling the request, and the data returned by <code>recycledState</code> is passed as an argument. As an example, <code>ResourceController</code> 'compiles' its operation methods. The compiled product is stored as recycled state so that future instances can bind request data more efficiently.</p>
+<h2 id="exception-handling">Exception Handling</h2>
+<p>If an exception or error is thrown during the handling of a request, the controller currently handling the request will catch it. For the majority of values caught, a controller will send a 500 Server Response. The details of the exception or error will be <a href="../../application/configure/">logged</a>, and the request is removed from the channel (it will not be passed to a linked controller).</p>
+<p>This is the default behavior for all thrown values except <code>Response</code> and <code>HandlerException</code>.</p>
+<h3 id="throwing-responses">Throwing Responses</h3>
+<p>A <code>Response</code> can be thrown at any time; the controller handling the request will catch it and send it to the client. This completes the request. This might not seem useful, for example, the following shows a silly use of this behavior:</p>
+<pre class="codehilite"><code class="language-dart">class Thrower extends Controller {
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    if (!isForbidden(request)) {
+      throw new Response.forbidden();
+    }
+
+    return Response.ok(null);
+  }
+}
+</code></pre>
+
+<h3 id="throwing-handlerexceptions">Throwing HandlerExceptions</h3>
+<p>Exceptions can implement <code>HandlerException</code> to provide a response other than the default when thrown. For example, an application that handles bank transactions might declare an exception for invalid withdrawals:</p>
+<pre class="codehilite"><code class="language-dart">enum WithdrawalProblem {
+  insufficientFunds,
+  bankClosed
+}
+class WithdrawalException implements Exception {
+  WithdrawalException(this.problem);
+
+  final WithdrawalProblem problem;
+}
+</code></pre>
+
+<p>Controller code can catch this exception to return a different status code depending on the exact problem with a withdrawal. If this code has to be written in multiple places, it is useful for <code>WithdrawalException</code> to implement <code>HandlerException</code>. An implementor must provide an implementation for <code>response</code>:</p>
+<pre class="codehilite"><code class="language-dart">class WithdrawalException implements HandlerException {
+  WithdrawalException(this.problem);
+
+  final WithdrawalProblem problem;
+
+  @override
+  Response get response {
+    switch (problem) {
+      case WithdrawalProblem.insufficientFunds:
+        return new Response.badRequest(body: {&quot;error&quot;: &quot;insufficient_funds&quot;});
+      case WithdrawalProblem.bankClosed:
+        return new Response.badRequest(body: {&quot;error&quot;: &quot;bank_closed&quot;});
+    }
+  }
+}
+</code></pre>
+
+<h2 id="cors-headers-and-preflight-requests">CORS Headers and Preflight Requests</h2>
+<p><code>Controller</code>s have built-in behavior for handling CORS requests. They will automatically respond to <code>OPTIONS</code> preflight requests and attach CORS headers to any other response. See <a href="../../application/configure/">the chapter on CORS</a> for more details.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../request_and_response/" class="btn btn-neutral float-right" title="Serializing Request and Response Bodies">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../request_and_response/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

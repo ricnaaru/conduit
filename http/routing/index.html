@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Routing - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Routing";
+        var mkdocs_page_input_path = "http/routing.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Routing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-is-routing">What is routing?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#route-specifications-match-http-request-paths">Route Specifications Match HTTP Request Paths</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#path-variables">Path Variables</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#optional-path-segments">Optional Path Segments</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#restricting-path-variable-values">Restricting Path Variable Values</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#matching-the-remaining-path">Matching the Remaining Path</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#accessing-path-variables">Accessing Path Variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#failed-matches-return-404">Failed Matches Return 404</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Handling HTTP Requests &raquo;</li>
+      <li>Routing</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/http/routing.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="routing">Routing</h1>
+<h2 id="what-is-routing">What is routing?</h2>
+<p>Every HTTP request has a URL. A URL identifies a <em>resource</em>. In the early days of the Internet, a resource was a file. For example, the URL <code>http://www.geocities.com/my_page/image.jpg</code> would return the file <code>image.jpg</code> from the folder <code>my_page</code> on the webserver located at <code>www.geocities.com</code>. In a web application today, resources come from many other sources of data, like a database or a connected device. The job of a web application is to provide, create or modify a resource for a URL, wherever that resource might come from.</p>
+<p>A URL is made up of many parts, some of which are optional. The typical URL we see as humans looks like this: <code>http://conduit.dart.com/about</code>. Most people recognize that typing this URL into a browser would take them to our company's "About" page. In other words, our "About" page is a resource and the URL identifies it.</p>
+<p>More generally, the "About" page URL has the three required components of a URL: a <em>scheme</em> (<code>http</code>), a <em>host</em> (<code>conduit.dart.com</code>) and a <em>path</em> (<code>/about</code>). The host specifies the computer responsible for providing the resource, the path identifies the resource and the scheme lets both the requester and the host know how they should exchange information.</p>
+<p>A Conduit application receives requests when the scheme is <code>http</code> (or <code>https</code>) and the host refers to a machine where the application is running. Therefore, once the application gets the request, it only cares about the remaining component: the path.</p>
+<p>In Conduit, a <code>Router</code> routes <code>Request</code>s to a <code>Controller</code> based on the request path. This process is known as <em>routing</em>. When an application starts up, routes are registered in a subclass of <code>ApplicationChannel</code>. Each registered route creates a new <a href="../../application/structure/">channel</a> of <code>Controller</code>s that will handle the request.</p>
+<h2 id="route-specifications-match-http-request-paths">Route Specifications Match HTTP Request Paths</h2>
+<p>A route is registered by invoking <code>Router.route</code>. This method takes a <em>route specification</em> - a <code>String</code> with some syntax rules that will match the path of a request. This registration occurs when an application first starts by overriding <code>ApplicationChannel.entryPoint</code>. For example:</p>
+<pre class="codehilite"><code class="language-dart">class MyApplicationChannel extends ApplicationChannel {
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+
+    router
+      .route(&quot;/users&quot;)
+      .linkFunction((req) async =&gt; new Response.ok(await getAllUsers());
+
+    return router;
+  }
+}
+</code></pre>
+
+<p>The argument to <code>route</code> is the route specification string. This particular route matches the path <code>/users</code>. That is, a request for the URL <code>http://myserver.com/users</code> will be handled by the <code>linkFunction</code> closure. (Leading and trailing slashes are stripped out when routes are compiled, so including them has no effect, but it is good style to show a leading slash.)</p>
+<p>A path can have multiple segments (the characters between slashes). For example, the path <code>/users/foo</code> has two path segments: <code>users</code> and <code>foo</code>. A route specification matches each segment of a path against each of its segments. The path and the route must also have the same number of segments. Thus, the route specification <code>/users/foo</code> would match the path <code>/users/foo</code>, but it would not match the paths <code>/users</code>, <code>/users/7</code> or <code>/users/foo/1</code>.</p>
+<h3 id="path-variables">Path Variables</h3>
+<p>A route specification may have <em>path variables</em>. A path variable captures the value from a path segment, so that your code can use it. A path variable is most often used to uniquely identify a resource by some identifier, like <code>/users/1</code> and <code>/users/2</code>.</p>
+<p>In a route specification, a path variable starts with a colon (<code>:</code>). The name of the variable follows this colon. For example, consider the following route that declares a path variable named <code>userID</code>:</p>
+<pre class="codehilite"><code class="language-dart">router.route(&quot;/users/:userID&quot;)
+</code></pre>
+
+<p>This route specification will match <code>/users/1</code>, <code>/users/2</code>, <code>/users/foo</code>, etc. The value of <code>userID</code> is <code>1</code>, <code>2</code> and <code>foo</code>, respectively. This route won't match <code>/users</code> or <code>/users/1/2</code>.</p>
+<h3 id="optional-path-segments">Optional Path Segments</h3>
+<p>Routes may have optional path segments. This allows a group of routes that all refer to a resource collection and its individual resources to go to the same controller. For example, the requests <code>/users</code> and <code>/users/1</code> can both be covered by a single route specification.</p>
+<p>An optional path segment has square brackets (<code>[]</code>) around it. The brackets can go before or after slashes. For example, the following two syntaxes register a route that accepts both <code>/users</code> and <code>/users/:userID</code>:</p>
+<pre class="codehilite"><code class="language-dart">route(&quot;/users/[:userID]&quot;)
+route(&quot;/users[/:userID]&quot;)
+</code></pre>
+
+<p>Conceptually, a request with a path of <code>/users/1</code> identifies a single user, where <code>/users</code> identifies all users. Optional segments are used to create better code structure by forwarding requests that deal with a specific type of resource to the same controller. Therefore, the code to handle one user or multiple users is written in the same place.</p>
+<p>You may have any number of optional segments in a route specification. Each optional segment must be nested. The following route would match <code>/a</code>, <code>/a/b</code> and <code>/a/b/c</code>. It would not match <code>/a/c</code>.</p>
+<pre class="codehilite"><code class="language-dart">route(&quot;/a/[b/[c]]&quot;)
+</code></pre>
+
+<p>It's pretty rare to have more than one optional segment in a route. For example, consider the route:</p>
+<pre class="codehilite"><code class="language-dart">route(&quot;/users/[:id/[:subresource/[:subresourceid]]]&quot;);
+</code></pre>
+
+<p>The code to handle one or more users is likely very different than the code to handle one of its subresources - different database tables will be queried and different authorization may be needed. Thus, a better approach is to split subresources into their own routes to keep controller logic modular:</p>
+<pre class="codehilite"><code class="language-dart">// Matches /users and /users/:id
+route(&quot;/users/[:id]&quot;)...;
+
+// Matches /users/:userId/posts and /users/:userId/posts/:postId
+route(&quot;/users/:userId/posts/[:postId]&quot;)...;
+
+// Matches /users/:userId/notes and /users/:userId/notes/:noteId
+route(&quot;/users/:userId/notes/[:noteId]&quot;)...;
+</code></pre>
+
+<h3 id="restricting-path-variable-values">Restricting Path Variable Values</h3>
+<p>Path variables may restrict their possible values with a regular expression. The expression comes in parentheses following the path variable name. For example, the following route specification limits <code>userID</code> to numbers only:</p>
+<pre class="codehilite"><code class="language-dart">route(&quot;/users/:userID([0-9]+)&quot;)
+</code></pre>
+
+<p>This regular expression would only apply to the <code>:userID</code> segment. Note that capture groups and parentheses in general can't be included in a route's regular expression.</p>
+<p>Everything in between the parentheses is evaluated as the regular expression. Therefore, any additional spaces or characters will be a part of the regular expression. Since spaces aren't valid in a URL, you don't want spaces in a regular expression.</p>
+<h3 id="matching-the-remaining-path">Matching the Remaining Path</h3>
+<p>Finally, a route specification may have a special 'match-all' token, the asterisk (<code>*</code>). This token allows for any remaining request path to be matched, regardless of its contents or length. For example, the route specification <code>/users/*</code> would match the following paths:</p>
+<pre class="codehilite"><code class="language-text">/users
+/users/1
+/users/foo
+/users/foo/bar
+/users/foo/bar/something/else/and/this/goes/on/forever
+</code></pre>
+
+<p>This token is used when another medium is going to interpret the URL. For example, <code>FileController</code> - which reads a file from the filesystem - might have a route <code>/file/*</code>. It uses everything after <code>/file</code> to figure out the path on the filesystem.</p>
+<h2 id="accessing-path-variables">Accessing Path Variables</h2>
+<p>Information that a router parses from a request path - like path variables - are stored in <code>Request.path</code>. When a <code>Request</code> is handled by a router, its <code>path</code> is set to an instance of this type. Controllers deeper in the channel access <code>Request.path</code> to help determine which resource the request is identifying. The <code>path</code> is an instance of <code>RequestPath</code>.</p>
+<p>A <code>RequestPath</code> contains an map of <code>variables</code>, where the key is path variable name and the value is the value of that variable in the request. For example, consider a route specification <code>/users/:id</code>. When a request with path <code>/users/1</code> is routed, the value <code>1</code> is stored in this map for the key <code>id</code>:</p>
+<pre class="codehilite"><code class="language-dart">final identifier = request.path.variables[&quot;id&quot;];
+// identifier = &quot;1&quot;
+</code></pre>
+
+<p>The values in <code>variables</code> are always <code>String</code>s, since a request path is a <code>String</code>. <code>Controller</code>s may parse path variables into types like <code>int</code>.</p>
+<p><a href="../resource_controller/">ResourceController</a> uses path variables to select a operation method to handle a request.</p>
+<h2 id="failed-matches-return-404">Failed Matches Return 404</h2>
+<p>A <code>Router</code> will return a <code>404 Not Found</code> if there is no matching route for the request. No linked controllers will handle the request. This behavior may be overridden by providing a closure to <code>Router</code>'s constructor.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../request_and_response/" class="btn btn-neutral float-left" title="Serializing Request and Response Bodies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../resource_controller/" class="btn btn-neutral float-right" title="Request Binding with Resource Controllers">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../request_and_response/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../resource_controller/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

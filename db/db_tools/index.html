@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Migration and Tooling - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Migration and Tooling";
+        var mkdocs_page_input_path = "db/db_tools.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Migration and Tooling</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#migration-files">Migration Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#generating-migration-files">Generating Migration Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validating-migration-files">Validating Migration Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#listing-migration-files">Listing Migration Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#getting-a-databases-version">Getting a Database's Version</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#upgrading-a-database-schema-by-executing-migration-files">Upgrading a Database Schema by Executing Migration Files</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#when-to-execute-migration-files">When to Execute Migration Files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#seeding-data">Seeding Data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#handling-non-nullable-additions">Handling Non-nullable Additions</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Migration and Tooling</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/db_tools.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="database-migration-and-tooling">Database Migration and Tooling</h1>
+<p>The <code>conduit db</code> command line tool creates and executes <em>migration files</em>. A migration file contains Dart code that executes SQL commands to create and modify database tables.</p>
+<p>!!! warning "PostgreSQL 9.6 and Greater" The minimum version of PostgreSQL needed to work with Conduit is 9.6.</p>
+<h2 id="migration-files">Migration Files</h2>
+<p>An application's data model is described by its <code>ManagedObject&lt;T&gt;</code> subclasses and their <a href="../modeling_data/">table definition</a>. Migration files describe a series of database commands that will create or modify a database schema to match an application's data model. Migration files are executed on a database when an application is first deployed and when changes to the data model occur - like adding new <code>ManagedObject&lt;T&gt;</code> subclasses or adding an database index to a property.</p>
+<p>A migration file is automatically generated from your code. Each migration file contains only the changes made since the last migration file was generated. For example, if you began your application with a <code>Author</code> type and generated a migration file, the migration file would create the author table. If you then added a <code>Book</code> type and generated a new migration file, the new file would only create the book table. When a migration is used to upgrade a database schema, every migration file that has not yet been run will be run.</p>
+<p>Migration files must be stored in version control so that you can manage multiple databases for different environments.</p>
+<h2 id="generating-migration-files">Generating Migration Files</h2>
+<p>The <code>conduit db generate</code> command generates a new migration file. This tool finds all <code>ManagedObject&lt;T&gt;</code> subclasses - your data model - in your application and compares them to the data model the last time the tool was run. Any differences between the data models are represented as a command in the generated migration file. If the new migration file were to be used to upgrade a database, the database would match the current data model in your application.</p>
+<p>!!! note "Finding ManagedObjects" A managed object subclass must be directly or transitively imported into your application channel file. A file in your project directory that is not imported will not be found. There is typically no need to import a managed object subclass file directly: your application is initialized in your channel, where imports all of your controllers and services, which in turn import the managed object subclasses they use. As long as you are using your managed object declarations in your application, they'll be found.</p>
+<p>Migration files are stored in an project's <code>migrations/</code> directory. Migration files are prefixed with a version number, a "0" padded eight digit number, ad suffixed with <code>.migration.dart</code>. For example, <code>00000001_initial.migration.dart</code> is a migration filename. The version number portion of the filename is required, as is the <code>.migration.dart</code> suffix. The underscore and remainder of the filename are optional and have no effect, they are just a way to name the file. Here is an example of two migration file names:</p>
+<pre class="codehilite"><code class="language-text">00000001_initial.migration.dart
+00000002_add_user_nickname.migration.dart
+</code></pre>
+
+<p>The version number of migration files indicate the order in which they are applied. Leading zeros are stripped from the filenames before their version numbers are compared. Version numbers do not necessarily have to be continuous, but doing otherwise is not recommended. Migration files may be altered after they are generated (see <a href="./#seeding-data">seeding data</a>).</p>
+<h2 id="validating-migration-files">Validating Migration Files</h2>
+<p>The <code>conduit db validate</code> tool validates that the database schema after running all migration files matches the application's data model. The validate tool will display differences found between the schema in code and the schema created by migration files.</p>
+<h2 id="listing-migration-files">Listing Migration Files</h2>
+<p>Use <code>conduit db list</code> to list all database migration files and their resolved version number.</p>
+<h2 id="getting-a-databases-version">Getting a Database's Version</h2>
+<p>You can fetch a database's current version number with <code>conduit db get-version</code>. This command takes <code>--connect</code> or a <code>database.yaml</code> file as described in the next section to get connection info for the database.</p>
+<h2 id="upgrading-a-database-schema-by-executing-migration-files">Upgrading a Database Schema by Executing Migration Files</h2>
+<p>The tool <code>conduit db upgrade</code> will apply the commands of migration files to a running database. This tool is run in an application's directory and database connection info is provided with the <code>--connect</code> option. For example, the following would execute the current project directory's migration files on a PostgreSQL database:</p>
+<pre class="codehilite"><code class="language-text">conduit db upgrade --connect postgres://username:password@localhost:5432/my_application
+</code></pre>
+
+<p>Every migration file that has not yet been run on the targeted database will be run. This tool manages a version table in each database it upgrades that allows it to determine which migration files need to be run.</p>
+<p>Connection information can alternatively be stored in a database configuration file named <code>database.yaml</code> in the application directory. If this file exists with the following format, <code>--connect</code> can be omitted and connection information will be read from this file:</p>
+<pre class="codehilite"><code class="language-text">username: &quot;user&quot;
+password: &quot;password&quot;
+host: &quot;host&quot;
+port: port
+databaseName: &quot;database&quot;
+</code></pre>
+
+<h3 id="when-to-execute-migration-files">When to Execute Migration Files</h3>
+<p>During development, there is no need to create a migration file for each change. Execute migration files prior to deployment of a new version of an application.</p>
+<p>You may delete migration files (as long as you haven't run them on a production database!). When <code>conduit db generate</code> is run again, it will replay only the existing migration files before determining which commands to add to the new migration file. For example, if you have 10 migration files over time and delete them all - the next generated migration file will contain commands to recreate the entire database schema.</p>
+<h3 id="seeding-data">Seeding Data</h3>
+<p>You may insert, delete, or edit rows during a database migration by overriding its <code>seed</code> method. You must run SQL queries instead of using <code>Query&lt;T&gt;</code> when seeding data. The <code>Migration</code> base class that all of your migrations extends have a property for a <code>PersistentStore</code> connected to the database the migration is being run on.</p>
+<pre class="codehilite"><code class="language-dart">class Migration2 extends Migration {
+  @override
+  Future upgrade() async {
+    ...
+  }
+
+  @override
+  Future downgrade() async {
+    ...
+  }
+
+  @override
+  Future seed() async {
+    await store.executeQuery(&quot;INSERT IN _mytable (a) VALUES (1)&quot;);
+  }
+}
+</code></pre>
+
+<p>Seeding is run after a migration's <code>ugprade</code> method has completed. Seeding data also occurs in the same transaction as <code>upgrade</code>.</p>
+<h3 id="handling-non-nullable-additions">Handling Non-nullable Additions</h3>
+<p>Some database upgrades can fail depending on the data currently in the database. A common scenario is adding a property to an existing managed object that is not-nullable. If the database table already has rows, those rows would not have a value for the new column and the migration would fail. If the database does not have any rows, the migration will succeed correctly. If the property has a default value attribute or is auto-incrementing, the migration will always succeed and the existing rows will have the default value for the new column.</p>
+<p>You may also provide a value just for the existing rows to make the migration succeed. This is added as an argument to the schema-altering command that would violate non-nullability:</p>
+<pre class="codehilite"><code class="language-dart">@override
+Future upgrade() async {
+  database.addColumn(&quot;_mytable&quot;, SchemaColumn(...), unencodedInitialValue: &quot;'text'&quot;)
+}
+</code></pre>
+
+<p>The unencoded initial value is inserted directly into a SQL command. This requires that the value be a SQL value literal as shown in the table:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Type</th>
+<th align="left">Unencoded Initial Value</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">int</td>
+<td align="left">"1"</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">String</td>
+<td align="left">"'string'"</td>
+<td align="left">'string'</td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="left">"2.0"</td>
+<td align="left">2.0</td>
+</tr>
+<tr>
+<td align="left">DateTime</td>
+<td align="left">"'1900-01-02T00:00:00.000Z'"</td>
+<td align="left">1/2/1900</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../validations/" class="btn btn-neutral float-left" title="Validations"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../json_columns/" class="btn btn-neutral float-right" title="JSON Document Storage">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../validations/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../json_columns/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

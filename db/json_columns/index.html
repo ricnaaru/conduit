@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>JSON Document Storage - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "JSON Document Storage";
+        var mkdocs_page_input_path = "db/json_columns.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">JSON Document Storage</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#json-columns-in-relational-databases">JSON Columns in Relational Databases</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-document-data-type">The Document Data Type</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#basic-operations-on-document-properties">Basic Operations on Document Properties</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#inserting-rows-with-document-properties">Inserting Rows with Document Properties</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fetching-rows-with-document-properties">Fetching Rows with Document Properties</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#updating-rows-with-document-properties">Updating Rows with Document Properties</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#accessing-document-values">Accessing Document Values</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fetching-sub-documents">Fetching Sub-documents</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>JSON Document Storage</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/json_columns.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="json-document-storage">JSON Document Storage</h1>
+<p>Learn how to store unstructured, binary JSON data in <code>ManagedObject&lt;T&gt;</code> properties.</p>
+<h2 id="json-columns-in-relational-databases">JSON Columns in Relational Databases</h2>
+<p>PostgreSQL supports many column data types like integers, strings, booleans and dates. A column may also be JSON data. This allows for storing unstructured data and simple objects in a table column. The data from JSON columns can be fetched all at once, or in pieces. Elements of JSON data can be used to filter the results of a query.</p>
+<h2 id="the-document-data-type">The Document Data Type</h2>
+<p>JSON document columns are added to a database table by declaring a <code>Document</code> property in a <code>ManagedObject&lt;T&gt;</code>'s table definition. In PostgreSQL, a <code>Document</code> column data type is <code>jsonb</code>. A document column can only contain JSON-encodable data. This data is typically a <code>Map</code> or <code>List</code> that contains only JSON-encodable data. The following <code>ManagedObject&lt;T&gt;</code> declaration will have a <code>contents</code> column of type <code>jsonb</code>.</p>
+<pre class="codehilite"><code class="language-dart">class Event extends ManagedObject&lt;_Event&gt; implements _Event {}
+class _Event {
+  @primaryKey
+  int id;
+
+  @Column(indexed: true)
+  DateTime timestamp;
+
+  Document contents;
+}
+</code></pre>
+
+<p>A <code>Document</code> object has a <code>data</code> property to hold its JSON-encodable data. When instantiating <code>Document</code>, this property defaults to null unless a value has been provided to the optional, ordered parameter in its constructor.</p>
+<pre class="codehilite"><code class="language-dart">final doc = new Document();
+assert(doc.data == null);
+
+final doc = new Document({&quot;key&quot;: &quot;value&quot;});
+assert(doc.data is Map);
+
+final doc = new Document([0]);
+assert(doc.data is List);
+</code></pre>
+
+<p>The data in a document can be accessed through its <code>data</code> property, or through its subscript operator. <code>Document</code>'s subscript operator forwards the invocation to its <code>data</code> property.</p>
+<pre class="codehilite"><code class="language-dart">final doc = new Document({&quot;key&quot;: &quot;value&quot;});
+
+assert(doc[&quot;key&quot;] == doc.data[&quot;key&quot;]);
+</code></pre>
+
+<p>The argument to the subscript operator may be a string (if <code>data</code> is a map) or an integer (if <code>data</code> is a list).</p>
+<h2 id="basic-operations-on-document-properties">Basic Operations on Document Properties</h2>
+<p><code>Document</code> columns are like any other type of column, and can therefore be set during an insert or update, and read during a fetch.</p>
+<h3 id="inserting-rows-with-document-properties">Inserting Rows with Document Properties</h3>
+<p>A <code>Document</code> property is first set when inserting with a <code>Query&lt;T&gt;</code>. The <code>values</code> property of the query is set to a <code>Document</code> object initialized with a JSON-encodable value.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..values.timestamp = DateTime.now()
+  ..values.contents = Document({
+    &quot;type&quot;: &quot;push&quot;,
+    &quot;user&quot;: &quot;bob&quot;,
+    &quot;tags&quot;: [&quot;v1&quot;]
+  });
+final event = await query.insert();
+</code></pre>
+
+<p>In the above, the argument to <code>Document</code> will be JSON-encoded and stored in the database for column <code>contents</code>. If the object can't be encoded as JSON, an exception will be thrown.</p>
+<h3 id="fetching-rows-with-document-properties">Fetching Rows with Document Properties</h3>
+<p>When fetching an object with <code>Document</code> properties with a <code>Query&lt;T&gt;</code>, you access the column's value through the document's <code>data</code> property.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..where((e) =&gt; e.id).equalTo(1);
+final event1 = await query.fetchOne();
+event1.contents.data == {
+  &quot;type&quot;: &quot;push&quot;,
+  &quot;user&quot;: &quot;bob&quot;,
+  &quot;tags&quot;: [&quot;v1&quot;]
+};
+</code></pre>
+
+<p>When fetching <code>Document</code> properties, the JSON data is decoded into the appropriate type. This is likely a <code>Map</code> or <code>List</code>, but can be any JSON-encodable object. Because the data stored in a <code>Document</code> property is unstructured, the type of <code>data</code> is <code>dynamic</code>. It is good practice to store consistent data structures in a column; i.e., always storing a <code>Map</code> or always storing a <code>List</code>.</p>
+<h3 id="updating-rows-with-document-properties">Updating Rows with Document Properties</h3>
+<p>Updating a row with <code>Document</code> properties works the same as inserting rows.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..where((e) =&gt; e.id).equalTo(1)
+  ..values.contents = Document({
+    &quot;type&quot;: &quot;push&quot;,
+    &quot;user&quot;: &quot;bob&quot;,
+    &quot;tags&quot;: [&quot;v1&quot;, &quot;new&quot;]
+  });
+final event = await query.updateOne();
+</code></pre>
+
+<p>When updating in this way, the document stored in the column is replaced entirely.</p>
+<h3 id="accessing-document-values">Accessing Document Values</h3>
+<p>The type of <code>Document.data</code> is <code>dynamic</code> - it can be any valid JSON type and may be casted to the expected type when used. This data can also be nested - a <code>List</code> of <code>Maps</code>, for example. When accessing object keys or list indices, you may use the subscript operator directly on <code>Document</code>.</p>
+<pre class="codehilite"><code class="language-dart">// Object Access by key
+final doc = Document({&quot;key&quot;: &quot;value&quot;});
+final value = doc[&quot;key&quot;] == &quot;value&quot;;
+
+// List Access by index
+final doc = Document([&quot;v1&quot;, &quot;v2&quot;]);
+final value = doc[0] == &quot;v1&quot;;
+</code></pre>
+
+<p>You can access nested elements with the same syntax:</p>
+<pre class="codehilite"><code class="language-dart">final doc = Document([
+  {&quot;id&quot;: 1},
+  {&quot;id&quot;: 2}
+]);
+
+final obj1 = doc[0][&quot;id&quot;]; // == 1
+final obj2 = doc[1][&quot;id&quot;]; // == 2
+</code></pre>
+
+<p>Note that using the subscript operator on a <code>Document</code> simply invokes it on its <code>data</code> property. Therefore, any subscript values must be valid for Dart <code>List</code> and <code>Map</code> types.</p>
+<h2 id="fetching-sub-documents">Fetching Sub-documents</h2>
+<p>When fetching a <code>Document</code> property, the default behavior is to return the entire JSON document as it is stored in the database column. You may fetch parts of the document you need by using <code>Query.returningProperties</code> and the subscript operator.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..returningProperties((e) =&gt; [e.id, e.contents[&quot;tags&quot;]]);
+final eventsWithTags = query.fetch();
+</code></pre>
+
+<p>When using the subscript operator on a returned <code>Document</code> property, only the value for that key is returned. For example, if the above query were executed and the stored column's value were:</p>
+<pre class="codehilite"><code class="language-javascript">{
+  &quot;type&quot;: &quot;push&quot;,  
+  &quot;user&quot;: &quot;bob&quot;,
+  &quot;tags&quot;: [&quot;v1&quot;]  
+}
+</code></pre>
+
+<p>The value of <code>Event.contents</code> would only contain the array for the key "tags":</p>
+<pre class="codehilite"><code class="language-javascript">[&quot;v1&quot;]
+</code></pre>
+
+<p>You may also index arrays in a JSON column using the same subscript operator, and the subscript operator can also be nested. For example, the following query would fetch the "tags" array, and then fetch the string at index 0 from it:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..returningProperties((e) =&gt; [e.id, e.contents[&quot;tags&quot;][0]]);
+final eventsWithFirstTag = await query.fetchOne();
+eventsWithFirstTag.contents.data == &quot;v1&quot;;
+</code></pre>
+
+<p>If a key or index does not exist in the JSON document, the value of the returned property will be null. For this reason, you should use null-aware operators when accessing <code>Document.data</code>:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..returningProperties((e) =&gt; [e.id, e.contents[&quot;tags&quot;][7]]); // 7 is out of bounds
+final eventsWithFirstTag = await query.fetchOne();
+if (eventsWithFirstTag.contents?.data == &quot;v1&quot;) {
+  ...
+}
+</code></pre>
+
+<p>When fetching elements from a JSON array, you may use negative indices to specify a index from the end of the array.</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Event&gt;(context)
+  ..returningProperties((e) =&gt; [e.id, e.contents[&quot;tags&quot;][-1]]);
+final eventsWithLastTag = await query.fetchOne();
+</code></pre>
+
+<p>Note that you can only fetch a single sub-structure from a <code>Document</code> column per query. That is, you may not do the following:</p>
+<pre class="codehilite"><code class="language-dart">// Invalid
+final query = Query&lt;Event&gt;(context)
+  ..returningProperties((e) =&gt; [e.id, e.contents[&quot;type&quot;], e.contents[&quot;user&quot;]]);
+</code></pre>
+
+<p>For operations not supported by <code>Query&lt;T&gt;</code>, you may use SQL directly:</p>
+<pre class="codehilite"><code class="language-dart">final eventTagCounts = await context.persistentStore.execute(&quot;SELECT jsonb_array_length(contents-&gt;'tags') from _Event&quot;);
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../db_tools/" class="btn btn-neutral float-left" title="Migration and Tooling"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../auth/server/" class="btn btn-neutral float-right" title="Setting up Authorization">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../db_tools/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../auth/server/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>HTTP - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "HTTP";
+        var mkdocs_page_input_path = "snippets/http.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">HTTP</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#hello-world">Hello, World</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#route-variables">Route Variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#grouping-routes-and-binding-path-variables">Grouping Routes and Binding Path Variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#custom-middleware">Custom Middleware</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#application-wide-cors-allowed-origins">Application-Wide CORS Allowed Origins</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#serve-files-and-set-cache-control-headers">Serve Files and Set Cache-Control Headers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#streaming-responses-server-side-events-with-textevent-stream">Streaming Responses (Server Side Events with text/event-stream)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#a-websocket-server">A websocket server</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setting-content-type-and-encoding-a-response-body">Setting Content-Type and Encoding a Response Body</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#proxy-a-file-from-another-server">Proxy a File From Another Server</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Snippets &raquo;</li>
+      <li>HTTP</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/snippets/http.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="conduit-http-snippets">Conduit HTTP Snippets</h1>
+<h2 id="hello-world">Hello, World</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {  
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/hello_world&quot;).linkFunction((request) async {
+      return Response.ok(&quot;Hello, world!&quot;)
+        ..contentType = ContentType.text;
+    });
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="route-variables">Route Variables</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {  
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/variable/[:variable]&quot;).linkFunction((request) async {
+      return Response.ok({
+        &quot;method&quot;: request.raw.method,
+        &quot;path&quot;: request.path.variables[&quot;variable&quot;] ?? &quot;not specified&quot;
+      });      
+    });
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="grouping-routes-and-binding-path-variables">Grouping Routes and Binding Path Variables</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {  
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router
+      .route(&quot;/users/[:id]&quot;)
+      .link(() =&gt; MyController());
+
+    return router;
+  }
+}
+
+class MyController extends ResourceController {
+  final List&lt;String&gt; things = ['thing1', 'thing2'];
+
+  @Operation.get()
+  Future&lt;Response&gt; getThings() async {
+    return Response.ok(things);
+  }
+
+  @Operation.get('id')
+  Future&lt;Response&gt; getThing(@Bind.path('id') int id) async {
+    if (id &lt; 0 || id &gt;= things.length) {
+      return Response.notFound();
+    }
+    return Response.ok(things[id]);
+  }
+}
+</code></pre>
+
+<h2 id="custom-middleware">Custom Middleware</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {  
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router
+      .route(&quot;/rate_limit&quot;)
+      .link(() =&gt; RateLimiter())
+      .linkFunction((req) async =&gt; Response.ok({
+        &quot;requests_remaining&quot;: req.attachments[&quot;remaining&quot;]
+      }));
+
+    return router;
+  }
+}
+
+class RateLimiter extends RequestController {
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    final apiKey = request.raw.headers.value(&quot;x-apikey&quot;);
+    final requestsRemaining = await remainingRequestsForAPIKey(apiKey);
+    if (requestsRemaining &lt;= 0) {
+      return Response(429, null, null);
+    }
+
+    request.addResponseModifier((r) {
+      r.headers[&quot;x-remaining-requests&quot;] = requestsRemaining;
+    });
+
+    return request;
+  }
+}
+</code></pre>
+
+<h2 id="application-wide-cors-allowed-origins">Application-Wide CORS Allowed Origins</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  @override
+  Future prepare() async {
+    // All controllers will use this policy by default
+    CORSPolicy.defaultPolicy.allowedOrigins = [&quot;https://mywebsite.com&quot;];
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/things&quot;).linkFunction((request) async {
+      return Response.ok([&quot;Widget&quot;, &quot;Doodad&quot;, &quot;Transformer&quot;]);
+    });
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="serve-files-and-set-cache-control-headers">Serve Files and Set Cache-Control Headers</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/files/*&quot;).link(() =&gt;
+      FileController(&quot;web&quot;)
+        ..addCachePolicy(new CachePolicy(expirationFromNow: new Duration(days: 365)),
+          (path) =&gt; path.endsWith(&quot;.js&quot;) || path.endsWith(&quot;.css&quot;))      
+    );
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="streaming-responses-server-side-events-with-textevent-stream">Streaming Responses (Server Side Events with text/event-stream)</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  final StreamController&lt;String&gt; controller = new StreamController&lt;String&gt;();  
+
+  @override
+  Future prepare() async {
+    var count = 0;
+     Timer.periodic(new Duration(seconds: 1), (_) {
+      count ++;
+      controller.add(&quot;This server has been up for $count seconds\n&quot;);
+    });
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = new Router();
+
+    router.route(&quot;/stream&quot;).linkFunction((req) async {
+      return Response.ok(controller.stream)
+          ..bufferOutput = false
+          ..contentType = new ContentType(
+            &quot;text&quot;, &quot;event-stream&quot;, charset: &quot;utf-8&quot;);
+    });
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="a-websocket-server">A websocket server</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  List&lt;WebSocket&gt; websockets = [];
+
+  @override
+  Future prepare() async {
+    // When another isolate gets a websocket message, echo it to
+    // websockets connected on this isolate.
+    messageHub.listen(sendBytesToConnectedClients);
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    // Allow websocket clients to connect to ws://host/connect
+    router.route(&quot;/connect&quot;).linkFunction((request) async {
+      var websocket = await WebSocketTransformer.upgrade(request.raw);
+      websocket.listen(echo, onDone: () {
+        websockets.remove(websocket);
+      }, cancelOnError: true);
+      websockets.add(websocket);
+
+      // Take request out of channel
+      return null;
+    });
+
+    return router;
+  }
+
+  void sendBytesToConnectedClients(List&lt;int&gt; bytes) {
+    websockets.forEach((ws) {
+      ws.add(bytes);
+    });
+  }
+
+  void echo(List&lt;int&gt; bytes) {
+    sendBytesToConnectedClients(bytes);
+
+    // Send to other isolates
+    messageHub.add(bytes);
+  }
+}
+</code></pre>
+
+<h2 id="setting-content-type-and-encoding-a-response-body">Setting Content-Type and Encoding a Response Body</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  final ContentType CSV = ContentType(&quot;text&quot;, &quot;csv&quot;, charset: &quot;utf-8&quot;);
+
+  @override
+  Future prepare() async {
+    // CsvCodec extends dart:convert.Codec
+    CodecRegistry.defaultInstance.add(CSV, new CsvCodec());
+  }
+
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/csv&quot;).linkFunction((req) async {
+      // These values will get converted by CsvCodec into a comma-separated string
+      return Response.ok([[1, 2, 3], [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]])
+        ..contentType = CSV;
+    });
+
+    return router;
+  }
+}
+</code></pre>
+
+<h2 id="proxy-a-file-from-another-server">Proxy a File From Another Server</h2>
+<pre class="codehilite"><code class="language-dart">class AppChannel extends ApplicationChannel {
+  @override
+  Controller get entryPoint {
+    final router = Router();
+
+    router.route(&quot;/proxy/*&quot;).linkFunction((req) async {
+      var fileURL = &quot;https://otherserver/${req.path.remainingPath}&quot;;
+      var fileRequest = await client.getUrl(url);
+      var fileResponse = await req.close();
+      if (fileResponse.statusCode != 200) {
+        return new Response.notFound();
+      }
+
+      // A dart:io.HttpResponse is a Stream&lt;List&lt;int&gt;&gt; of its body bytes.
+      return new Response.ok(fileResponse)
+        ..contentType = fileResponse.headers.contentType
+        // let the data just pass through because it has already been encoded
+        // according to content-type; applying encoding again would cause
+        // an issue
+        ..encodeBody = false;
+    });
+
+    return router;
+  }
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../" class="btn btn-neutral float-left" title="Overview"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../orm/" class="btn btn-neutral float-right" title="ORM">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../orm/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

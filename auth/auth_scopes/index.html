@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>OAuth 2.0 Scoping - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "OAuth 2.0 Scoping";
+        var mkdocs_page_input_path = "auth/auth_scopes.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">OAuth 2.0 Scoping</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#granular-authorization-with-oauth-20-scopes">Granular Authorization with OAuth 2.0 Scopes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope-usage-in-conduit">Scope Usage in Conduit</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#adding-scope-restrictions-to-operations">Adding Scope Restrictions to Operations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-permissible-scope">Defining Permissible Scope</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#client-application-integration">Client Application Integration</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope-format-and-hierarchy">Scope Format and Hierarchy</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Authorization and OAuth 2.0 &raquo;</li>
+      <li>OAuth 2.0 Scoping</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/auth/auth_scopes.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="auth_scopes">auth_scopes</h1>
+<h2 id="granular-authorization-with-oauth-20-scopes">Granular Authorization with OAuth 2.0 Scopes</h2>
+<p>In many applications, operations have varying levels of access control. For example, a user may need special permission to create 'notes', but every user can read notes. In OAuth 2.0, permissions for operations are determined by an access token's <em>scope</em>. Operations can be defined to require certain scopes, and a request may only invoke those operations if its access token was granted with those scopes.</p>
+<p>A scope is a string identifier, like <code>notes</code> or <code>notes.readonly</code>. When a client application authenticates on behalf of a user, it requests one or more of these scope identifiers to be granted to the access token. Valid scopes will be stored with the access token, so that the scope can be referenced by subsequent uses of the access token.</p>
+<h2 id="scope-usage-in-conduit">Scope Usage in Conduit</h2>
+<p>An access token's scope is determined when a user authenticates. During authentication, a client application indicates the requested scope, and the Conduit application determines if that scope is permissible for the client application and the user. This scope information is attached to the access token.</p>
+<p>When a request is made with an access token, an <code>Authorizer</code> retrieves the token's scope. After the request is validated, the <code>Authorizer</code> stores scope information in <code>Request.authorization</code>. Linked controllers can use this information to determine how the request is handled. In general, a controller will reject a request and send a 403 Forbidden response when an access token has insufficient scope for an operation.</p>
+<p>Therefore, adding scopes to an application consists of three steps:</p>
+<ol>
+<li>Adding scope restrictions to operations.</li>
+<li>Adding permissible scopes for OAuth2 client identifiers (and optionally users).</li>
+<li>Updating client applications to request scope when authenticating.</li>
+</ol>
+<h3 id="adding-scope-restrictions-to-operations">Adding Scope Restrictions to Operations</h3>
+<p>When an <code>Authorizer</code> handles a request, it creates an <code>Authorization</code> object that is attached to the request. An <code>Authorization</code> object has a <code>scopes</code> property that contains every scope granted for the access token. This object also has a convenience method for checking if a particular scope is valid for that list of scopes:</p>
+<pre class="codehilite"><code class="language-dart">class NoteController extends Controller {
+  @override
+  Future&lt;RequestOrResponse&gt; handle(Request request) async {
+    if (!request.authorization.isAuthorizedForScope(&quot;notes&quot;)) {
+      return Response.forbidden();
+    }
+
+    return Response.ok(await getAllNotes());
+  }
+}
+</code></pre>
+
+<p>!!! warning "Use an Authorizer" The <code>authorization</code> property of <code>Request</code> is only valid after the request is handled by an <code>Authorizer</code>. It is <code>null</code> otherwise.</p>
+<p>An <code>Authorizer</code> may also validate the scope of a request before letting it pass to its linked controller.</p>
+<pre class="codehilite"><code class="language-dart">router
+  .route('/notes')
+  .link(() =&gt; Authorizer.bearer(authServer, scopes: ['notes']))
+  .link(() =&gt; NoteController());
+</code></pre>
+
+<p>In the above, the <code>NoteController</code> will only be reached if the request's bearer token has 'notes' scope. If there is insufficient scope, a 403 Forbidden response is sent. This applies to all operations of the <code>NoteController</code>.</p>
+<p>It often makes sense to have separate scope for different operations on the same resource. The <code>Scope</code> annotation may be added to <code>ResourceController</code> operation methods for this purpose.</p>
+<pre class="codehilite"><code class="language-dart">class NoteController extends ResourceController {
+  @Scope(['notes.readonly'])
+  @Operation.get()
+  Future&lt;Response&gt; getNotes() async =&gt; ...;
+
+  @Scope(['notes'])
+  @Operation.post()
+  Future&lt;Response&gt; createNote(@Bind.body() Note note) async =&gt; ...;
+}
+</code></pre>
+
+<p>If a request does not have sufficient scope for the intended operation method, a 403 Forbidden response is sent. When using <code>Scope</code> annotations, you must link an <code>Authorizer</code> prior to the <code>ResourceController</code>, but it is not necessary to specify <code>Authorizer</code> scopes.</p>
+<p>If a <code>Scope</code> annotation or <code>Authorizer</code> contains multiple scope entries, an access token must have scope for each of those entries. For example, the annotation <code>@Scope(['notes', 'user'])</code> requires an access token to have both 'notes' and 'user' scope.</p>
+<h3 id="defining-permissible-scope">Defining Permissible Scope</h3>
+<p>When a client application authenticates on behalf of a user, it includes a list of request scopes for the access token. A Conduit application will grant the requested scopes to the token if the scopes are permissible for both the authenticating client identifier and the authenticating user.</p>
+<p>To add permissible scopes to an authenticating client, you use the <code>conduit auth</code> command-line tool. When creating a new client identifier, include the <code>--allowed-scopes</code> options:</p>
+<pre class="codehilite"><code class="language-bash">conduit auth add-client \
+  --id com.app.mobile \
+  --secret myspecialsecret \
+  --allowed-scopes 'notes users' \
+  --connect postgres://user:password@dbhost:5432/db_name
+</code></pre>
+
+<p>When modifying an existing client identifier, use the command <code>conduit auth set-scope</code>:</p>
+<pre class="codehilite"><code class="language-bash">conduit auth set-scope \
+  --id com.app.mobile \
+  --scopes 'notes users' \
+  --connect postgres://user:password@dbhost:5432/db_name
+</code></pre>
+
+<p>Each scope is a space-delimited string; the above examples allow clients authenticating with the <code>com.app.mobile</code> client ID to grant access tokens with 'notes' and 'users' scope. If a client application requests scopes that are not available for that client application, the granted access token will not contain that scope. If none of the request scopes are available for the client identifier, no access token is granted. When adding scope restrictions to your application, you must ensure that all of the client applications that have access to those operations are able to grant that scope.</p>
+<p>Scopes may also be limited by some attribute of your application's concept of a 'user'. This user-level filtering is done by overriding <code>getAllowedScopes</code> in <code>AuthServerDelegate</code>. By default, this method returns <code>AuthScope.Any</code> - which means there are no restrictions. If the client application allows the scope, then any user that logs in with that application can request that scope.</p>
+<p>This method may return a list of <code>AuthScope</code>s that are valid for the authenticating user. The following example shows a <code>ManagedAuthDelegate&lt;T&gt;</code> subclass that allows any scope for <code>@conduit.dart.com</code> usernames, no scopes for <code>@hotmail.com</code> addresses and some limited scope for everyone else:</p>
+<pre class="codehilite"><code class="language-dart">class DomainBasedAuthDelegate extends ManagedAuthDelegate&lt;User&gt; {
+  DomainBasedAuthDelegate(ManagedContext context, {int tokenLimit: 40}) :
+        super(context, tokenLimit: tokenLimit);
+
+  @override
+  List&lt;AuthScope&gt; getAllowedScopes(covariant User user) {
+    if (user.username.endsWith(&quot;@conduit.dart.com&quot;)) {
+      return AuthScope.Any;
+    } else if (user.username.endsWith(&quot;@hotmail.com&quot;)) {
+      return [];
+    } else {
+      return [AuthScope(&quot;user&quot;)];
+    }
+  }      
+}
+</code></pre>
+
+<p>The <code>user</code> passed to <code>getAllowedScopes</code> is the user being authenticated. It will have previously been fetched by the <code>AuthServer</code>. The <code>AuthServer</code> fetches this object by invoking <code>AuthDelegate.getResourceOwner</code>. The default implementation of this method for <code>ManagedAuthDelegate&lt;T&gt;</code> only fetches the <code>id</code>, <code>username</code>, <code>salt</code> and <code>hashedPassword</code> of the user.</p>
+<p>When using some other attribute of an application's user object to restrict allowed scopes, you must also override <code>getResourceOwner</code> to fetch these attributes. For example, if your application's user has a <code>role</code> attribute, you must fetch it and the other four required properties. Here's an example implementation:</p>
+<pre class="codehilite"><code class="language-dart">class RoleBasedAuthDelegate extends ManagedAuthDelegate&lt;User&gt; {
+  RoleBasedAuthDelegate(ManagedContext context, {int tokenLimit: 40}) :
+        super(context, tokenLimit: tokenLimit);
+
+  @override
+  Future&lt;User&gt; getResourceOwner(
+      AuthServer server, String username) {
+    final query = Query&lt;User&gt;(context)
+      ..where((u) =&gt; u.username).equalTo(username)
+      ..returningProperties((t) =&gt;
+        [t.id, t.username, t.hashedPassword, t.salt, t.role]);
+
+    return query.fetchOne();
+  }
+
+  @override
+  List&lt;AuthScope&gt; getAllowedScopes(covariant User user) {
+    var scopeStrings = [];
+    if (user.role == &quot;admin&quot;) {
+      scopeStrings = [&quot;admin&quot;, &quot;user&quot;];
+    } else if (user.role == &quot;user&quot;) {
+      scopeStrings = [&quot;user:email&quot;];
+    }
+
+    return scopeStrings.map((str) =&gt; AuthScope(str)).toList();
+  }
+}
+</code></pre>
+
+<h3 id="client-application-integration">Client Application Integration</h3>
+<p>Client applications that integrate with your scoped Conduit application must include a list of requested scopes when performing authentication. When authenticating through <code>AuthController</code>, a <code>scope</code> parameter must be added to the form data body. This parameter's value must be a space-delimited, URL-encoded list of requested scopes.</p>
+<pre class="codehilite"><code class="language-text">username=bob&amp;password=foo&amp;grant_type=password&amp;scope=notes%20users
+</code></pre>
+
+<p>When authenticating via an <code>AuthCodeController</code>, this same query parameter is added to the initial <code>GET</code> request to render the login form.</p>
+<p>When authentication is complete, the list of granted scopes will be available in the JSON response body as a space-delimited string.</p>
+<pre class="codehilite"><code class="language-javascript">{
+  &quot;access_token&quot;: &quot;...&quot;,
+  &quot;refresh_token&quot;: &quot;...&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;,
+  &quot;expires_in&quot;: 3600,
+  &quot;scopes&quot;: &quot;notes users&quot;
+}
+</code></pre>
+
+<h2 id="scope-format-and-hierarchy">Scope Format and Hierarchy</h2>
+<p>There is no definitive guide on what a scope string should look like, other than being restricted to alphanumeric characters and some symbols. Conduit, however, provides a simple scoping structure - there are two special symbols, <code>:</code> and <code>.</code>.</p>
+<p>Hierarchy is specified by the <code>:</code> character. For example, the following is a hierarchy of scopes related to a user and its sub-resources:</p>
+<ul>
+<li><code>user</code> (can read/write everything a user has)</li>
+<li><code>user:email</code> (can read/write a user's email)</li>
+<li><code>user:documents</code> (can read/write a user's documents)</li>
+<li><code>user:documents:spreadsheets</code> (can read/write a user's spreadsheet documents)</li>
+</ul>
+<p>Notice how these scopes form a hierarchy. Each segment makes the scope more restrictive. For example, if an access token has <code>user:email</code> scope, it only allows access to a user's email. However, if the access token has <code>user</code> scope, it allows access to everything a user has, including their email.</p>
+<p>As another example, an access token with <code>user:documents</code> scope can access all of a user's documents, but the scope <code>user:documents:spreadsheets</code> is limited to only spreadsheet documents.</p>
+<p>Scope is often used to indicate read vs. write access. At first glance, it might sound like a good idea to use the hierarchy operator, e.g. <code>user:email:read</code> and <code>user:email:write</code>. However, an access token with <code>user:email:write</code> <em>does not</em> have permission to read email and this is likely unintended.</p>
+<p>This is where <em>scope modifiers</em> come in. A scope modifier is added after a <code>.</code> at the end of a scope string. For example, <code>user:email.readonly</code> grants readonly access to a user's email whereas <code>user:email</code> grants read and write access.</p>
+<p>An access token without a modifier has permission <em>any</em> modifier. Thus, <code>user</code> and <code>user:email</code> can both access <code>user:email.readonly</code> protected resources and actions, but <code>user:email.readonly</code> cannot access resources protected by <code>user:email</code>.</p>
+<p>A scope modifier is only valid for the last segment of a scope string. That is, <code>user:documents.readonly:spreadsheets</code> is not valid, but <code>user:documents:spreadsheets.readonly</code> is.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../cli/" class="btn btn-neutral float-left" title="Managing OAuth 2.0 Clients"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../what_is_oauth/" class="btn btn-neutral float-right" title="What is OAuth 2.0?">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../cli/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../what_is_oauth/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

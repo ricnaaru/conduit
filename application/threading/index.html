@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Multi-threading - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Multi-threading";
+        var mkdocs_page_input_path = "application/threading.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Multi-threading</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-conduit-uses-isolates">How Conduit Uses Isolates</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-many-isolates-should-i-use">How Many Isolates Should I Use</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../db/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/modeling_data/">Modeling Data and Relationships</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../db/json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Application Configuration and Behavior &raquo;</li>
+      <li>Multi-threading</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/application/threading.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="multi-threading-in-conduit">Multi-threading in Conduit</h1>
+<p>One of the primary differentiators between Conduit and other server frameworks is its multi-threaded behavior. When a Conduit application starts, it replicates the application logic across a number of threads.</p>
+<p>In Dart, threads are called <em>isolates</em>. The difference in naming isn't just to be cute - an isolate is a little bit different than a thread in that memory is not shared between isolates. Each isolate has its own heap (this is where memory for objects is allocated from) that other isolates can't access.</p>
+<p>An isolated thread is very valuable. Many multi-threaded applications share memory across threads, which require difficult design patterns and can easily introduce hard to track bugs that even the most experienced programmer will have a hard time avoiding.</p>
+<h2 id="how-conduit-uses-isolates">How Conduit Uses Isolates</h2>
+<p>An application is initialized by invoking a series of initialization methods in a <code>ApplicationChannel</code>. Once these methods are finished executing, the application starts sending HTTP requests through the channel created by the <code>ApplicationChannel</code>.</p>
+<p>Because an <code>ApplicationChannel</code> is a type - and can be instantiated - Conduit simply creates a number of isolates and instantiates <code>ApplicationChannel</code> for each. The initialization code is therefore identical for each isolate, which means that the ongoing behavior of each isolate is also identical.</p>
+<p>More importantly, you - the programmer - have to do absolutely nothing to take advantage of Conduit's multi-threaded behavior. You simply have to pick the number of isolates you want to run the application on (see <a href="./#how-many-isolates-should-i-use">this section</a>).</p>
+<p>While you don't have to do anything in a Conduit application to take advantage of multiple processors, there are things you shouldn't do or should do in another way.</p>
+<p>First, you must be careful of keeping any state in your application. After initialization, any objects created while handling a request should be destroyed once the request is fulfilled. Any data that needs to be persisted must be stored in a database or other data store. This is just good practice for a REST API anyhow, so nothing is really lost here.</p>
+<p>However, there are times where you do need to track state. For example, if you are managing websocket connections, you do need to store some state after initialization - a reference to the websocket. <a href="../../http/websockets/">This guide</a> covers this topic in detail; the simple explanation is to use the <code>ApplicationMessageHub</code>.</p>
+<p>Another thing that is important to consider is initialization. The methods <code>prepare()</code> and <code>entryPoint</code> in an application channel will be invoked on each isolate. This behavior is guaranteed to occur for each isolate and there is often little to worry about.</p>
+<p>However, when implementing <code>ApplicationChannel.initializeApplication</code>, code runs on the main isolate. Any changes to static variables or singletons will not be replicated to the isolates running the application logic. The use case for this method is rather minimal, but it is very important that types like <code>CodecRegistry</code> aren't configured in this method.</p>
+<h2 id="how-many-isolates-should-i-use">How Many Isolates Should I Use</h2>
+<p>To give you a starting point, the default number of isolates for an application is 3 when started with <code>conduit serve</code>. While less than 3 isolates will most certainly degrade performance, more than 3 doesn't necessarily improve performance. (And many more will certainly degrade performance.)</p>
+<p>There are a number of variables that factor into the isolate count decision. First, recall a computer essentially does two things: it executes instructions and transmits data. Both of these tasks take time, especially when that data is transmitted to another computer thousands of miles away. (It is a modern marvel that these tasks occur as fast as they do - one that we often take for granted.)</p>
+<p>While a few milliseconds difference in speed to handle a single request isn't all that meaningful, when you start receiving thousands of requests at a time, these milliseconds add up. When your application is struggling to keep up with executing instructions, it is said to be <em>CPU-bound</em>. (When your application is struggling to transmit data, it is said to be <em>IO-bound</em>.)</p>
+<p>A CPU-bound application has two choices: execute less instructions or have more processors (or cores) to execute instructions with. Most computers these days have multiple processors. When only using a single isolate, a Conduit application can only use one of those processors at a time. As the number of isolates increases, so too do the number of processors that can be used at a time.</p>
+<p>Thus, more isolates means more processors means more instructions and your application bound less by the CPU. However, there is a limit - creating 100 isolates when there are only two processors doesn't yield any greater performance, because 50 isolates will fight over a single processor. In fact, the amount of work to schedule these instructions and the amount of memory this many isolates will consume will hurt performance.</p>
+<p>For example, when running benchmarks with <a href="https://github.com/wg/wrk">wrk</a> on my four-core machine, I get significantly better results as I add isolates 1 through 4, but then I get marginal gains and finally less or equal performance as I increase the number of isolates past 4. The blue bar represents the number of requests per second for each isolate count when making a simple HTTP call to Conduit.</p>
+<p><img alt="Requests Per Second" src="../.gitbook/assets/req_per_sec%20%281%29.png" /></p>
+<p>(Note that benchmarks are a good way of measuring relative performance of an application and identifying bottlenecks, but real world usability performance across a network is the only measurement that matters. The absolute value of these benchmarks should not be taken seriously, as they entirely remove the network portion of the transmission.)</p>
+<p>But this isn't the whole story. Server applications are rarely CPU-bound, but instead IO-bound. The red bar represents the number of requests per second when making a database query and returning the results of that query as JSON in the response body. When using Observatory, the measurements indicate that the overwhelming majority of the time is spent transmitting data to and from the database. This is an example of being bound by IO (and the speed of the query).</p>
+<p>Recall that each isolate has its own database connection. A database connection is a serial queue - it can only handle one query at a time. Increasing the number of database connections means handling more queries at a time. This is no more apparent than when looking at the following graph, which measures the latency of requests with and without a database call.</p>
+<p><img alt="Average Latency" src="../.gitbook/assets/latency%20%281%29.png" /></p>
+<p>When there is only one database connection (one isolate), the latency is significantly higher per request - the application is entirely bound by the speed of the database serial queue. Adding a second isolate, and therefore a second database connection, drops the latency by more than half.</p>
+<p>There are diminishing returns as more database connections are added. That's because the same thing about the number of threads per processor also applies to the number of database connections. Adding more database connections doesn't magically make the database server run any faster.</p>
+<p>As a general rule, start with N-1 isolates, where N is the number of processors on the machine. Use <code>wrk</code> and Observatory to profile your application and tune accordingly. In a multi-instance environment, remember that the total number of database connections is MxN, where M is the number of machines and N is the number of isolates.</p>
+<p>If you find yourself in a jam where IO would be better served by less isolates, but CPU would be better served by more isolates, you may consider using a database connection pool isolate.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../structure/" class="btn btn-neutral float-left" title="Application and Project Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../http/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../structure/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../http/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

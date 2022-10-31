@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Modeling Data and Relationships - Conduit</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../style/css/override.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Modeling Data and Relationships";
+        var mkdocs_page_input_path = "db/modeling_data.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-41269877-2', 'aqueduct.io');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Conduit
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../index.md">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../core_concepts/">Core Concepts</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../getting_started/">Getting Started</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../tour/">Tour</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../best_practices/">Best Practices</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="" href="../../intellij.md">IntelliJ IDEA Templates</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorial</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/getting-started/">1. Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/executing-queries/">2. Reading from a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/storing-data/">3. Storing Data in a Database</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/writing-tests/">4. Configuration and Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tut/oauth2/">5. Authentication and Authorization</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Snippets</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/http/">HTTP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/orm/">ORM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/auth/">Authentication and Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../snippets/test/">Testing</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Application Configuration and Behavior</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../application/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/channel/">Starting and Stopping Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/configure/">Configuring an Application and its Environment</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/structure/">Application and Project Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../application/threading/">Multi-threading</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Handling HTTP Requests</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/controller/">Handling Requests and Sending Response</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/request_and_response/">Serializing Request and Response Bodies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/routing/">Routing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/resource_controller/">Request Binding with Resource Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/serving_files/">Serving Files and Caching</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/websockets/">Websockets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../http/file_upload/">Uploading Files</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Databases and ORM</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="" href="../index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../connecting/">Connecting to a Database</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Modeling Data and Relationships</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#defining-a-table">Defining a Table</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#defining-a-managed-object-subclass">Defining a Managed Object Subclass</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modeling-relationships">Modeling Relationships</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#special-behaviors">Special Behaviors</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#enum-types">Enum Types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#private-variables">Private Variables</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#transient-properties">Transient Properties</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#project-file-structure">Project File Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#example-one-to-many-relationship">Example: One-to-Many Relationship</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-one-to-one-relationship">Example: One-to-One Relationship</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-many-to-many-relationship">Example: Many-to-Many Relationship</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-hierarchical-relationships-self-referencing">Example: Hierarchical Relationships (Self Referencing)</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../serialization/">Serialization and Deserialization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../executing_queries/">Basic Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced_queries/">Advanced Queries</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../transactions/">Transactions</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../validations/">Validations</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../db_tools/">Migration and Tooling</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../json_columns/">JSON Document Storage</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Authorization and OAuth 2.0</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../auth/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/server/">Setting up Authorization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/authorizer/">Protecting Routes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/controllers/">Issuing Access Tokens</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/cli/">Managing OAuth 2.0 Clients</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/auth_scopes/">OAuth 2.0 Scoping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../auth/what_is_oauth/">What is OAuth 2.0?</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Development and Testing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../testing/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/tests/">Writing Tests</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mixins/">Testing with the ORM and OAuth 2.0</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/debugger/">Using the Debugger</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/clients/">Developing Client Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../testing/mock/">Mocking Services</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: OpenAPI Documentation</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../openapi/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/cli/">Creating an OpenAPI Document</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/components/">Documenting Components</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/endpoint/">Documenting Endpoint Controllers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../openapi/middleware/">Documenting Middleware Controllers</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Command-line Tooling</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../cli/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/create/">Creating Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/running/">Running Applications</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../cli/document/">Generating an OpenAPI/Swagger Specification</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Guide: Deployment</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="../../deploy/index.md">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/build/">Creating a Conduit Executable</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_local/">Deploy Locally (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_docker/">Deploying with Docker and Kubernetes (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_heroku/">Deploy on Heroku (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/deploy_aws/">Deploy on AWS (VM)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../deploy/script/">Deploying without aqueduct serve (VM)</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Conduit</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Guide: Databases and ORM &raquo;</li>
+      <li>Modeling Data and Relationships</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/stablekernel/aqueduct/edit/docs/source/source/docs/db/modeling_data.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="modeling-data">Modeling Data</h1>
+<p>In this guide, you will learn how to create types that are mapped to database tables. At the end of this guide are additional examples of data model types.</p>
+<h2 id="defining-a-table">Defining a Table</h2>
+<p>In your application, you declare types whose instances are stored in a database. Each of these types is mapped to a database table, where each property of the type is a column of the table. For example, consider modeling newspaper articles, where each article has a unique identifier, text contents and published date:</p>
+<pre class="codehilite"><code class="language-dart">// This is a table definition of an 'article'
+class _Article {
+  @Column(primaryKey: true)
+  int id;
+
+  String contents;
+
+  @Column(indexed: true)
+  DateTime publishedDate;
+}
+</code></pre>
+
+<p>This plain Dart class is called a <em>table definition</em> because it defines a database table named <code>_Article</code>. The table has three columns, <code>id</code>, <code>contents</code>, <code>publishedDate</code>. An example of the data stored in this table might look like this:</p>
+<table>
+<thead>
+<tr>
+<th align="left">id</th>
+<th align="left">contents</th>
+<th align="left">publishedDate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="left">Today, the local...</td>
+<td align="left">2018-02-01 00:00:00.000</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">In other news, ...</td>
+<td align="left">2018-03-01 04:30:00.000</td>
+</tr>
+</tbody>
+</table>
+<p>A property in a table definition can optionally have a <code>Column</code> annotation. This annotation configures the behavior of the associated database column. If a property doesn't have an annotation, the column has default behavior. These behaviors are shown in the table below:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Option</th>
+<th align="left">Type</th>
+<th align="left">Behavior</th>
+<th align="left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">primaryKey</td>
+<td align="left"><code>bool</code></td>
+<td align="left">sets primary key column</td>
+<td align="left">false (not primary key)</td>
+</tr>
+<tr>
+<td align="left">databaseType</td>
+<td align="left"><code>ManagedPropertyType</code></td>
+<td align="left">sets underlying column type</td>
+<td align="left">inferred from Dart type</td>
+</tr>
+<tr>
+<td align="left">nullable</td>
+<td align="left"><code>bool</code></td>
+<td align="left">toggles whether column can be null</td>
+<td align="left">false (not nullable)</td>
+</tr>
+<tr>
+<td align="left">unique</td>
+<td align="left"><code>bool</code></td>
+<td align="left">toggles whether column is unique across all rows</td>
+<td align="left">false (not unique)</td>
+</tr>
+<tr>
+<td align="left">defaultValue</td>
+<td align="left"><code>String</code></td>
+<td align="left">provides default value for new rows when value is undefined</td>
+<td align="left">null</td>
+</tr>
+<tr>
+<td align="left">indexed</td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether an index should be created for the column</td>
+<td align="left">false (no index)</td>
+</tr>
+<tr>
+<td align="left">omitByDefault</td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether this column should be left out by default</td>
+<td align="left">false (fetch column value)</td>
+</tr>
+<tr>
+<td align="left">autoincrement</td>
+<td align="left"><code>bool</code></td>
+<td align="left">whether this column's value is automatically generated from a series</td>
+<td align="left">false (not generated)</td>
+</tr>
+</tbody>
+</table>
+<p>You must use either zero or one <code>Column</code> annotation per property, and you must set all behaviors in one annotation, e.g.:</p>
+<pre class="codehilite"><code class="language-dart">@Column(nullable: true, unique: true, indexed: true)
+int field;
+</code></pre>
+
+<p>The data type of a column is inferred from the Dart type of the property as shown by the following table.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Dart Type</th>
+<th align="left">General Column Type</th>
+<th align="left">PostgreSQL Column Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>int</code></td>
+<td align="left">integer number</td>
+<td align="left"><code>INT</code> or <code>SERIAL</code></td>
+</tr>
+<tr>
+<td align="left"><code>double</code></td>
+<td align="left">floating point number</td>
+<td align="left"><code>DOUBLE PRECISION</code></td>
+</tr>
+<tr>
+<td align="left"><code>String</code></td>
+<td align="left">text</td>
+<td align="left"><code>TEXT</code></td>
+</tr>
+<tr>
+<td align="left"><code>DateTime</code></td>
+<td align="left">timestamp</td>
+<td align="left"><code>TIMESTAMP</code></td>
+</tr>
+<tr>
+<td align="left"><code>bool</code></td>
+<td align="left">boolean</td>
+<td align="left"><code>BOOLEAN</code></td>
+</tr>
+<tr>
+<td align="left"><code>Document</code></td>
+<td align="left">a JSON object or array</td>
+<td align="left"><code>JSONB</code></td>
+</tr>
+<tr>
+<td align="left">Any <code>enum</code></td>
+<td align="left">text, restricted to enum cases</td>
+<td align="left"><code>TEXT</code></td>
+</tr>
+</tbody>
+</table>
+<p>Some types can be represented by many database types; for example, an integer can be stored as 2, 4 or 8 bytes. Use the <code>databaseType</code> of a <code>Column</code> annotation to specify:</p>
+<pre class="codehilite"><code class="language-dart">@Column(databaseType: ManagedPropertyType.bigInteger)
+int bigNumber;
+</code></pre>
+
+<p>The only requirement of a table definition type is that it has exactly one primary key property. A primary key is an indexed, unique identifier for a database row and is set through the <code>Column</code> annotation.</p>
+<pre class="codehilite"><code class="language-dart">@Column(primaryKey: true)
+int id;
+</code></pre>
+
+<p>A primary key can be any supported data type, and it is always unique and indexed. It is common for primary keys to be 64-bit, auto-incrementing integers. The <code>primaryKey</code> constant exists as a convenience for a <code>Column</code> with these behaviors.</p>
+<pre class="codehilite"><code class="language-dart">class _Article {
+  @primaryKey // equivalent to @Column(primaryKey: true, databaseType: ManagedPropertyType.bigInteger, autoincrement: true)
+  int id;
+
+  ...
+}
+</code></pre>
+
+<p>!!! note "Creating Tables" Tables are created in a database by using the <code>conduit</code> command line tool to generate and execute migration scripts. The tool inspects your database types and automatically synchronizes a databases schema to match your them.</p>
+<p>By default, the name of the table definition is the name of the database table. You can configure this with the <code>Table</code> annotation.</p>
+<pre class="codehilite"><code class="language-dart">@Table(name: &quot;ArticleTable&quot;)
+class _Article {
+  @primaryKey
+  int id;
+
+  String contents;
+
+  @Column(indexed: true)
+  DateTime publishedDate;
+}
+</code></pre>
+
+<p>It is convention that table definitions are <em>private classes</em>, that is, their name is prefixed with an underscore (<code>_</code>). This convention is discussed later in this guide.</p>
+<h2 id="defining-a-managed-object-subclass">Defining a Managed Object Subclass</h2>
+<p>A table definition by itself is just a plain Dart class. You must also declare a <code>ManagedObject</code> subclass to bring your table definition to life. Here's an example:</p>
+<pre class="codehilite"><code class="language-dart">class Article extends ManagedObject&lt;_Article&gt; implements _Article {}
+</code></pre>
+
+<p>A managed object subclass, also called the <em>instance type</em>, is the object type that you work with in your application code. For example, when you fetch rows from a database, you will get a list of managed objects. A managed object subclass declares its table definition in two places: once as the type argument of its superclass, and again as an interface it implements.</p>
+<p>A managed object subclass inherits all of the properties from its table definition; i.e., an <code>Article</code> has an <code>id</code>, <code>contents</code> and <code>publishedDate</code> because <code>_Article</code> declares those properties. You create and use instances of a managed object subclass like any other object:</p>
+<pre class="codehilite"><code class="language-dart">final article = new Article();
+article.text = &quot;Today, ...&quot;;
+article.publishedDate = DateTime.now();
+</code></pre>
+
+<p>!!! warning "Managed Object Constructors" You can add new constructors to a managed object subclass, but you must always have a default, no-argument constructor. This default constructor is used when the ORM creates instances from rows in your database.</p>
+<h2 id="modeling-relationships">Modeling Relationships</h2>
+<p>A managed object can have <em>relationships</em> to other managed objects. For example, an author can have many books, an article can belong to a newspaper, and an employee can have a manager. In a relational database, relationships between tables are established by storing the primary key of a table row in a column of the related table. This column is a <em>foreign key reference</em> to the related table.</p>
+<p>When a table has a foreign key reference, it is said to <em>belong to</em> the related table. In the example of an employee and manager, the employee <em>belongs to</em> the manager and therefore the employee table has a foreign key reference to the manager table. The inverse of this statement is also true: a manager <em>has</em> employees. A manager has-many employees - this is called a <em>has-many relationship</em>. There are also <em>has-one relationships</em> - for example, a country has-one capital.</p>
+<p>The following is an example of a country and a has-one relationship to a capital city:</p>
+<pre class="codehilite"><code class="language-dart">class City extends ManagedObject&lt;_City&gt; implements _City {}
+class _City {
+  @primaryKey
+  int id;
+
+  @Relate(#capital)
+  Country country;
+}
+
+class Country extends ManagedObject&lt;_Country&gt; implements _Country {}
+class _Country {
+  @primaryKey
+  int id;
+
+  City capital;
+}
+</code></pre>
+
+<p>A relationship is formed between two tables by declaring properties in both table definition types. The type of those properties is the related managed object subclass - so a <code>Country</code> has a property of type <code>City</code>, and a <code>City</code> has a property of type <code>Country</code>.</p>
+<p>Exactly one of those properties must have a <code>Relate</code> annotation. The <code>Relate</code> annotation designates the underlying column as a foreign key column. In this example, the city table has a foreign key column to the country table. Conceptually, then, a city <em>belongs to</em> a country and a country has-one capital city. A city can only belong to one country through this relationship, and that is true of all belongs-to relationship properties.</p>
+<p>!!! note "Foreign Key Column Names" A foreign key column in the database is named by joining the name of the relationship property and the primary key of the related table with an underscore. For example, the column in the city table is named <code>country_id</code>.</p>
+<p>The property without <code>Relate</code> is the <em>inverse</em> of the relationship and is conceptually either a has-one or has-many relationship property. In this example, a country's relationship to its capital is has-one. A relationship is has-many when the type of the inverse property is a <code>ManagedSet</code>. For example, if we wanted to model a relationship between a country and all of its cities, we'd declare a <code>ManagedSet&lt;City&gt;</code> property in the country:</p>
+<pre class="codehilite"><code class="language-dart">class City extends ManagedObject&lt;_City&gt; implements _City {}
+class _City {
+  ...
+
+  @Relate(#cities)
+  Country country;
+}
+
+class Country extends ManagedObject&lt;_Country&gt; implements _Country {}
+class _Country {
+  ...
+
+  ManagedSet&lt;City&gt; cities;
+}
+</code></pre>
+
+<p>!!! note "ManagedSet Behavior" A <code>Relate</code> property can never be a <code>ManagedSet</code>. A <code>ManagedSet</code> is a <code>List</code>, and therefore can be used in the same way a list is used.</p>
+<p>Notice that the <code>Relate</code> annotation takes at least one argument: a symbol that matches the name of the inverse property. This is what links two relationship properties to each other. In the first example, this argument was <code>#capital</code> because the name of the inverse property is <code>capital</code>; likewise, <code>#cities</code> and <code>cities</code>. This pairing name must match or an error will be thrown.</p>
+<p>!!! note "Symbols" A symbol is a name identifier in Dart; a symbol can refer to a class, method, or property. The <code>#name</code> syntax is a <em>symbol literal</em>.</p>
+<p>The <code>Relate</code> annotation has optional arguments to further define the relationship. Like <code>Column</code>, these are optional arguments, e.g.:</p>
+<pre class="codehilite"><code class="language-dart">@Relate(#cities, isRequired: true, onDelete: DeleteRule.cascade)
+</code></pre>
+
+<p>A relationship may be be required or optional. For example, if <code>City.country</code> were required, then a <code>City</code> must always have a <code>Country</code>. By default, relationships are optional.</p>
+<p>A relationship has a delete rule. When an object is deleted, any objects that belong to its relationships are subject to this rule. The following table shows the rules and their behavior:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Rule</th>
+<th align="left">Behavior</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">nullify (default)</td>
+<td align="left">inverse is set to null</td>
+<td align="left">When deleting an author, its articles' author becomes null</td>
+</tr>
+<tr>
+<td align="left">cascade</td>
+<td align="left">related objects are also deleted</td>
+<td align="left">When deleting an author, its articles are deleted</td>
+</tr>
+<tr>
+<td align="left">restrict</td>
+<td align="left">delete fails</td>
+<td align="left">When attempting to delete an author with articles, the delete operation fails</td>
+</tr>
+<tr>
+<td align="left">default</td>
+<td align="left">inverse set to a default value</td>
+<td align="left">When deleting an author, its articles author is set to the default value of the column</td>
+</tr>
+</tbody>
+</table>
+<h2 id="special-behaviors">Special Behaviors</h2>
+<h3 id="enum-types">Enum Types</h3>
+<p>Enums types can be used to declare properties in a table definition. The database will store the column as a string representation of the enumeration. Here's an example where a user can be an administrator or a normal user:</p>
+<pre class="codehilite"><code class="language-dart">enum UserType {
+  admin, user
+}
+
+class User extends ManagedObject&lt;_User&gt; implements _User {}
+class _User {
+  @primaryKey
+  int id;
+
+  String name;
+
+  UserType role;
+}
+
+var query = Query&lt;User&gt;(context)
+  ..values.name = &quot;Bob&quot;
+  ..values.role = UserType.admin;
+final bob = await query.insert();
+
+query = Query&lt;User&gt;(context)
+  ..where((u) =&gt; u.role).equalTo(UserType.admin);
+final allAdmins = await query.fetch();
+</code></pre>
+
+<p>In the database, the <code>role</code> column is stored as a string. Its value is either "admin" or "user".</p>
+<h3 id="private-variables">Private Variables</h3>
+<p>A private variable in a table definition removes it from the serialized representation of an object. A private variable is always fetched when making a database query, but it is not read when invoking <code>read</code> and is not written when invoking <code>asMap</code>. Both of these methods are invoked when reading a managed object from a request body, or writing it to a response body.</p>
+<h3 id="transient-properties">Transient Properties</h3>
+<p>Properties declared in a managed object subclass are called <em>transient</em> because they are not stored in a database. For example, consider an <code>Author</code> type that stores first and last name as separate columns. Instead of redundantly storing a 'full name' in the database, a transient property can combine the first and last name:</p>
+<pre class="codehilite"><code class="language-dart">class Author extends ManagedObject&lt;_Author&gt; implements _Author {
+  String get name =&gt; &quot;$firstName $lastName&quot;;
+  set name(String fullName) {
+    firstName = fullName.split(&quot; &quot;).first;
+    lastName = fullName.split(&quot; &quot;).last;
+  }
+}
+class _Author {
+  @primaryKey
+  int id;
+
+  String firstName;
+  String lastName;
+}
+</code></pre>
+
+<p>By default, a transient property is ignored when reading an object from a request body or writing the object to a response body (see the guide on <a href="../serialization/">serialization</a> for more details). You can annotate a transient property with <code>Serialize</code> so that it is able to be read from a request body, written to a response body, or both. For example:</p>
+<pre class="codehilite"><code class="language-dart">class Author extends ManagedObject&lt;_Author&gt; implements _Author {
+  @Serialize()
+  String get name =&gt; &quot;$firstName $lastName&quot;;
+
+  @Serialize()
+  set name(String fullName) {
+    firstName = fullName.split(&quot; &quot;).first;
+    lastName = fullName.split(&quot; &quot;).last;
+  }
+}
+</code></pre>
+
+<p>You may declare getters, setters and properties to be serialized in this way. When declaring a property, you can control it with arguments to <code>Serialize</code>:</p>
+<pre class="codehilite"><code class="language-dart">class Author extends ManagedObject&lt;_Author&gt; implements _Author {
+  @Serialize(input: false, output: true)
+  bool isCurrentlyPromoted;
+}
+</code></pre>
+
+<h2 id="project-file-structure">Project File Structure</h2>
+<p>A managed object subclass and its table definition together are called an <em>entity</em>. Each entity should be declared in the same file, and the table definition should be prefixed with an <code>_</code> to prevent it from being used elsewhere in the project. It is preferable to declare one entity per file, and store all entities in the <code>lib/model/</code> directory of your project.</p>
+<p>The files your model definitions are declared in must be visible to Conduit tooling. In normal circumstances, this happens automatically because of the following:</p>
+<ol>
+<li>Conduit tooling can find any file that is imported (directly or transitively) from your library file.</li>
+<li>Your library file, by default, can see the file your <code>ApplicationChannel</code> is declared in.</li>
+<li>Your application channel file must import any controller that it links.</li>
+<li>Your controllers must import any model file they use.</li>
+</ol>
+<p>When you use the <code>conduit</code> CLI to generate database migration scripts, it will report all of the <code>ManagedObject</code>s in your application that it was able to find. If a particular type is not listed, it may reveal that you aren't using that type. If you need to ensure that the tooling can see a particular model file that it is not locating, you may import it in your <code>channel.dart</code> file.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="example-one-to-many-relationship">Example: One-to-Many Relationship</h3>
+<p>An author has many books:</p>
+<pre class="codehilite"><code class="language-dart">class Author extends ManagedObject&lt;_Author&gt; implements _Author {}
+class _Author {
+  @primaryKey
+  int id;
+
+  String name;
+
+  ManagedSet&lt;Book&gt; books;
+}
+
+class Book extends ManagedObject&lt;_Book&gt; implements _Book {}
+class _Book {
+  @primaryKey
+  int id;
+
+  String name;
+
+  @Relate(#books)
+  Author author;
+}
+</code></pre>
+
+<p>To insert an author and a book associated with that author:</p>
+<pre class="codehilite"><code class="language-dart">final authorQuery = Query&lt;Author&gt;(context)
+  ..values.name = &quot;Fred&quot;;
+final author = await authorQuery.insert();
+
+final bookQuery = Query&lt;Book&gt;(context)
+  ..values.name = &quot;Title&quot;
+  ..values.author.id = author.id;
+final book = await bookQuery.insert();
+</code></pre>
+
+<p>To fetch authors and their books:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Author&gt;(context)
+  ..join(set: (a) =&gt; a.books);
+final authors = await query.fetch();
+</code></pre>
+
+<p>To fetch a book and their full author object:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Book&gt;(context)
+  ..where((b) =&gt; b.id).equalTo(1)
+  ..join(object: (a) =&gt; a.author);
+final books = await query.fetch();
+</code></pre>
+
+<h3 id="example-one-to-one-relationship">Example: One-to-One Relationship</h3>
+<pre class="codehilite"><code class="language-dart">class Country extends ManagedObject&lt;_Country&gt; implements _Country {}
+class _Country {
+  @primaryKey
+  int id;
+
+  String name;
+
+  City capital;
+}
+
+class City extends ManagedObject&lt;_City&gt; implements _City {}
+class _City {
+  @primaryKey
+  int id;
+
+  String name;
+
+  @Relate(#capital)
+  Country country;
+}
+</code></pre>
+
+<p>To fetch a country and its capital:</p>
+<pre class="codehilite"><code class="language-dart">final query = Query&lt;Country&gt;(context)
+  ..where((c) =&gt; c.id).equalTo(1)
+  ..join(object: (a) =&gt; a.capital);
+final countries = await query.fetch();
+</code></pre>
+
+<h3 id="example-many-to-many-relationship">Example: Many-to-Many Relationship</h3>
+<pre class="codehilite"><code class="language-dart">class Team extends ManagedObject&lt;_Team&gt; implements _Team {}
+class _Team {
+  @primaryKey
+  int id;
+
+  String name;
+
+  ManagedSet&lt;TeamPlayer&gt; teamPlayers;
+}
+
+// This type is a join table
+class TeamPlayer extends ManagedObject&lt;_TeamPlayer&gt; implements _TeamPlayer {}
+class _TeamPlayer {
+  @primaryKey
+  int id;  
+
+  @Relate(#teamPlayers)
+  Team team;
+
+  @Relate(#teamPlayers)
+  Player player;
+}
+
+class Player extends ManagedObject&lt;_Player&gt; implements _Player {}
+class _Player {
+  @primaryKey
+  int id;
+
+  String name;
+
+  ManagedSet&lt;TeamPlayer&gt; teamPlayers;
+}
+</code></pre>
+
+<p>To fetch a team and its players:</p>
+<pre class="codehilite"><code class="language-dart">// Note that the final join is not cascaded from the Team query,
+// but from the Query created by joining with TeamPlayer
+final query = Query&lt;Team&gt;(context)
+  ..where((t) =&gt; t.id).equalTo(1)
+  ..join(set: (t) =&gt; t.teamPlayers).join(object: (tp) =&gt; tp.player);
+final team = await query.fetchOne();
+</code></pre>
+
+<p>The structure of this object is:</p>
+<pre class="codehilite"><code class="language-javascript">{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;Badgers&quot;,
+  &quot;teamPlayers&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;team&quot;: {
+        &quot;id&quot;: 1
+      },
+      &quot;player&quot;: {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;Fred&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+
+<p>You can flatten this structure in a number of ways. In the simplest form, add a <code>Serialize</code>-annotated transient property to the <code>ManagedObject</code> subclass, and each time you fetch, remove the join table from the object and place the players in the transient property.</p>
+<pre class="codehilite"><code class="language-dart">class Team extends ManagedObject&lt;_Team&gt; implements _Team {
+  @Serialize(input: false, output: true)
+  List&lt;Map&lt;String, dynamic&gt;&gt; players;
+}
+
+final team = ...;
+team.players = team.teamPlayers.map((t) =&gt; t.player.asMap()).toList();
+// Remove teamPlayers; it is redundant
+team.backing.removeProperty(&quot;teamPlayers&quot;);
+</code></pre>
+
+<h3 id="example-hierarchical-relationships-self-referencing">Example: Hierarchical Relationships (Self Referencing)</h3>
+<p>Hierarchical relationships follow the same rules as all other relationship, but declare the foreign key property and the inverse in the same type.</p>
+<pre class="codehilite"><code class="language-dart">class Person extends ManagedObject&lt;_Person&gt; implements _Person {}
+class _Person {
+  @primaryKey
+  int id;
+
+  String name;
+
+  ManagedSet&lt;Person&gt; children;
+
+  @Relate(#children)
+  Person parent;
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../connecting/" class="btn btn-neutral float-left" title="Connecting to a Database"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../serialization/" class="btn btn-neutral float-right" title="Serialization and Deserialization">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p>Built by Stable Kernel</p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/stablekernel/aqueduct" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../connecting/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../serialization/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
