@@ -32,10 +32,10 @@ scripts:
     run: melos exec -- "mkdir -p '$PUB_CACHE/hosted/pub.dev/\$MELOS_PACKAGE_NAME-\$MELOS_PACKAGE_VERSION' && cp -rf '\$MELOS_PACKAGE_PATH'/* '$PUB_CACHE/hosted/pub.dev/\$MELOS_PACKAGE_NAME-\$MELOS_PACKAGE_VERSION'"
     select-pacakge:
       no-private: true
-  cache-source-win:
-    run: melos exec -- "mkdir %PUB_CACHE%hosted\pub.dev\%MELOS_PACKAGE_NAME%-%MELOS_PACKAGE_VERSION% && xcopy %MELOS_PACKAGE_PATH% %PUB_CACHE%hosted\pub.dev\%MELOS_PACKAGE_NAME%-%MELOS_PACKAGE_VERSION% /Y /s /e"
-    select-pacakge:
-      no-private: true
+  # cache-source-win:
+  #   run: melos exec -- mkdir %PUB_CACHE%/hosted\pub.dev\%MELOS_PACKAGE_NAME%-%MELOS_PACKAGE_VERSION% && melos exec -- xcopy %MELOS_PACKAGE_PATH% %PUB_CACHE%/hosted\pub.dev\%MELOS_PACKAGE_NAME%-%MELOS_PACKAGE_VERSION% /Y /s /e
+  #   select-pacakge:
+  #     no-private: true
   hard-clean:
     run: melos exec -- "rm -rf '\$MELOS_PACKAGE_PATH/.dart_tool' '\$MELOS_PACKAGE_PATH/pubspec.lock'"
   gen-docs:
@@ -45,8 +45,8 @@ scripts:
       no-private: true
   fix:
     run: melos exec --fail-fast --ignore "*common*" --ignore "*application*" --ignore "*dependency*" -- "dart fix --apply ."
-    select-pacakge:
-      no-private: true
+  sync-version:
+    run: melos exec --fail-fast --ignore "*common*" --ignore "*application*" --ignore "*dependency*" --ignore "*test_package*" -- melos version --yes -V MELOS_PACKAGE_NAME:`dart pub deps -s list | grep conduit_workspace | awk '{print $2}' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'`
 environment:
-  sdk: ">=3.0.1 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
   

@@ -18,12 +18,13 @@ jobs:
       || startsWith(github.event.head_commit.message, 'perf')
       || startsWith(github.event.head_commit.message, 'refactor')
       || startsWith(github.event.head_commit.message, 'revert')
+      || startsWith(github.event.head_commit.message, 'trigger')
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: dart-lang/setup-dart@v1
       with:
-        sdk: stable
+        sdk: main
     - name: Prepare pub credentials
       run: |
         mkdir "$XDG_CONFIG_HOME/dart"
@@ -37,7 +38,7 @@ jobs:
     - name: Format
       run: dart fix --apply && dart format --fix .
     - name: Uptick versions
-      run: melos version --yes
+      run: melos sync-version
     - name: Changelog
       run: git diff --unified=0 $GITHUB_SHA packages/cli/CHANGELOG.md | tail +6 | sed -e 's/^\+//' > CHANGES.txt
     - name: Cache Source
@@ -68,7 +69,7 @@ jobs:
       || startsWith(github.event.head_commit.message, 'revert')
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Compute the release tag
       run: |
         echo "release_tag=v`cat packages/cli/pubspec.yaml | sed -nre 's/^version: [^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'`" >> $GITHUB_ENV
