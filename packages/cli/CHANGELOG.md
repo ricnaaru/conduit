@@ -1,3 +1,9 @@
+## 5.0.0
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**: housekeeping dart version uptick. ([826f2805](https://github.com/conduit-dart/conduit/commit/826f2805666af5903ad868a7c9715cf90d2a000e))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+
 ## 4.4.0
 
  - Graduate package to a stable release. See pre-releases prior to this version for changelog entries.

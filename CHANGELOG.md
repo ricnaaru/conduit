@@ -3,6 +3,104 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`conduit` - `v5.0.0`](#conduit---v500)
+ - [`conduit_codable` - `v5.0.0`](#conduit_codable---v500)
+ - [`conduit_common` - `v5.0.0`](#conduit_common---v500)
+ - [`conduit_config` - `v5.0.0`](#conduit_config---v500)
+ - [`conduit_core` - `v5.0.0`](#conduit_core---v500)
+ - [`conduit_isolate_exec` - `v5.0.0`](#conduit_isolate_exec---v500)
+ - [`conduit_open_api` - `v5.0.0`](#conduit_open_api---v500)
+ - [`conduit_password_hash` - `v5.0.0`](#conduit_password_hash---v500)
+ - [`conduit_postgresql` - `v5.0.0`](#conduit_postgresql---v500)
+ - [`conduit_runtime` - `v5.0.0`](#conduit_runtime---v500)
+ - [`conduit_test` - `v5.0.0`](#conduit_test---v500)
+ - [`fs_test_agent` - `v5.0.0`](#fs_test_agent---v500)
+
+---
+
+#### `conduit` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**: housekeeping dart version uptick. ([826f2805](https://github.com/conduit-dart/conduit/commit/826f2805666af5903ad868a7c9715cf90d2a000e))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+
+#### `conduit_codable` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_common` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_config` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_core` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **FIX**(ci): Publish automation fix ([#217](https://github.com/conduit-dart/conduit/issues/217)). ([2da2db05](https://github.com/conduit-dart/conduit/commit/2da2db058feb8f8bb6c0b97a8144252c188765c8))
+
+#### `conduit_isolate_exec` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+
+#### `conduit_open_api` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_password_hash` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_postgresql` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_runtime` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+#### `conduit_test` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+
+#### `fs_test_agent` - `v5.0.0`
+
+ - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
+ - **REFACTOR**(postgres): BREAKING CHANGE major release for postgres driver. ([d6bf1165](https://github.com/conduit-dart/conduit/commit/d6bf1165f6903cb133b1ec4bf3d66242646f548b))
+ - **REFACTOR**: House Keeping July 22. ([cf1eb45e](https://github.com/conduit-dart/conduit/commit/cf1eb45e035a202a97c6baab3348c030a667628b))
+
+
 ## 2023-11-22
 
 ### Changes
