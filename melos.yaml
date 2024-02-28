@@ -46,7 +46,20 @@ scripts:
   fix:
     run: melos exec --fail-fast --ignore "*common*" --ignore "*application*" --ignore "*dependency*" -- "dart fix --apply ."
   sync-version:
-    run: melos exec -c1 --fail-fast --ignore "*common*" --ignore "*application*" --ignore "*dependency*" --ignore "*test_package*" -- melos version -V MELOS_PACKAGE_NAME:`dart pub deps -s list | grep conduit_workspace | awk '{print $2}' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'` --yes
+    run: |
+      export v=`dart pub deps -s list | grep conduit_workspace | awk '{print $2}' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'`; \
+      melos version  --yes -V conduit:$v \
+                          -V conduit_codable:$v \
+                          -V conduit_common:$v \
+                          -V conduit_config:$v \
+                          -V conduit_core:$v \
+                          -V conduit_isolate_exec:$v \
+                          -V conduit_open_api:$v \
+                          -V conduit_password_hash:$v \
+                          -V conduit_postgresql:$v \
+                          -V conduit_runtime:$v \
+                          -V conduit_test:$v \
+                          -V fs_test_agent:$v
 environment:
   sdk: ">=3.3.0 <4.0.0"
   
