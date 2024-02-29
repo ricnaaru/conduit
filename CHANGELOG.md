@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`conduit` - `v5.0.1`](#conduit---v501)
+ - [`conduit_codable` - `v5.0.1`](#conduit_codable---v501)
+ - [`conduit_common` - `v5.0.1`](#conduit_common---v501)
+ - [`conduit_config` - `v5.0.1`](#conduit_config---v501)
+ - [`conduit_core` - `v5.0.1`](#conduit_core---v501)
+ - [`conduit_isolate_exec` - `v5.0.1`](#conduit_isolate_exec---v501)
+ - [`conduit_open_api` - `v5.0.1`](#conduit_open_api---v501)
+ - [`conduit_password_hash` - `v5.0.1`](#conduit_password_hash---v501)
+ - [`conduit_postgresql` - `v5.0.1`](#conduit_postgresql---v501)
+ - [`conduit_runtime` - `v5.0.1`](#conduit_runtime---v501)
+ - [`conduit_test` - `v5.0.1`](#conduit_test---v501)
+ - [`fs_test_agent` - `v5.0.1`](#fs_test_agent---v501)
+
+---
+
+#### `conduit` - `v5.0.1`
+
+ - Bump "conduit" to `5.0.1`.
+
+#### `conduit_codable` - `v5.0.1`
+
+ - Bump "conduit_codable" to `5.0.1`.
+
+#### `conduit_common` - `v5.0.1`
+
+ - Bump "conduit_common" to `5.0.1`.
+
+#### `conduit_config` - `v5.0.1`
+
+ - Bump "conduit_config" to `5.0.1`.
+
+#### `conduit_core` - `v5.0.1`
+
+ - Bump "conduit_core" to `5.0.1`.
+
+#### `conduit_isolate_exec` - `v5.0.1`
+
+ - Bump "conduit_isolate_exec" to `5.0.1`.
+
+#### `conduit_open_api` - `v5.0.1`
+
+ - Bump "conduit_open_api" to `5.0.1`.
+
+#### `conduit_password_hash` - `v5.0.1`
+
+ - Bump "conduit_password_hash" to `5.0.1`.
+
+#### `conduit_postgresql` - `v5.0.1`
+
+ - Bump "conduit_postgresql" to `5.0.1`.
+
+#### `conduit_runtime` - `v5.0.1`
+
+ - Bump "conduit_runtime" to `5.0.1`.
+
+#### `conduit_test` - `v5.0.1`
+
+ - Bump "conduit_test" to `5.0.1`.
+
+#### `fs_test_agent` - `v5.0.1`
+
+ - Bump "fs_test_agent" to `5.0.1`.
+
+
 ## 2024-02-27
 
 ### Changes
