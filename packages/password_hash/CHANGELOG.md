@@ -1,3 +1,7 @@
+## 5.0.1
+
+ - Bump "conduit_password_hash" to `5.0.1`.
+
 ## 5.0.0
 
  - **REFACTOR**: housekeeping 2 20 24 ([#216](https://github.com/conduit-dart/conduit/issues/216)). ([5fd4d59b](https://github.com/conduit-dart/conduit/commit/5fd4d59bd1e20485f7af4871995a689e910a969d))
