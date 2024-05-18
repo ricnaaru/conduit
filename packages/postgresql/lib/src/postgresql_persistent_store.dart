@@ -5,6 +5,20 @@ import 'postgresql_query.dart';
 import 'postgresql_schema_generator.dart';
 import 'package:postgres/postgres.dart';
 
+extension ToSslMode on String? {
+  SslMode toSslMode() {
+    switch (this) {
+      case "disable":
+        return SslMode.disable;
+      case "require":
+        return SslMode.require;
+      case "verifyFull":
+        return SslMode.verifyFull;
+    }
+    return SslMode.disable;
+  }
+}
+
 /// The database layer responsible for carrying out [Query]s against PostgreSQL databases.
 ///
 /// To interact with a PostgreSQL database, a [ManagedContext] must have an instance of this class.
@@ -19,8 +33,9 @@ class PostgreSQLPersistentStore extends PersistentStore
     this.port,
     this.databaseName, {
     this.timeZone = "UTC",
-    bool useSSL = false,
-  }) : isSSLConnection = useSSL;
+    this.sslMode,
+    @Deprecated('Use sslMode instead') bool useSSL = false,
+  }) : isSSLConnection = useSSL || sslMode.toSslMode() != SslMode.disable;
 
   /// Same constructor as default constructor.
   ///
@@ -32,17 +47,20 @@ class PostgreSQLPersistentStore extends PersistentStore
     this.port,
     this.databaseName, {
     this.timeZone = "UTC",
-    bool useSSL = false,
-  }) : isSSLConnection = useSSL;
+    this.sslMode,
+    @Deprecated('Use sslMode instead') bool useSSL = false,
+  }) : isSSLConnection = useSSL || sslMode.toSslMode() != SslMode.disable;
 
   PostgreSQLPersistentStore._from(PostgreSQLPersistentStore from)
-      : isSSLConnection = from.isSSLConnection,
+      : isSSLConnection =
+            from.isSSLConnection || from.sslMode.toSslMode() != SslMode.disable,
         username = from.username,
         password = from.password,
         host = from.host,
         port = from.port,
         databaseName = from.databaseName,
-        timeZone = from.timeZone;
+        timeZone = from.timeZone,
+        sslMode = from.sslMode;
 
   factory PostgreSQLPersistentStore._transactionProxy(
     PostgreSQLPersistentStore parent,
@@ -75,6 +93,9 @@ class PostgreSQLPersistentStore extends PersistentStore
   /// Whether this connection is established over SSL.
   final bool isSSLConnection;
 
+  /// The SSL mode of the connection to the database.
+  final String? sslMode;
+
   /// Whether or not the underlying database connection is open.
   ///
   /// Connections are automatically opened when a query is executed, so this property should not be used
@@ -102,7 +123,7 @@ class PostgreSQLPersistentStore extends PersistentStore
   ///
   /// Use this property to execute raw queries on the underlying database connection.
   /// If running a transaction, this context is the transaction context.
-  Future<Session?> get executionContext => getDatabaseConnection();
+  Future<Session> get executionContext => getDatabaseConnection();
 
   /// Retrieves a connection to the database this instance connects to.
   ///
@@ -160,7 +181,7 @@ class PostgreSQLPersistentStore extends PersistentStore
     final now = DateTime.now().toUtc();
     final dbConnection = await executionContext;
     try {
-      final rows = await dbConnection!.execute(
+      final rows = await dbConnection.execute(
         Sql.named(sql),
         parameters: substitutionValues,
         timeout: timeout,
@@ -191,15 +212,14 @@ class PostgreSQLPersistentStore extends PersistentStore
   }
 
   @override
-  Future<T?> transaction<T>(
+  Future<T> transaction<T>(
     ManagedContext transactionContext,
-    Future<T?> Function(ManagedContext transaction) transactionBlock,
+    Future<T> Function(ManagedContext transaction) transactionBlock,
   ) async {
     final Connection dbConnection = await getDatabaseConnection();
 
-    T? output;
     try {
-      await dbConnection.runTx((dbTransactionContext) async {
+      return await dbConnection.runTx((dbTransactionContext) async {
         transactionContext.persistentStore =
             PostgreSQLPersistentStore._transactionProxy(
           this,
@@ -207,7 +227,7 @@ class PostgreSQLPersistentStore extends PersistentStore
         );
 
         try {
-          output = await transactionBlock(transactionContext);
+          return await transactionBlock(transactionContext);
         } on Rollback {
           /// user triggered a manual rollback.
           /// TODO: there is currently no reliable way for a user to detect
@@ -226,8 +246,6 @@ class PostgreSQLPersistentStore extends PersistentStore
 
       rethrow;
     }
-
-    return output;
   }
 
   @override
@@ -251,14 +269,14 @@ class PostgreSQLPersistentStore extends PersistentStore
   }
 
   @override
-  Future<Schema?> upgrade(
-    Schema? fromSchema,
+  Future<Schema> upgrade(
+    Schema fromSchema,
     List<Migration> withMigrations, {
     bool temporary = false,
   }) async {
     final Connection connection = await getDatabaseConnection();
 
-    Schema? schema = fromSchema;
+    Schema schema = fromSchema;
 
     await connection.runTx((ctx) async {
       final transactionStore =
@@ -323,7 +341,7 @@ class PostgreSQLPersistentStore extends PersistentStore
     final now = DateTime.now().toUtc();
     try {
       final dbConnection = await executionContext;
-      final Result results = await dbConnection!.execute(
+      final Result results = await dbConnection.execute(
         Sql.named(formatString),
         parameters: values,
         timeout: Duration(seconds: timeoutInSeconds),
@@ -410,7 +428,6 @@ class PostgreSQLPersistentStore extends PersistentStore
 
   Future<Connection> _connect() {
     logger.info("PostgreSQL connecting, $username@$host:$port/$databaseName.");
-
     return Connection.open(
       Endpoint(
         host: host!,
@@ -421,7 +438,7 @@ class PostgreSQLPersistentStore extends PersistentStore
       ),
       settings: ConnectionSettings(
         timeZone: timeZone!,
-        sslMode: isSSLConnection ? SslMode.verifyFull : SslMode.disable,
+        sslMode: sslMode.toSslMode(),
         ignoreSuperfluousParameters: true,
       ),
     );
