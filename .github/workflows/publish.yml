@@ -7,7 +7,6 @@ on:
 
 concurrency:
   group: "publish"
-  cancel-in-progress: true
     
 jobs:
   pub:
