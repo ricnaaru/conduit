@@ -58,6 +58,7 @@ jobs:
         tag_name: ${{ env.release_tag }}
         body_path: CHANGES.txt
   docker:
+    needs: pub
     if: |
       startsWith(github.event.head_commit.message, 'feat')
       || startsWith(github.event.head_commit.message, 'fix')
