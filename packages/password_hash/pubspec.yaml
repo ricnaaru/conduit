@@ -1,5 +1,5 @@
 name: conduit_password_hash
-version: 5.1.1
+version: 5.1.2
 description: PBKDF2 password hashing utility
 home: https://www.theconduit.dev
 repository: https://github.com/conduit-dart/conduit
@@ -12,5 +12,5 @@ dependencies:
   crypto: ^3.0.3
 
 dev_dependencies:
-  lints: ^3.0.0
+  lints: ^4.0.0
   test: ^1.25.2
