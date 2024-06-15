@@ -58,14 +58,8 @@ jobs:
         tag_name: ${{ env.release_tag }}
         body_path: CHANGES.txt
   docker:
-    needs: pub
     if: |
-      startsWith(github.event.head_commit.message, 'feat')
-      || startsWith(github.event.head_commit.message, 'fix')
-      || startsWith(github.event.head_commit.message, 'bug')
-      || startsWith(github.event.head_commit.message, 'perf')
-      || startsWith(github.event.head_commit.message, 'refactor')
-      || startsWith(github.event.head_commit.message, 'revert')
+      startsWith(github.event.head_commit.message, 'chore')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
