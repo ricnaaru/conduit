@@ -1,3 +1,7 @@
+## 5.1.4
+
+ - Bump "conduit_codable" to `5.1.4`.
+
 ## 5.1.3
 
  - **REFACTOR**: Upgrading packages and refactoring ([#238](https://github.com/conduit-dart/conduit/issues/238)). ([75b86fae](https://github.com/conduit-dart/conduit/commit/75b86fae9ce6e01107e34df05bdd74ba40f5533d))
