@@ -110,6 +110,4 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PAT }}
     - name: Build
-      run: docker buildx build --platform linux/amd64 --file docker/Dockerfile.flutter --tag conduitdart/conduit:${{ env.release_tag }}-flutter --push .
-    - name: Push
-      run: docker push -a conduitdart/conduit
+      run: docker buildx build --platform linux/amd64,linux/arm64/v8 --file docker/Dockerfile.flutter --tag conduitdart/conduit:${{ env.release_tag }}-flutter --push .
