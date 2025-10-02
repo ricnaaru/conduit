@@ -16,9 +16,7 @@ class QueryPredicate {
   /// Default constructor
   ///
   /// The [format] and [parameters] of this predicate. [parameters] may be null.
-  QueryPredicate(this.format, this.parameters) {
-    parameters ??= {};
-  }
+  QueryPredicate(this.format, [this.parameters = const {}]);
 
   /// Creates an empty predicate.
   ///
@@ -38,20 +36,15 @@ class QueryPredicate {
   ///
   /// If [predicates] is null or empty, an empty predicate is returned. If [predicates] contains only
   /// one predicate, that predicate is returned.
-  factory QueryPredicate.and(Iterable<QueryPredicate?>? predicates) {
-    final predicateList = predicates
-        ?.where((p) => p?.format != null && p!.format.isNotEmpty)
-        .toList();
-    if (predicateList == null) {
-      return QueryPredicate.empty();
-    }
+  factory QueryPredicate.and(Iterable<QueryPredicate> predicates) {
+    final predicateList = predicates.where((p) => p.format.isNotEmpty).toList();
 
     if (predicateList.isEmpty) {
       return QueryPredicate.empty();
     }
 
     if (predicateList.length == 1) {
-      return predicateList.first!;
+      return predicateList.first;
     }
 
     // If we have duplicate keys anywhere, we need to disambiguate them.
@@ -59,14 +52,13 @@ class QueryPredicate {
     final allFormatStrings = [];
     final valueMap = <String, dynamic>{};
     for (final predicate in predicateList) {
-      final duplicateKeys = predicate!.parameters?.keys
-              .where((k) => valueMap.keys.contains(k))
-              .toList() ??
-          [];
+      final duplicateKeys = predicate.parameters.keys
+          .where((k) => valueMap.keys.contains(k))
+          .toList();
 
       if (duplicateKeys.isNotEmpty) {
         var fmt = predicate.format;
-        final Map<String?, String> dupeMap = {};
+        final Map<String, String> dupeMap = {};
         for (final key in duplicateKeys) {
           final replacementKey = "$key$dupeCounter";
           fmt = fmt.replaceAll("@$key", "@$replacementKey");
@@ -75,12 +67,12 @@ class QueryPredicate {
         }
 
         allFormatStrings.add(fmt);
-        predicate.parameters?.forEach((key, value) {
+        predicate.parameters.forEach((key, value) {
           valueMap[dupeMap[key] ?? key] = value;
         });
       } else {
         allFormatStrings.add(predicate.format);
-        valueMap.addAll(predicate.parameters ?? {});
+        valueMap.addAll(predicate.parameters);
       }
     }
 
@@ -98,5 +90,114 @@ class QueryPredicate {
   ///
   /// Input values should not be in the format string, but instead provided in this map.
   /// Keys of this map will be searched for in the format string and be replaced by the value in this map.
-  Map<String, dynamic>? parameters;
+  Map<String, dynamic> parameters;
+}
+
+/// The operator in a comparison matcher.
+enum PredicateOperator {
+  lessThan,
+  greaterThan,
+  notEqual,
+  lessThanEqualTo,
+  greaterThanEqualTo,
+  equalTo
+}
+
+class ComparisonExpression implements PredicateExpression {
+  const ComparisonExpression(this.value, this.operator);
+
+  final dynamic value;
+  final PredicateOperator operator;
+
+  @override
+  PredicateExpression get inverse {
+    return ComparisonExpression(value, inverseOperator);
+  }
+
+  PredicateOperator get inverseOperator {
+    switch (operator) {
+      case PredicateOperator.lessThan:
+        return PredicateOperator.greaterThanEqualTo;
+      case PredicateOperator.greaterThan:
+        return PredicateOperator.lessThanEqualTo;
+      case PredicateOperator.notEqual:
+        return PredicateOperator.equalTo;
+      case PredicateOperator.lessThanEqualTo:
+        return PredicateOperator.greaterThan;
+      case PredicateOperator.greaterThanEqualTo:
+        return PredicateOperator.lessThan;
+      case PredicateOperator.equalTo:
+        return PredicateOperator.notEqual;
+    }
+  }
+}
+
+/// The operator in a string matcher.
+enum PredicateStringOperator { beginsWith, contains, endsWith, equals }
+
+abstract class PredicateExpression {
+  PredicateExpression get inverse;
+}
+
+class RangeExpression implements PredicateExpression {
+  const RangeExpression(this.lhs, this.rhs, {this.within = true});
+
+  final bool within;
+  final dynamic lhs;
+  final dynamic rhs;
+
+  @override
+  PredicateExpression get inverse {
+    return RangeExpression(lhs, rhs, within: !within);
+  }
+}
+
+class NullCheckExpression implements PredicateExpression {
+  const NullCheckExpression({this.shouldBeNull = true});
+
+  final bool shouldBeNull;
+
+  @override
+  PredicateExpression get inverse {
+    return NullCheckExpression(shouldBeNull: !shouldBeNull);
+  }
+}
+
+class SetMembershipExpression implements PredicateExpression {
+  const SetMembershipExpression(this.values, {this.within = true});
+
+  final List<dynamic> values;
+  final bool within;
+
+  @override
+  PredicateExpression get inverse {
+    return SetMembershipExpression(values, within: !within);
+  }
+}
+
+class StringExpression implements PredicateExpression {
+  const StringExpression(
+    this.value,
+    this.operator, {
+    this.caseSensitive = true,
+    this.invertOperator = false,
+    this.allowSpecialCharacters = true,
+  });
+
+  final PredicateStringOperator operator;
+  final bool invertOperator;
+  final bool caseSensitive;
+  final bool allowSpecialCharacters;
+  final String value;
+
+  @override
+  PredicateExpression get inverse {
+    return StringExpression(
+      value,
+      operator,
+      caseSensitive: caseSensitive,
+      invertOperator: !invertOperator,
+      allowSpecialCharacters: allowSpecialCharacters,
+    );
+  }
 }

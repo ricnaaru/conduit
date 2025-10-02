@@ -45,7 +45,7 @@ class Router extends Controller {
   /// Routers allow for multiple linked controllers. A request that matches [pattern]
   /// will be sent to the controller linked to this method's return value.
   ///
-  /// The [pattern] must follow the rules of route patterns (see also http://conduit.io/docs/http/routing/).
+  /// The [pattern] must follow the rules of route patterns (see also http://www.theconduit.dev/docs/http/routing/).
   ///
   /// A pattern consists of one or more path segments, e.g. "/path" or "/path/to".
   ///
@@ -89,12 +89,13 @@ class Router extends Controller {
 
   /// Routers override this method to throw an exception. Use [route] instead.
   @override
-  Linkable? link(Controller Function() generatorFunction) {
+  Linkable link(Controller Function() generatorFunction) {
     throw ArgumentError(
       "Invalid link. 'Router' cannot directly link to controllers. Use 'route'.",
     );
   }
 
+  @Deprecated('Prefer to use `link` instead of `linkFunction`.')
   @override
   Linkable? linkFunction(
     FutureOr<RequestOrResponse?> Function(Request request) handle,
@@ -169,7 +170,7 @@ class Router extends Controller {
 
   Future _handleUnhandledRequest(Request req) async {
     if (_unmatchedController != null) {
-      return _unmatchedController!(req);
+      return _unmatchedController(req);
     }
     final response = Response.notFound();
     if (req.acceptsContentType(ContentType.html)) {

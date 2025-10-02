@@ -7,7 +7,7 @@ import 'package:conduit_runtime/src/context.dart';
 import 'package:conduit_runtime/src/mirror_context.dart';
 import 'package:package_config/package_config.dart';
 import 'package:path/path.dart';
-import 'package:pubspec/pubspec.dart';
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:yaml/yaml.dart';
 
 /// Configuration and context values used during [Build.execute].
@@ -17,6 +17,7 @@ class BuildContext {
     this.buildDirectoryUri,
     this.executableUri,
     this.source, {
+    this.environment,
     this.forTests = false,
   }) {
     analyzer = CodeAnalyzer(sourceApplicationDirectory.uri);
@@ -24,11 +25,12 @@ class BuildContext {
 
   factory BuildContext.fromMap(Map<String, dynamic> map) {
     return BuildContext(
-      Uri.parse(map['rootLibraryFileUri'] as String),
-      Uri.parse(map['buildDirectoryUri'] as String),
-      Uri.parse(map['executableUri'] as String),
-      map['source'] as String,
-      forTests: map['forTests'] as bool? ?? false,
+      Uri.parse(map['rootLibraryFileUri']),
+      Uri.parse(map['buildDirectoryUri']),
+      Uri.parse(map['executableUri']),
+      map['source'],
+      environment: map['environment'],
+      forTests: map['forTests'] ?? false,
     );
   }
 
@@ -37,10 +39,11 @@ class BuildContext {
         'buildDirectoryUri': buildDirectoryUri.toString(),
         'source': source,
         'executableUri': executableUri.toString(),
+        'environment': environment,
         'forTests': forTests
       };
 
-  late CodeAnalyzer analyzer;
+  late final CodeAnalyzer analyzer;
 
   /// A [Uri] to the library file of the application to be compiled.
   final Uri rootLibraryFileUri;
@@ -59,6 +62,8 @@ class BuildContext {
 
   PackageConfig? _packageConfig;
 
+  final Map<String, String>? environment;
+
   /// The [RuntimeContext] available during the build process.
   MirrorContext get context => RuntimeContext.current as MirrorContext;
 
@@ -68,7 +73,7 @@ class BuildContext {
           .resolve("main_test.dart")
       : buildDirectoryUri.resolve("main.dart");
 
-  PubSpec get sourceApplicationPubspec => PubSpec.fromYamlString(
+  Pubspec get sourceApplicationPubspec => Pubspec.parse(
         File.fromUri(sourceApplicationDirectory.uri.resolve("pubspec.yaml"))
             .readAsStringSync(),
       );
@@ -104,8 +109,8 @@ class BuildContext {
 
   /// Gets dependency package location relative to [sourceApplicationDirectory].
   Future<PackageConfig> get packageConfig async {
-    _packageConfig ??= (await findPackageConfig(sourceApplicationDirectory))!;
-    return _packageConfig!;
+    return _packageConfig ??=
+        (await findPackageConfig(sourceApplicationDirectory))!;
   }
 
   /// Returns a [Directory] at [uri], creates it recursively if it doesn't exist.

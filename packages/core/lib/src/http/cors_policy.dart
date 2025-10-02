@@ -46,7 +46,6 @@ class CORSPolicy {
   /// You may modify this default policy. All instances of [CORSPolicy] are instantiated
   /// using the values of this default policy. Do not modify this property
   /// unless you want the defaults to change application-wide.
-  // ignore: prefer_constructors_over_static_methods
   static CORSPolicy get defaultPolicy {
     return _defaultPolicy ??= CORSPolicy._defaults();
   }
@@ -84,7 +83,7 @@ class CORSPolicy {
   /// Whether or not to allow use of credentials, including Authorization and cookies.
   ///
   /// Defaults to true. In the specification (http://www.w3.org/TR/cors/), this is 'supports credentials'.
-  bool? allowCredentials;
+  late bool allowCredentials;
 
   /// Which response headers to expose to the client.
   ///
@@ -122,7 +121,7 @@ class CORSPolicy {
           exposedResponseHeaders.join(", ");
     }
 
-    if (allowCredentials!) {
+    if (allowCredentials) {
       headers["Access-Control-Allow-Credentials"] = "true";
     }
 
@@ -189,7 +188,7 @@ class CORSPolicy {
       "Access-Control-Allow-Headers": allowedRequestHeaders.join(", ")
     };
 
-    if (allowCredentials!) {
+    if (allowCredentials) {
       headers["Access-Control-Allow-Credentials"] = "true";
     }
 

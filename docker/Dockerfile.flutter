@@ -1,0 +1,20 @@
+FROM ghcr.io/cirruslabs/flutter:latest
+
+RUN chown -R 1000:1000 /sdks/flutter
+RUN mkdir /conduit
+COPY ci/ /conduit/ci/
+COPY packages/ /conduit/packages/
+COPY melos.yaml /conduit/melos.yaml
+COPY pubspec.yaml /conduit/pubspec.yaml
+RUN chown -R 1000:1000 /conduit
+
+USER 1000
+
+WORKDIR /conduit
+
+ENV PUB_CACHE=/conduit/.pub-cache
+ENV PATH=$PATH:$PUB_CACHE/bin
+RUN dart pub global activate -spath packages/cli
+RUN dart pub global activate melos
+RUN melos cache-source --no-select
+RUN dart --disable-analytics

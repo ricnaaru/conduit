@@ -8,7 +8,7 @@ RuntimeContext instance = MirrorContext._();
 
 class MirrorContext extends RuntimeContext {
   MirrorContext._() {
-    final m = <String, dynamic>{};
+    final m = <String, Object>{};
 
     for (final c in compilers) {
       final compiledRuntimes = c.compile(this);
@@ -63,7 +63,11 @@ class MirrorContext extends RuntimeContext {
 
   @override
   T coerce<T>(dynamic input) {
-    return runtimeCast(input, reflectType(T)) as T;
+    try {
+      return input as T;
+    } catch (_) {
+      return runtimeCast(input, reflectType(T)) as T;
+    }
   }
 }
 
@@ -72,9 +76,8 @@ T? firstMetadataOfType<T>(DeclarationMirror dm, {TypeMirror? dynamicType}) {
   try {
     return dm.metadata
         .firstWhere((im) => im.type.isSubtypeOf(tMirror))
-        .reflectee as T?;
-    // ignore: avoid_catching_errors
-  } on StateError catch (_) {
+        .reflectee as T;
+  } on StateError {
     return null;
   }
 }

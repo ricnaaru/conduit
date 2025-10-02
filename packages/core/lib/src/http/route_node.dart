@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'package:conduit_core/src/http/controller.dart';
 import 'package:conduit_core/src/http/request_path.dart';
 import 'package:conduit_core/src/http/route_specification.dart';
@@ -51,12 +49,12 @@ class RouteSegment {
   bool isRemainingMatcher = false;
 
   @override
-  bool operator ==(dynamic other) {
-    return literal == other.literal &&
-        variableName == other.variableName &&
-        isRemainingMatcher == other.isRemainingMatcher &&
-        matcher?.pattern == other.matcher?.pattern;
-  }
+  bool operator ==(Object other) =>
+      other is RouteSegment &&
+      literal == other.literal &&
+      variableName == other.variableName &&
+      isRemainingMatcher == other.isRemainingMatcher &&
+      matcher?.pattern == other.matcher?.pattern;
 
   @override
   int get hashCode => (literal ?? variableName).hashCode;

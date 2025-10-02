@@ -1,3 +1,4 @@
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
 import 'package:test/test.dart';
 
@@ -6,7 +7,7 @@ void main() {
       "Mixed in properties with @Serialize() are transient properties fromCurrentMirrorSystem",
       () {
     final dm = ManagedDataModel.fromCurrentMirrorSystem();
-    final ctx = ManagedContext(dm, EmptyStore());
+    final ctx = ManagedContext(dm, DefaultPersistentStore());
     final m = ctx.dataModel!.entityForType(Mixin);
     expect(m.attributes["serialized"]!.isTransient, true);
 
@@ -22,7 +23,7 @@ void main() {
       "Mixed in properties with @Serialize() are transient properties from list of types",
       () {
     final dm = ManagedDataModel([Mixin]);
-    final ctx = ManagedContext(dm, EmptyStore());
+    final ctx = ManagedContext(dm, DefaultPersistentStore());
     final m = ctx.dataModel!.entityForType(Mixin);
     expect(m.properties.length, 3);
     expect(m.attributes["serialized"]!.isTransient, true);
@@ -49,7 +50,7 @@ class _Mixin {
   int? id;
 }
 
-abstract class MixinEntity {
+mixin MixinEntity {
   @Serialize()
   String? serialized;
 

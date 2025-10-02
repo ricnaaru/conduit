@@ -9,7 +9,7 @@ enum Validating { update, insert }
 /// Information about a validation being performed.
 class ValidationContext {
   /// Whether this validation is occurring during update or insert.
-  Validating? event;
+  late Validating event;
 
   /// The property being validated.
   ManagedPropertyDescription? property;
@@ -81,7 +81,7 @@ class Validate {
   ///
   /// This constructor is used so that subclasses can pass [onUpdate] and [onInsert].
   /// Example:
-  ///         class CustomValidate extends Validate<String> {
+  ///         class CustomValidate extends Validate\<String> {
   ///           CustomValidate({bool onUpdate: true, bool onInsert: true})
   ///             : super(onUpdate: onUpdate, onInsert: onInsert);
   ///
@@ -89,7 +89,7 @@ class Validate {
   ///              ValidateOperation operation,
   ///              ManagedAttributeDescription property,
   ///              String value,
-  ///              List<String> errors) {
+  ///              List\<String> errors) {
   ///                return someCondition;
   ///            }
   ///         }
@@ -324,7 +324,7 @@ class Validate {
   /// If compilation fails, throw a [ValidateCompilationError] with a message describing the issue. The entity
   /// and property will automatically be added to the error.
   dynamic compile(
-    ManagedType? typeBeingValidated, {
+    ManagedType typeBeingValidated, {
     Type? relationshipInverseType,
   }) {
     switch (type) {
@@ -335,7 +335,7 @@ class Validate {
       case ValidateType.oneOf:
         {
           return _oneOfCompiler(
-            typeBeingValidated!,
+            typeBeingValidated,
             relationshipInverseType: relationshipInverseType,
           );
         }
@@ -454,17 +454,17 @@ class Validate {
       case ValidateType.length:
         {
           if (_equalTo != null) {
-            object.maxLength = _equalTo as int?;
-            object.minLength = _equalTo as int?;
+            object.maxLength = _equalTo as int;
+            object.minLength = _equalTo;
           } else {
             if (_greaterThan is int) {
-              object.minLength = 1 + (_greaterThan! as int);
+              object.minLength = 1 + (_greaterThan);
             } else if (_greaterThanEqualTo is int) {
               object.minLength = _greaterThanEqualTo as int?;
             }
 
             if (_lessThan is int) {
-              object.maxLength = (-1) + (_lessThan! as int);
+              object.maxLength = (-1) + (_lessThan);
             } else if (_lessThanEqualTo != null) {
               object.maximum = _lessThanEqualTo as int?;
             }
@@ -495,7 +495,7 @@ class Validate {
       );
     }
 
-    final options = _value as List;
+    final options = _value;
     final supportedOneOfTypes = [
       ManagedPropertyType.string,
       ManagedPropertyType.integer,
@@ -627,14 +627,14 @@ class Validate {
       );
     }
 
-    return RegExp(_value as String);
+    return RegExp(_value);
   }
 
   dynamic _lengthCompiler(
-    ManagedType? typeBeingValidated, {
+    ManagedType typeBeingValidated, {
     Type? relationshipInverseType,
   }) {
-    if (typeBeingValidated?.kind != ManagedPropertyType.string) {
+    if (typeBeingValidated.kind != ManagedPropertyType.string) {
       throw ValidateCompilationError(
         "Validate.length is only valid for 'String' properties.",
       );

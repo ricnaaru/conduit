@@ -1,22 +1,14 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/dev/helpers.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
   group("Linking", () {
-    HttpServer? server;
-
-    tearDown(() async {
-      await server?.close();
-    });
-
     test("Prepare flows through controllers", () async {
       final completer = Completer();
       final root = PassthruController();

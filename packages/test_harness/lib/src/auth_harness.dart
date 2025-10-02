@@ -1,10 +1,7 @@
-// ignore_for_file: implementation_imports
-
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/auth/auth.dart' as auth_util;
 import 'package:conduit_test/conduit_test.dart';
 
 /// Use methods from this class to test applications that use [AuthServer] for authentication & authorization.
@@ -37,7 +34,7 @@ import 'package:conduit_test/conduit_test.dart';
 ///               publicAgent = await addClient("com.public.client");
 ///             }
 ///         }
-abstract class TestHarnessAuthMixin<T extends ApplicationChannel>
+mixin TestHarnessAuthMixin<T extends ApplicationChannel>
     implements TestHarness<T> {
   /// Must override to return [authServer] of application under test.
   ///
@@ -45,7 +42,7 @@ abstract class TestHarnessAuthMixin<T extends ApplicationChannel>
   /// Return that [AuthServer] from this method, e.g.,
   ///
   ///             AuthServer get authServer => channel.authServer;
-  AuthServer? get authServer;
+  AuthServer get authServer;
 
   /// Creates a new OAuth2 client identifier and returns an [Agent] that makes requests on behalf of that client.
   ///
@@ -63,12 +60,12 @@ abstract class TestHarnessAuthMixin<T extends ApplicationChannel>
 
     if (secret != null) {
       client
-        ..salt = auth_util.generateRandomSalt()
-        ..hashedSecret = auth_util.generatePasswordHash(secret, client.salt!)
+        ..salt = generateRandomSalt()
+        ..hashedSecret = generatePasswordHash(secret, client.salt!)
         ..redirectURI = redirectUri;
     }
 
-    await authServer!.addClient(client);
+    await authServer.addClient(client);
 
     final authorizationHeader =
         "Basic ${base64.encode("$id:${secret ?? ""}".codeUnits)}";
@@ -93,7 +90,7 @@ abstract class TestHarnessAuthMixin<T extends ApplicationChannel>
     final credentials = parser.parse(authorizationHeader);
 
     try {
-      final token = await authServer!.authenticate(
+      final token = await authServer.authenticate(
           username, password, credentials.username, credentials.password,
           requestedScopes: scopes?.map(AuthScope.new).toList());
       return Agent.from(fromAgent)

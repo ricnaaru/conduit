@@ -1,4 +1,4 @@
-library conduit_test.client;
+library;
 
 import 'dart:async';
 import 'dart:convert';
@@ -93,10 +93,10 @@ class Agent {
   /// The base URL that this agent's requests will be made against.
   String get baseURL {
     if (_application != null) {
-      if (!_application!.isRunning) {
+      if (!_application.isRunning) {
         throw StateError("Application under test is not running.");
       }
-      return "${_application!.server.requiresHTTPS ? "https" : "http"}://localhost:${_application!.channel.server.server!.port}";
+      return "${_application.server.requiresHTTPS ? "https" : "http"}://localhost:${_application.channel.server.server.port}";
     }
 
     return "$_scheme://$_host:$_port";
@@ -108,7 +108,7 @@ class Agent {
   /// for the key 'authorization' in [headers].
   void setBasicAuthorization(String username, String password) {
     headers["authorization"] =
-        "Basic ${base64.encode("$username:${password}".codeUnits)}";
+        "Basic ${base64.encode("$username:$password".codeUnits)}";
   }
 
   /// Adds bearer authorization to requests from this agent.

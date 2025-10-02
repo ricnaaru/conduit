@@ -1,0 +1,40 @@
+name: Docs
+
+on:
+  pull_request:
+    branches:
+    - master
+    types: [closed]
+  workflow_dispatch:
+    branches:
+    - master
+
+concurrency:
+  group: "documentation"
+  cancel-in-progress: true
+    
+jobs:
+  docs:
+    if: |
+      github.event_name == 'workflow_dispatch' 
+      || (github.event.pull_request.merged && startsWith(github.head_ref, 'docs/'))
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: stable
+    - name: Print ref name
+      run: echo ${{github.ref_name}}
+    - name: Install melos
+      run: dart pub global activate melos
+    - name: Generate docs
+      run: melos bootstrap && melos gen-docs && echo "mkdocs-monorepo-plugin==1.0.4" > requirements.txt
+    - name: Deploy docs
+      uses: mhausenblas/mkdocs-deploy-gh-pages@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CUSTOM_DOMAIN: docs.theconduit.dev
+        CONFIG_FILE: mkdocs.yml
+        EXTRA_PACKAGES: build-base
+        REQUIREMENTS: requirements.txt

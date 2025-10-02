@@ -1,9 +1,7 @@
-// ignore_for_file: avoid_dynamic_calls, avoid_setters_without_getters
-
 import 'dart:convert';
 
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/dev/helpers.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -299,11 +297,12 @@ void main() {
 
   test("mappableOutput properties are emitted in asMap", () {
     var t = TransientTest()..text = "foo";
+    final map = t.asMap();
 
-    expect(t.asMap()["defaultedText"], "Mr. foo");
-    expect(t.asMap()["outputOnly"], "foo");
-    expect(t.asMap()["bothButOnlyOnOne"], "foo");
-    expect(t.asMap()["bothOverQualified"], "foo");
+    expect(map["defaultedText"], "Mr. foo");
+    expect(map["outputOnly"], "foo");
+    expect(map["bothButOnlyOnOne"], "foo");
+    expect(map["bothOverQualified"], "foo");
 
     t = TransientTest()..outputInt = 2;
     expect(t.asMap()["outputInt"], 2);
@@ -785,7 +784,7 @@ void main() {
 
   test("Can have constructor with only optional args", () {
     final dm = ManagedDataModel([DefaultConstructorHasOptionalArgs]);
-    final _ = ManagedContext(dm, EmptyStore());
+    final _ = ManagedContext(dm, DefaultPersistentStore());
     final instance =
         dm.entityForType(DefaultConstructorHasOptionalArgs).instanceOf();
     expect(instance is DefaultConstructorHasOptionalArgs, true);
@@ -1090,7 +1089,6 @@ class _ConstructorOverride {
 
 class DefaultConstructorHasOptionalArgs
     extends ManagedObject<_ConstructorTableDef> {
-  // ignore: avoid_unused_constructor_parameters
   DefaultConstructorHasOptionalArgs({int? foo});
 }
 

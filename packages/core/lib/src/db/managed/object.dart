@@ -32,12 +32,12 @@ abstract class ManagedBacking {
   /// Removes a property from this instance.
   ///
   /// Use this method to use any reference of a property from this instance.
-  void removeProperty(String? propertyName) {
-    contents!.remove(propertyName);
+  void removeProperty(String propertyName) {
+    contents.remove(propertyName);
   }
 
   /// A map of all set values of this instance.
-  Map<String?, dynamic>? get contents;
+  Map<String, dynamic> get contents;
 }
 
 /// An object that represents a database row.
@@ -63,15 +63,14 @@ abstract class ManagedBacking {
 /// A subclass of this type must implement its table definition and use it as the type argument of [ManagedObject]. Properties and methods
 /// declared in the subclass (also called the 'instance type') are not stored in the database.
 ///
-/// See more documentation on defining a data model at http://conduit.io/docs/db/modeling_data/
+/// See more documentation on defining a data model at http://www.theconduit.dev/docs/db/modeling_data/
 abstract class ManagedObject<T> extends Serializable {
   /// IMPROVEMENT: Cache of entity.properties to reduce property loading time
-  late Map<String?, ManagedPropertyDescription?> properties = entity.properties;
+  late Map<String, ManagedPropertyDescription?> properties = entity.properties;
 
   /// Cache of entity.properties using ResponseKey name as key, in case no ResponseKey is set then default property name is used as key
-  late Map<String?, ManagedPropertyDescription?> responseKeyProperties = {
-    for (final key in properties.keys)
-      if (key != null) mapKeyName(key): properties[key]
+  late Map<String, ManagedPropertyDescription?> responseKeyProperties = {
+    for (final key in properties.keys) mapKeyName(key): properties[key]
   };
 
   late final bool modelFieldIncludeIfNull = properties.isEmpty ||
@@ -98,7 +97,7 @@ abstract class ManagedObject<T> extends Serializable {
   ManagedBacking backing = ManagedValueBacking();
 
   /// Retrieves a value by property name from [backing].
-  dynamic operator [](String? propertyName) {
+  dynamic operator [](String propertyName) {
     final prop = properties[propertyName];
     if (prop == null) {
       throw ArgumentError("Invalid property access for '${entity.name}'. "
@@ -122,7 +121,7 @@ abstract class ManagedObject<T> extends Serializable {
   /// Removes a property from [backing].
   ///
   /// This will remove a value from the backing map.
-  void removePropertyFromBackingMap(String? propertyName) {
+  void removePropertyFromBackingMap(String propertyName) {
     backing.removeProperty(propertyName);
   }
 
@@ -135,7 +134,7 @@ abstract class ManagedObject<T> extends Serializable {
 
   /// Checks whether or not a property has been set in this instances' [backing].
   bool hasValueForProperty(String propertyName) {
-    return backing.contents!.containsKey(propertyName);
+    return backing.contents.containsKey(propertyName);
   }
 
   /// Callback to modify an object prior to updating it with a [Query].
@@ -203,7 +202,7 @@ abstract class ManagedObject<T> extends Serializable {
 
   @override
   dynamic noSuchMethod(Invocation invocation) {
-    final propertyName = entity.runtime!.getPropertyName(invocation, entity);
+    final propertyName = entity.runtime.getPropertyName(invocation, entity);
     if (propertyName != null) {
       if (invocation.isGetter) {
         return this[propertyName];
@@ -245,7 +244,7 @@ abstract class ManagedObject<T> extends Serializable {
             throw ValidationException(["invalid input type for key '$key'"]);
           }
 
-          entity.runtime!
+          entity.runtime
               .setTransientValueForKey(this, property.name, decodedValue);
         }
       } else {
@@ -270,8 +269,8 @@ abstract class ManagedObject<T> extends Serializable {
   Map<String, dynamic> asMap() {
     final outputMap = <String, dynamic>{};
 
-    backing.contents!.forEach((k, v) {
-      if (!_isPropertyPrivate(k!)) {
+    backing.contents.forEach((k, v) {
+      if (!_isPropertyPrivate(k)) {
         final property = properties[k];
         final value = property!.convertToPrimitiveValue(v);
         if (value == null && !_includeIfNull(property)) {
@@ -284,7 +283,7 @@ abstract class ManagedObject<T> extends Serializable {
     entity.attributes.values
         .where((attr) => attr!.transientStatus?.isAvailableAsOutput ?? false)
         .forEach((attr) {
-      final value = entity.runtime!.getTransientValueForKey(this, attr!.name);
+      final value = entity.runtime.getTransientValueForKey(this, attr!.name);
       if (value != null) {
         outputMap[mapKeyName(attr.responseKey?.name ?? attr.name)] = value;
       }

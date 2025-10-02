@@ -8,8 +8,8 @@ import 'package:conduit_core/src/runtime/orm/entity_mirrors.dart';
 import 'package:conduit_core/src/runtime/orm/property_builder.dart';
 import 'package:conduit_core/src/runtime/orm_impl.dart';
 import 'package:conduit_core/src/utilities/mirror_helpers.dart';
-import 'package:conduit_core/src/utilities/text_case.dart';
 import 'package:logging/logging.dart';
+import 'package:recase/recase.dart';
 
 class EntityBuilder {
   EntityBuilder(Type type)
@@ -44,22 +44,22 @@ class EntityBuilder {
   final Table? metadata;
   final ResponseModel? responseModel;
 
-  ManagedEntityRuntime? runtime;
+  late final ManagedEntityRuntime runtime;
 
   late final String name = _getName();
-  late ManagedEntity entity;
+  late final ManagedEntity entity;
   List<String>? uniquePropertySet;
-  late PropertyBuilder primaryKeyProperty;
-  List<PropertyBuilder> properties = [];
-  Map<String?, ManagedAttributeDescription?> attributes = {};
-  Map<String?, ManagedRelationshipDescription?> relationships = {};
+  late final PropertyBuilder primaryKeyProperty;
+  late final List<PropertyBuilder> properties;
+  final Map<String, ManagedAttributeDescription?> attributes = {};
+  final Map<String, ManagedRelationshipDescription?> relationships = {};
 
   String get instanceTypeName => MirrorSystem.getName(instanceType.simpleName);
 
   String get tableDefinitionTypeName =>
       MirrorSystem.getName(tableDefinitionType.simpleName);
 
-  void compile(List<EntityBuilder>? entityBuilders) {
+  void compile(final List<EntityBuilder> entityBuilders) {
     for (final p in properties) {
       p.compile(entityBuilders);
     }
@@ -68,7 +68,7 @@ class EntityBuilder {
         metadata?.uniquePropertySet?.map(MirrorSystem.getName).toList();
   }
 
-  void validate(List<EntityBuilder>? entityBuilders) {
+  void validate(final List<EntityBuilder> entityBuilders) {
     // Check that we have a default constructor
     if (!classHasDefaultConstructor(instanceType)) {
       throw ManagedDataModelErrorImpl.noConstructor(instanceType);
@@ -163,8 +163,10 @@ class EntityBuilder {
     entity.validators = [];
     entity.validators.addAll(attributes.values.expand((a) => a!.validators));
     entity.validators.addAll(relationships.values.expand((a) => a!.validators));
-    entity.uniquePropertySet =
-        uniquePropertySet?.map((key) => entity.properties[key]).toList();
+    entity.uniquePropertySet = uniquePropertySet
+        ?.map((key) => entity.properties[key])
+        .nonNulls
+        .toList();
   }
 
   PropertyBuilder getInverseOf(PropertyBuilder foreignKey) {
@@ -234,9 +236,7 @@ class EntityBuilder {
         .map((p) => PropertyBuilder(this, p))
         .toList();
 
-    return [transientProperties, persistentProperties]
-        .expand((l) => l)
-        .toList();
+    return [...transientProperties, ...persistentProperties];
   }
 
   Iterable<PropertyBuilder> _getTransientAttributes() {

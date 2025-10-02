@@ -3,10 +3,13 @@ name: Release
 on:
   push:
     branches:
-      - master
+    - master
 
+concurrency:
+  group: "publish"
+    
 jobs:
-  publish:
+  pub:
     if: |
       startsWith(github.event.head_commit.message, 'feat')
       || startsWith(github.event.head_commit.message, 'fix')
@@ -16,10 +19,10 @@ jobs:
       || startsWith(github.event.head_commit.message, 'revert')
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: dart-lang/setup-dart@v1
       with:
-        sdk: stable
+        sdk: main
     - name: Prepare pub credentials
       run: |
         mkdir "$XDG_CONFIG_HOME/dart"
@@ -29,11 +32,11 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
     - name: Install melos
-      run: dart pub global activate melos
-    - name: Format
-      run: dart fix --apply && dart format --fix .
+      run: |
+        cat pubspec.yaml
+        dart pub global activate melos
     - name: Uptick versions
-      run: melos version --yes
+      run: melos sync-version
     - name: Changelog
       run: git diff --unified=0 $GITHUB_SHA packages/cli/CHANGELOG.md | tail +6 | sed -e 's/^\+//' > CHANGES.txt
     - name: Cache Source
@@ -48,18 +51,63 @@ jobs:
         branch: master
     - name: Compute the release tag
       run: |
-        echo "release_tag=v`cat packages/cli/pubspec.yaml | sed -nre 's/^version: [^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'`" >> $GITHUB_ENV
+        echo "release_tag=v`cat pubspec.yaml | sed -nre 's/^version: [^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'`" >> $GITHUB_ENV
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         tag_name: ${{ env.release_tag }}
         body_path: CHANGES.txt
-    - name: Generate docs
-      run: melos gen-docs && echo "mkdocs-monorepo-plugin=1.0.4" > requirements.txt
-    - name: Deploy docs
-      uses: mhausenblas/mkdocs-deploy-gh-pages@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CONFIG_FILE: mkdocs.yml
-        EXTRA_PACKAGES: build-base
-        REQUIREMENTS: requirements.txt
+  docker:
+    if: |
+      startsWith(github.event.head_commit.message, 'chore')
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          dart_channel:
+            - main
+            - beta
+            - stable
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compute the release tag
+      run: |
+        echo "release_tag=v`cat pubspec.yaml | sed -nre 's/^version: [^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'`" >> $GITHUB_ENV
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PAT }}
+    - name: Build and Push
+      run: docker buildx build --platform linux/amd64,linux/arm64/v8,linux/arm/v7 --file docker/Dockerfile.${{ matrix.dart_channel }} --tag conduitdart/conduit:${{ env.release_tag }}-${{ matrix.dart_channel }} --push .
+  docker-flutter:
+    if: |
+      startsWith(github.event.head_commit.message, 'chore')
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Compute the release tag
+      run: |
+        echo "release_tag=v`cat pubspec.yaml | sed -nre 's/^version: [^0-9]*(([0-9]+\.)*[0-9]+).*/\1/p'`" >> $GITHUB_ENV
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+    - name: Login to GHCR
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.CONDUIT_PAT }}
+    - name: Pull Prereequisites
+      run: docker pull ghcr.io/cirruslabs/flutter:latest
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PAT }}
+    - name: Build
+      run: docker buildx build --platform linux/amd64,linux/arm64/v8 --file docker/Dockerfile.flutter --tag conduitdart/conduit:${{ env.release_tag }}-flutter --push .

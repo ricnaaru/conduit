@@ -1,5 +1,3 @@
-// ignore_for_file: leading_newlines_in_multiline_strings
-
 import 'dart:mirrors';
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
@@ -22,16 +20,17 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
 
   @override
   ManagedObject instanceOfImplementation({ManagedBacking? backing}) {
-    final object =
-        instanceType.newInstance(Symbol.empty, []).reflectee as ManagedObject?;
+    try {
+      final object =
+          instanceType.newInstance(Symbol.empty, []).reflectee as ManagedObject;
 
-    if (object == null) {
+      if (backing != null) {
+        object.backing = backing;
+      }
+      return object;
+    } on TypeError {
       throw StateError('No implementation found for $instanceType');
     }
-    if (backing != null) {
-      object.backing = backing;
-    }
-    return object;
   }
 
   @override
@@ -131,17 +130,16 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
         return [];
       }
 
-      final type = element.variable.type;
+      final type = element.variable2!.type;
       final isSubclassOrInstanceOfValidate =
-          type.getDisplayString(withNullability: true) == "Validate" ||
+          type.getDisplayString() == "Validate" ||
               buildCtx.context.getSubclassesOf(Validate).any(
                 (subclass) {
                   return MirrorSystem.getName(subclass.simpleName) ==
-                      type.getDisplayString(withNullability: true);
+                      type.getDisplayString();
                 },
               );
-      final isInstanceOfColumn =
-          type.getDisplayString(withNullability: true) == "Column";
+      final isInstanceOfColumn = type.getDisplayString() == "Column";
 
       if (isSubclassOrInstanceOfValidate) {
         importUris.add(annotation.element!.source!.uri);
@@ -150,7 +148,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime
         final originatingLibrary = element.session!
             .getParsedLibraryByElement(element.library) as ParsedLibraryResult;
         final elementDeclaration = originatingLibrary
-            .getElementDeclaration(element.variable)!
+            .getElementDeclaration(element.variable2!)!
             .node as VariableDeclaration;
 
         return _getConstructorSourcesFromColumnArgList(
@@ -440,22 +438,22 @@ return entity.symbolMap[Symbol(symbolName)];
     final className = MirrorSystem.getName(instanceType.simpleName);
     final originalFileUri = instanceType.location!.sourceUri.toString();
     final relationshipsStr = (await Future.wait(
-      entity.relationships!.keys.map((name) async {
-        return "'$name': ${await _getRelationshipInstantiator(ctx, entity.relationships![name]!, importUris: importUris)}";
+      entity.relationships.keys.map((name) async {
+        return "'$name': ${await _getRelationshipInstantiator(ctx, entity.relationships[name]!, importUris: importUris)}";
       }),
     ))
         .join(", ");
 
     final uniqueStr = entity.uniquePropertySet == null
         ? "null"
-        : "[${entity.uniquePropertySet!.map((u) => "'${u!.name}'").join(",")}].map((k) => entity.properties[k]).toList()";
+        : "[${entity.uniquePropertySet!.map((u) => "'${u.name}'").join(",")}].map((k) => entity.properties[k]).nonNulls.toList()";
 
     final entityConstructor =
         await _getEntityConstructor(ctx, importUris: importUris);
 
     // Need to import any relationships types and metadata types
     // todo: limit import of importUris to only show symbols required to replicate metadata
-    final directives = entity.relationships!.values.map((r) {
+    final directives = entity.relationships.values.map((r) {
       var mirror = reflectType(r!.declaredType!);
       if (mirror.isSubtypeOf(reflectType(ManagedSet))) {
         mirror = mirror.typeArguments.first;
@@ -489,7 +487,7 @@ class ManagedEntityRuntimeImpl extends ManagedEntityRuntime {
     _entity.relationships = {$relationshipsStr};
     _entity.validators = [];
     _entity.validators.addAll(_entity.attributes.values.expand((a) => a!.validators));
-    _entity.validators.addAll(_entity.relationships?.values.expand((a) => a!.validators) ?? []);
+    _entity.validators.addAll(_entity.relationships.values.expand((a) => a!.validators));
 
     entity.uniquePropertySet = $uniqueStr;
   }

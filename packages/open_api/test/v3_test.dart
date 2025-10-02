@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -33,7 +31,6 @@ void main() {
             ..referenceURI = Uri.parse("#/components/schemas/foo"),
         );
         expect(true, false);
-        // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
         expect(e.message, contains("Invalid reference URI"));
       }
@@ -43,7 +40,6 @@ void main() {
           APISchemaObject()..referenceURI = Uri.parse("#/components/schemas"),
         );
         expect(true, false);
-        // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
         expect(e.message, contains("Invalid reference URI"));
       }
@@ -53,7 +49,6 @@ void main() {
           APISchemaObject()..referenceURI = Uri.parse("/components/foobar/foo"),
         );
         expect(true, false);
-        // ignore: avoid_catching_errors
       } on ArgumentError catch (e) {
         expect(e.message, contains("Invalid reference URI"));
       }
@@ -174,25 +169,25 @@ void main() {
         expect(getOp.description, contains("10 most recent reversals"));
         expect(getOp.id, "GetTransfersTransferReversalsId");
         expect(getParams!.length, 3);
-        expect(getParams[0]!.location, APIParameterLocation.query);
+        expect(getParams[0].location, APIParameterLocation.query);
         expect(
-          getParams[0]!.description,
+          getParams[0].description,
           "Specifies which fields in the response should be expanded.",
         );
-        expect(getParams[0]!.name, "expand");
-        expect(getParams[0]!.isRequired, false);
-        expect(getParams[0]!.schema!.type, APIType.array);
-        expect(getParams[0]!.schema!.items!.type, APIType.string);
+        expect(getParams[0].name, "expand");
+        expect(getParams[0].isRequired, false);
+        expect(getParams[0].schema!.type, APIType.array);
+        expect(getParams[0].schema!.items!.type, APIType.string);
 
-        expect(getParams[1]!.location, APIParameterLocation.path);
-        expect(getParams[1]!.name, "id");
-        expect(getParams[1]!.isRequired, true);
-        expect(getParams[1]!.schema!.type, APIType.string);
+        expect(getParams[1].location, APIParameterLocation.path);
+        expect(getParams[1].name, "id");
+        expect(getParams[1].isRequired, true);
+        expect(getParams[1].schema!.type, APIType.string);
 
-        expect(getParams[2]!.location, APIParameterLocation.path);
-        expect(getParams[2]!.name, "transfer");
-        expect(getParams[2]!.isRequired, true);
-        expect(getParams[2]!.schema!.type, APIType.string);
+        expect(getParams[2].location, APIParameterLocation.path);
+        expect(getParams[2].name, "transfer");
+        expect(getParams[2].isRequired, true);
+        expect(getParams[2].schema!.type, APIType.string);
 
         expect(getResponses!.length, 2);
         expect(getResponses["200"]!.content!.length, 1);

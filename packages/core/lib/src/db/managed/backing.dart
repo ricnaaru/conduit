@@ -1,4 +1,3 @@
-import 'package:conduit_core/src/db/managed/key_path.dart';
 import 'package:conduit_core/src/db/managed/managed.dart';
 import 'package:conduit_core/src/db/managed/relationship_type.dart';
 
@@ -11,7 +10,7 @@ final ArgumentError _invalidValueConstruction = ArgumentError(
 
 class ManagedValueBacking extends ManagedBacking {
   @override
-  Map<String?, dynamic> contents = {};
+  Map<String, dynamic> contents = {};
 
   @override
   dynamic valueForProperty(ManagedPropertyDescription property) {
@@ -38,13 +37,13 @@ class ManagedForeignKeyBuilderBacking extends ManagedBacking {
     ManagedEntity entity,
     ManagedBacking backing,
   ) {
-    if (backing.contents!.containsKey(entity.primaryKey)) {
-      contents[entity.primaryKey] = backing.contents![entity.primaryKey];
+    if (backing.contents.containsKey(entity.primaryKey)) {
+      contents[entity.primaryKey] = backing.contents[entity.primaryKey];
     }
   }
 
   @override
-  Map<String?, dynamic> contents = {};
+  Map<String, dynamic> contents = {};
 
   @override
   dynamic valueForProperty(ManagedPropertyDescription property) {
@@ -94,7 +93,7 @@ class ManagedBuilderBacking extends ManagedBacking {
   }
 
   @override
-  Map<String?, dynamic> contents = {};
+  Map<String, dynamic> contents = {};
 
   @override
   dynamic valueForProperty(ManagedPropertyDescription property) {
@@ -142,7 +141,7 @@ class ManagedAccessTrackingBacking extends ManagedBacking {
   KeyPath? workingKeyPath;
 
   @override
-  Map<String, dynamic>? get contents => null;
+  Map<String, dynamic> get contents => {};
 
   @override
   dynamic valueForProperty(ManagedPropertyDescription property) {

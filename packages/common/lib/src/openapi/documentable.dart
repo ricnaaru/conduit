@@ -176,7 +176,7 @@ class APIDocumentContext {
   Future<Map<String, dynamic>> finalize() async {
     final dops = _deferredOperations;
     _deferredOperations = [];
-    // ignore: avoid_dynamic_calls
+
     await Future.forEach(dops, (Function dop) => dop());
 
     document.paths!.values
@@ -184,7 +184,7 @@ class APIDocumentContext {
         .where((op) => op!.security != null)
         .expand((op) => op!.security!)
         .forEach((req) {
-      req!.requirements!.forEach((schemeName, scopes) {
+      req.requirements!.forEach((schemeName, scopes) {
         final scheme = document.components!.securitySchemes[schemeName];
         if (scheme!.type == APISecuritySchemeType.oauth2) {
           for (final flow in scheme.flows!.values) {
@@ -205,7 +205,7 @@ class APIDocumentContext {
 /// A collection of reusable OpenAPI objects.
 ///
 /// Components of type [T] may be registered and referenced through this object.
-class APIComponentCollection<T extends APIObject?> {
+class APIComponentCollection<T extends APIObject> {
   APIComponentCollection._(this._typeName, this._componentMap);
 
   final String _typeName;
@@ -257,7 +257,7 @@ class APIComponentCollection<T extends APIObject?> {
   /// If after [APIDocumentContext.finalize] is called and no object
   /// has been registered for [name], an error is thrown.
   T getObject(String name) {
-    final obj = _getInstanceOf()!;
+    final obj = _getInstanceOf();
     obj.referenceURI = Uri(path: "/components/$_typeName/$name");
     return obj;
   }
@@ -271,7 +271,7 @@ class APIComponentCollection<T extends APIObject?> {
   /// for [type]. If after [APIDocumentContext.finalize] is called and no object
   /// has been registered for [type], an error is thrown.
   T getObjectWithType(Type type) {
-    final obj = _getInstanceOf()!;
+    final obj = _getInstanceOf();
     obj.referenceURI =
         Uri(path: "/components/$_typeName/conduit-typeref:$type");
 
@@ -282,7 +282,7 @@ class APIComponentCollection<T extends APIObject?> {
           _resolutionMap.putIfAbsent(type, () => Completer<T>.sync());
 
       completer.future.then((refObject) {
-        obj.referenceURI = refObject!.referenceURI;
+        obj.referenceURI = refObject.referenceURI;
       });
     }
 
@@ -291,19 +291,19 @@ class APIComponentCollection<T extends APIObject?> {
 
   T _getInstanceOf() {
     switch (T) {
-      case APISchemaObject:
+      case const (APISchemaObject):
         return APISchemaObject.empty() as T;
-      case APIResponse:
+      case const (APIResponse):
         return APIResponse.empty() as T;
-      case APIParameter:
+      case const (APIParameter):
         return APIParameter.empty() as T;
-      case APIRequestBody:
+      case const (APIRequestBody):
         return APIRequestBody.empty() as T;
-      case APIHeader:
+      case const (APIHeader):
         return APIHeader.empty() as T;
-      case APISecurityScheme:
+      case const (APISecurityScheme):
         return APISecurityScheme.empty() as T;
-      case APICallback:
+      case const (APICallback):
         return APICallback.empty() as T;
     }
 

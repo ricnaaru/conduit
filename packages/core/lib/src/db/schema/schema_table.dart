@@ -1,5 +1,3 @@
-// ignore_for_file: no_adjacent_strings_in_list
-
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:conduit_core/src/db/managed/managed.dart';
 import 'package:conduit_core/src/db/managed/relationship_type.dart';
@@ -35,7 +33,7 @@ class SchemaTable {
     _columns =
         validProperties.map((p) => SchemaColumn.fromProperty(p!)).toList();
 
-    uniqueColumnSet = entity.uniquePropertySet?.map((p) => p!.name).toList();
+    uniqueColumnSet = entity.uniquePropertySet?.map((p) => p.name).toList();
   }
 
   /// Creates a deep copy of [otherTable].
@@ -73,7 +71,7 @@ class SchemaTable {
   List<String>? get uniqueColumnSet =>
       _uniqueColumnSet != null ? List.unmodifiable(_uniqueColumnSet!) : null;
 
-  set uniqueColumnSet(List<String?>? columnNames) {
+  set uniqueColumnSet(List<String>? columnNames) {
     if (columnNames != null) {
       _uniqueColumnSet = List.from(columnNames);
       _uniqueColumnSet?.sort((String a, String b) => a.compareTo(b));
@@ -92,7 +90,6 @@ class SchemaTable {
   List<SchemaColumn>? _columnStorage;
   List<String>? _uniqueColumnSet;
 
-  // ignore: avoid_setters_without_getters
   set _columns(List<SchemaColumn> columns) {
     _columnStorage = columns;
     for (final c in _columnStorage!) {

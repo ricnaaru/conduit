@@ -10,15 +10,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  macos:
+  smoke:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        sdk: [stable, main]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ matrix.sdk }}
+    - name: Setup Conduit
+      run: |
+        dart pub global activate melos
+        dart pub global activate -spath packages/cli
+        melos cache-source
+    - name: Run tests
+      working-directory: ../
+      run: |
+        conduit create -t db_and_auth --offline wildfire
+        cd wildfire/
+        echo "----------- Building test project -----------"
+        conduit build
+        conduit db generate
+  unit:
+    needs: smoke
     if: |
       startsWith(github.head_ref, 'feature/')
       || startsWith(github.head_ref, 'fix/')
       || startsWith(github.head_ref, 'refactor/')
     runs-on: macos-latest
     strategy:
+      fail-fast: false
       matrix:
-        runner_args: [melos test-unit, dart tool/generated_test_runner.dart]
+        runner_args: [melos test-unit --no-select, dart tool/generated_test_runner.dart]
+        sdk: [stable, main]
     env:
       TEST_DIR: packages/core
       POSTGRES_HOST: localhost
@@ -30,28 +56,23 @@ jobs:
       TEST_VALUE: 1
       TEST_BOOL: true
     steps:
-    - name: Start PostgreSQL
-      run: |
-        mkdir -p $HOME/datadir
-        initdb -U postgres -D $HOME/datadir
-        pg_ctl -o "-p ${{ env.POSTGRES_PORT }}" -D $HOME/datadir start
-    - name: Create database
-      env:
-        PGUSER: postgres
-        PGPORT: 15432
-      run: |
-        createuser -s -e -g postgres ${{ env.POSTGRES_USER }}
-        psql --command="ALTER USER ${{ env.POSTGRES_USER }} WITH PASSWORD '${{ env.POSTGRES_PASSWORD }}'"
-        createdb --owner=${{ env.POSTGRES_USER }} ${{ env.POSTGRES_DB }}
-    - uses: actions/checkout@v3
+    - name: Setup PostgreSQL for Linux/macOS/Windows
+      uses: ikalnytskyi/action-setup-postgres@v6
+      with:
+        username: conduit_test_user
+        password: conduit!
+        database: conduit_test_db
+        port: 15432
+    - uses: actions/checkout@v4
     - uses: dart-lang/setup-dart@v1
       with:
-        sdk: dev
+        sdk: ${{ matrix.sdk }}
     - name: Get Dependencies
       run: |
+        dart pub global activate -spath packages/cli
         dart pub global activate melos
         melos bootstrap
-        melos cache-source
+        melos cache-source --no-select
         dart pub get --directory=packages/isolate_exec_test_packages/test_package --offline
         dart pub get --directory=packages/runtime_test_packages/application --offline
         dart pub get --directory=packages/runtime_test_packages/dependency --offline

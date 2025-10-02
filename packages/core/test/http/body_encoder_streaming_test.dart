@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/dev/helpers.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -35,7 +35,7 @@ void main() {
 
       sc.add([1, 2, 3, 4]);
       sc.add([5, 6, 7, 8]);
-      // ignore: unawaited_futures
+
       sc.close();
 
       final result = await resultFuture;
@@ -55,7 +55,7 @@ void main() {
       sc.add([1, 2, 3, 4]);
       sc.add([5, 6, 7, 8]);
       sc.addError(Exception("Whatever"));
-      // ignore: unawaited_futures
+
       sc.close();
 
       final resp = await resultFuture;
@@ -86,7 +86,7 @@ void main() {
 
       sc.add([1, 2, 3, 4]);
       sc.add([5, 6, 7, 8]);
-      // ignore: unawaited_futures
+
       sc.close();
 
       // The test fails for a different reason in checked vs. unchecked mode.
@@ -95,7 +95,7 @@ void main() {
         final result = await resultFuture;
         expect(result.statusCode, 500);
         expect(result.bodyBytes, []);
-      } on http.ClientException catch (_) {}
+      } on http.ClientException {}
     });
   });
 
@@ -116,7 +116,7 @@ void main() {
 
       sc.add("abcd");
       sc.add("efgh");
-      // ignore: unawaited_futures
+
       sc.close();
 
       final result = await resultFuture;
@@ -138,7 +138,7 @@ void main() {
 
       sc.add("abcd");
       sc.add("efgh");
-      // ignore: unawaited_futures
+
       sc.close();
 
       try {
@@ -184,7 +184,7 @@ void main() {
 
       sc.add("abcd");
       sc.add("efgh");
-      // ignore: unawaited_futures
+
       sc.close();
 
       final resp = await respFuture;
@@ -217,7 +217,7 @@ void main() {
 
       sc.add("abcd");
       sc.add("efgh");
-      // ignore: unawaited_futures
+
       sc.close();
 
       final resp = await respFuture;
@@ -247,7 +247,7 @@ void main() {
       final respFuture = req.close();
 
       sc.add([1, 2, 3, 4]);
-      // ignore: unawaited_futures
+
       sc.close();
 
       final resp = await respFuture;
@@ -274,7 +274,7 @@ void main() {
       final respFuture = req.close();
 
       sc.add("abcd");
-      // ignore: unawaited_futures
+
       sc.close();
 
       final resp = await respFuture;
@@ -373,7 +373,7 @@ void main() {
       try {
         final response = await req.close();
         expect(response.statusCode, 413);
-      } on SocketException catch (_) {
+      } on SocketException {
         if (!Platform.isMacOS) {
           rethrow;
         }
@@ -489,7 +489,7 @@ class CrashingEncoder extends Converter<String, List<int>> {
   }
 }
 
-class CrashingSink extends ChunkedConversionSink<String> {
+class CrashingSink implements ChunkedConversionSink<String> {
   CrashingSink(this.sink);
 
   Sink<List<int>> sink;

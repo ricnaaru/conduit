@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:mirrors';
@@ -16,8 +14,8 @@ import 'package:yaml/yaml.dart';
 
 class ConduitCompiler extends Compiler {
   @override
-  Map<String, dynamic> compile(MirrorContext context) {
-    final m = <String, dynamic>{};
+  Map<String, Object> compile(MirrorContext context) {
+    final m = <String, Object>{};
 
     m.addEntries(
       context
@@ -71,7 +69,6 @@ class ConduitCompiler extends Compiler {
     if (context.forTests) {
       final devPackages = [
         {'name': 'fs_test_agent', 'path': 'fs_test_agent'},
-        {'name': 'conduit_common_test', 'path': 'common_test'},
         {'name': 'conduit_test', 'path': 'test_harness'},
       ];
       final targetPubspecFile =
@@ -111,11 +108,6 @@ class ConduitCompiler extends Compiler {
         {'name': 'conduit_isolate_exec', 'path': 'isolate_exec'},
       ];
       _overwritePackageDependency(context, 'conduit_runtime', runtimePackages);
-
-      final commonTestPackages = [
-        {'name': 'conduit_common', 'path': 'common'},
-      ];
-      _overwritePackageDependency(context, 'common_test', commonTestPackages);
 
       final commonPackages = [
         {'name': 'conduit_open_api', 'path': 'open_api'},

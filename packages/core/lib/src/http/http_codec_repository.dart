@@ -98,7 +98,6 @@ class CodecRegistry {
   ///
   /// Use this method when wanting to compress a [Response.body], but there is no need for a [Codec] to transform
   /// the body object.
-  // ignore: avoid_positional_boolean_parameters
   void setAllowsCompression(ContentType contentType, bool allowed) {
     if (contentType.subType == "*") {
       _primaryTypeCompressionMap[contentType.primaryType] = allowed;
@@ -242,7 +241,7 @@ class _FormDecoder extends Converter<String, Map<String, dynamic>> {
   }
 }
 
-class _FormSink extends ChunkedConversionSink<String> {
+class _FormSink implements ChunkedConversionSink<String> {
   _FormSink(this._outSink);
 
   final _FormDecoder decoder = const _FormDecoder();

@@ -13,15 +13,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 /// The core libraries of the Conduit framework.
 ///
-/// See documentation guides at https://conduit.io/docs/.
-library conduit;
+/// See documentation guides at https://www.theconduit.dev/docs/.
+library;
 
 export 'package:conduit_config/conduit_config.dart';
 export 'package:conduit_core/src/runtime/compiler.dart';
+export 'package:conduit_core/src/application/channel.dart';
 export 'package:logging/logging.dart';
 
-export 'src/application/application.dart';
-export 'src/auth/auth.dart';
-export 'src/db/db.dart';
-export 'src/db/managed/relationship_type.dart';
-export 'src/http/http.dart';
+export 'package:conduit_core/src/application/application.dart';
+export 'package:conduit_core/src/auth/auth.dart';
+export 'package:conduit_core/src/db/db.dart';
+export 'package:conduit_core/src/db/managed/relationship_type.dart';
+export 'package:conduit_core/src/http/http.dart';

@@ -38,7 +38,6 @@ class IsolateExecutor<U> {
       ..listen((err) async {
         if (err is List) {
           final stack =
-              // ignore: avoid_dynamic_calls
               StackTrace.fromString(err.last.replaceAll(scriptSource, ""));
 
           completer.completeError(StateError(err.first), stack);
@@ -76,6 +75,9 @@ class IsolateExecutor<U> {
         automaticPackageResolution: packageConfigURI == null,
       );
       return await completer.future;
+    } catch (e) {
+      print(e);
+      rethrow;
     } finally {
       onErrorPort.close();
       controlPort.close();

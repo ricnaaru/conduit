@@ -5,33 +5,33 @@ import 'package:conduit_core/src/runtime/orm/entity_builder.dart';
 import 'package:conduit_runtime/runtime.dart';
 
 class DataModelCompiler {
-  Map<String, dynamic> compile(MirrorContext context) {
-    final m = <String, dynamic>{};
+  Map<String, Object> compile(MirrorContext context) {
+    final m = <String, Object>{};
 
     final instanceTypes = context.types
         .where(_isTypeManagedObjectSubclass)
         .map((c) => c.reflectedType);
 
     _builders = instanceTypes.map((t) => EntityBuilder(t)).toList();
-    for (final b in _builders!) {
+    for (final b in _builders) {
       b.compile(_builders);
     }
     _validate();
 
-    for (final b in _builders!) {
-      b.link(_builders!.map((eb) => eb.entity).toList());
+    for (final b in _builders) {
+      b.link(_builders.map((eb) => eb.entity).toList());
       m[b.entity.instanceType.toString()] = b.runtime;
     }
 
     return m;
   }
 
-  List<EntityBuilder>? _builders;
+  late List<EntityBuilder> _builders;
 
   void _validate() {
     // Check for dupe tables
-    for (final builder in _builders!) {
-      final withSameName = _builders!
+    for (final builder in _builders) {
+      final withSameName = _builders
           .where((eb) => eb.name == builder.name)
           .map((eb) => eb.instanceTypeName)
           .toList();
@@ -43,7 +43,7 @@ class DataModelCompiler {
       }
     }
 
-    for (final b in _builders!) {
+    for (final b in _builders) {
       b.validate(_builders);
     }
   }

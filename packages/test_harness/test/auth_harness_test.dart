@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_core/conduit_core.dart';
 import 'package:conduit_core/managed_auth.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
+
+import 'not_tests/postgres_test_config.dart';
 
 void main() {
   final harness = HarnessSubclass()..install();
@@ -116,8 +117,8 @@ void main() {
 }
 
 class Channel extends ApplicationChannel {
-  ManagedContext? context;
-  AuthServer? authServer;
+  late ManagedContext context;
+  late final AuthServer authServer;
 
   @override
   Future prepare() async {
@@ -143,7 +144,7 @@ class HarnessSubclass extends TestHarness<Channel>
   Future seed() async {}
 
   @override
-  AuthServer? get authServer => channel!.authServer;
+  AuthServer get authServer => channel!.authServer;
 
   @override
   ManagedContext? get context => channel!.context;

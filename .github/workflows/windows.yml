@@ -10,15 +10,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  windows:
+  smoke:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: dev
+    - name: Setup Conduit
+      run: |
+        dart pub global activate melos
+        dart pub global activate -spath packages/cli
+    - name: Run tests
+      working-directory: ../
+      run: |
+        conduit create -t db_and_auth --offline wildfire
+        cd wildfire/
+        echo "----------- Building test project -----------"
+        conduit build
+        conduit db generate
+  unit:
+    needs: smoke
     if: |
       startsWith(github.head_ref, 'feature/')
       || startsWith(github.head_ref, 'fix/')
       || startsWith(github.head_ref, 'refactor/')
     runs-on: windows-latest
     strategy:
+      fail-fast: false
       matrix:
-        runner_args: [melos test-unit, dart tool/generated_test_runner.dart]
+        runner_args: [melos test-unit --no-select, dart tool/generated_test_runner.dart]
     env:
       TEST_DIR: packages/core
       POSTGRES_HOST: localhost
@@ -51,9 +72,10 @@ jobs:
     - name: Get Dependencies
       run: |
         choco install yq
+        dart pub global activate -spath packages/cli
         dart pub global activate melos
         dart pub global run melos:melos bootstrap
-        dart pub global run melos:melos cache-source-win
+        dart pub global run melos:melos cache-source-win --no-select
         dart pub get --directory=packages/isolate_exec_test_packages/test_package --offline
         dart pub get --directory=packages/runtime_test_packages/application --offline
         dart pub get --directory=packages/runtime_test_packages/dependency --offline

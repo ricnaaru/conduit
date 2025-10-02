@@ -1,13 +1,10 @@
 import 'dart:async';
 
 import 'package:conduit_common/conduit_common.dart';
-import 'package:conduit_core/src/application/channel.dart';
-import 'package:conduit_core/src/application/service_registry.dart';
 import 'package:conduit_core/src/db/managed/data_model_manager.dart' as mm;
 import 'package:conduit_core/src/db/managed/managed.dart';
 import 'package:conduit_core/src/db/persistent_store/persistent_store.dart';
 import 'package:conduit_core/src/db/query/query.dart';
-import 'package:conduit_core/src/http/http.dart';
 
 /// A service object that handles connecting to and sending queries to a database.
 ///
@@ -47,14 +44,16 @@ class ManagedContext implements APIComponentDocumenter {
   /// on this context if its type is in [dataModel].
   ManagedContext(this.dataModel, this.persistentStore) {
     mm.add(dataModel!);
-    ServiceRegistry.defaultInstance
-        .register<ManagedContext>(this, (o) => o.close());
+    _finalizer.attach(this, persistentStore, detach: this);
   }
 
   /// Creates a child context from [parentContext].
   ManagedContext.childOf(ManagedContext parentContext)
       : persistentStore = parentContext.persistentStore,
         dataModel = parentContext.dataModel;
+
+  static final Finalizer<PersistentStore> _finalizer =
+      Finalizer((store) async => store.close());
 
   /// The persistent store that [Query]s on this context are executed through.
   PersistentStore persistentStore;
@@ -81,23 +80,23 @@ class ManagedContext implements APIComponentDocumenter {
   ///
   /// TODO: the following statement is not true.
   /// Rollback takes a string but the transaction
-  /// returns <T>.  It would seem to be a better idea to still throw the manual Rollback
+  /// returns \<T>.  It would seem to be a better idea to still throw the manual Rollback
   /// so the user has a consistent method of handling the rollback. We could add a property
   /// to the Rollback class 'manual' which would be used to indicate a manual rollback.
-  /// For the moment I've changed the return type to Future<void> as
+  /// For the moment I've changed the return type to Future\<void> as
   /// The parameter passed to [Rollback]'s constructor will be returned from this method
   /// so that the caller can determine why the transaction was rolled back.
   ///
   /// Example usage:
   ///
   ///         await context.transaction((transaction) async {
-  ///            final q = new Query<Model>(transaction)
+  ///            final q = new Query\<Model>(transaction)
   ///             ..values = someObject;
   ///            await q.insert();
   ///            ...
   ///         });
-  Future<T?> transaction<T>(
-    Future<T?> Function(ManagedContext transaction) transactionBlock,
+  Future<T> transaction<T>(
+    Future<T> Function(ManagedContext transaction) transactionBlock,
   ) {
     return persistentStore.transaction(
       ManagedContext.childOf(this),
@@ -111,7 +110,8 @@ class ManagedContext implements APIComponentDocumenter {
   /// A context may not be reused once it has been closed.
   Future close() async {
     await persistentStore.close();
-    dataModel?.release();
+    _finalizer.detach(this);
+    mm.remove(dataModel!);
   }
 
   /// Returns an entity for a type from [dataModel].

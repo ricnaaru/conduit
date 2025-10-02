@@ -1,9 +1,8 @@
-// ignore_for_file: avoid_catching_errors
 import 'dart:mirrors';
 
 import 'package:conduit_runtime/src/exceptions.dart';
 
-dynamic runtimeCast(dynamic object, TypeMirror intoType) {
+Object runtimeCast(Object object, TypeMirror intoType) {
   final exceptionToThrow =
       TypeCoercionException(intoType.reflectedType, object.runtimeType);
 
@@ -34,9 +33,9 @@ dynamic runtimeCast(dynamic object, TypeMirror intoType) {
       });
       return output;
     }
-  } on TypeError catch (_) {
+  } on TypeError {
     throw exceptionToThrow;
-  } on TypeCoercionException catch (_) {
+  } on TypeCoercionException {
     throw exceptionToThrow;
   }
 

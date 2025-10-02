@@ -1,4 +1,4 @@
-import 'package:conduit_runtime/src/mirror_context.dart' as context;
+import 'package:conduit_runtime/src/mirror_context.dart';
 
 /// Contextual values used during runtime.
 abstract class RuntimeContext {
@@ -6,7 +6,7 @@ abstract class RuntimeContext {
   ///
   /// Is either a `MirrorContext` or a `GeneratedContext`,
   /// depending on the execution type.
-  static final RuntimeContext current = context.instance;
+  static final RuntimeContext current = instance;
 
   /// The runtimes available to the executing application.
   late RuntimeCollection runtimes;
@@ -30,11 +30,11 @@ abstract class RuntimeContext {
 class RuntimeCollection {
   RuntimeCollection(this.map);
 
-  final Map<String, dynamic> map;
+  final Map<String, Object> map;
 
-  Iterable<dynamic> get iterable => map.values;
+  Iterable<Object> get iterable => map.values;
 
-  dynamic operator [](Type t) {
+  Object operator [](Type t) {
     //todo: optimize by keeping a cache where keys are of type [Type] to avoid the
     // expensive indexOf and substring calls in this method
     final typeName = t.toString();

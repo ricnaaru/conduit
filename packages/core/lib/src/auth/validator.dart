@@ -11,7 +11,7 @@ import 'package:conduit_open_api/v3.dart';
 /// header of the [Request].
 ///
 /// [AuthServer] implements this interface.
-abstract class AuthValidator {
+mixin AuthValidator {
   /// Returns an [Authorization] if [authorizationData] is valid.
   ///
   /// This method is invoked by [Authorizer] to validate the Authorization header of a request. [authorizationData]
@@ -22,7 +22,7 @@ abstract class AuthValidator {
   /// If this method throws an [AuthServerException], an appropriate status code is sent for the details of the exception.
   ///
   /// If [requiredScope] is provided, a request's authorization must have at least that much scope to pass the [Authorizer].
-  FutureOr<Authorization>? validate<T>(
+  FutureOr<Authorization?> validate<T>(
     AuthorizationParser<T> parser,
     T authorizationData, {
     List<AuthScope>? requiredScope,

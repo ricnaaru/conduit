@@ -88,7 +88,10 @@ class CodeAnalyzer {
           .whereType<ClassDeclaration>()
           .firstWhere((c) => c.name.value() == className);
     } catch (e) {
-      if (e is StateError || e is TypeError || e is ArgumentError) {
+      if (e is StateError ||
+          e is TypeError ||
+          e is ArgumentError ||
+          e is UnsupportedError) {
         return null;
       }
       rethrow;
@@ -102,7 +105,8 @@ class CodeAnalyzer {
     return _getFileAstRoot(fileUri)
         .declarations
         .whereType<ClassDeclaration>()
-        .where((c) => c.extendsClause?.superclass.name.name == superclassName)
+        .where((c) =>
+            c.extendsClause?.superclass.name2.toString() == superclassName)
         .toList();
   }
 

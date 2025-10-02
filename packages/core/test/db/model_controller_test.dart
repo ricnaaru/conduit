@@ -4,12 +4,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/db/query/matcher_internal.dart';
-import 'package:conduit_core/src/db/query/mixin.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
+
+import '../not_tests/postgres_test_config.dart';
 
 void main() {
   Controller.letUncaughtExceptionsEscape = true;
@@ -27,7 +26,6 @@ void main() {
     router.didAddToChannel();
 
     server.listen((req) async {
-      // ignore: unawaited_futures
       router.receive(Request(req));
     });
   });
@@ -89,7 +87,7 @@ class TestModelController extends QueryController<TestModel> {
       statusCode = 400;
     }
 
-    if (query!.values.backing.contents!.isNotEmpty) {
+    if (query!.values.backing.contents.isNotEmpty) {
       statusCode = 400;
     }
 
@@ -113,7 +111,7 @@ class TestModelController extends QueryController<TestModel> {
       statusCode = 400;
     }
 
-    if (query!.values.backing.contents!.isNotEmpty) {
+    if (query!.values.backing.contents.isNotEmpty) {
       statusCode = 400;
     }
 

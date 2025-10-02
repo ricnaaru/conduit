@@ -1,7 +1,7 @@
 import "dart:core";
 
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/dev/helpers.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
@@ -101,7 +101,7 @@ void main() {
 }
 
 class Channel extends ApplicationChannel {
-  AuthServer? authServer;
+  late AuthServer authServer;
 
   @override
   Controller get entryPoint {

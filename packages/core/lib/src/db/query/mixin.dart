@@ -1,12 +1,11 @@
 import 'package:conduit_core/src/db/managed/backing.dart';
-import 'package:conduit_core/src/db/managed/key_path.dart';
 import 'package:conduit_core/src/db/managed/managed.dart';
 import 'package:conduit_core/src/db/managed/relationship_type.dart';
 import 'package:conduit_core/src/db/query/page.dart';
 import 'package:conduit_core/src/db/query/query.dart';
 import 'package:conduit_core/src/db/query/sort_descriptor.dart';
 
-abstract class QueryMixin<InstanceType extends ManagedObject>
+mixin QueryMixin<InstanceType extends ManagedObject>
     implements Query<InstanceType> {
   @override
   int offset = 0;
@@ -26,9 +25,12 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
   @override
   QueryPredicate? predicate;
 
+  @override
+  QuerySortPredicate? sortPredicate;
+
   QueryPage? pageDescriptor;
-  List<QuerySortDescriptor>? sortDescriptors;
-  Map<ManagedRelationshipDescription, Query>? subQueries;
+  final List<QuerySortDescriptor> sortDescriptors = <QuerySortDescriptor>[];
+  final Map<ManagedRelationshipDescription, Query> subQueries = {};
 
   QueryMixin? _parentQuery;
   List<QueryExpression<dynamic, dynamic>> expressions = [];
@@ -111,8 +113,7 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
   ) {
     final attribute = entity.identifyAttribute(propertyIdentifier);
 
-    sortDescriptors ??= <QuerySortDescriptor>[];
-    sortDescriptors!.add(QuerySortDescriptor(attribute.name, order));
+    sortDescriptors.add(QuerySortDescriptor(attribute.name, order));
   }
 
   @override
@@ -154,7 +155,7 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
   Query<T> _createSubquery<T extends ManagedObject>(
     ManagedRelationshipDescription fromRelationship,
   ) {
-    if (subQueries?.containsKey(fromRelationship) ?? false) {
+    if (subQueries.containsKey(fromRelationship)) {
       throw StateError(
         "Invalid query. Cannot join same property more than once.",
       );
@@ -163,8 +164,8 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
     // Ensure we don't cyclically join
     var parent = _parentQuery;
     while (parent != null) {
-      if (parent.subQueries!.containsKey(fromRelationship.inverse)) {
-        final validJoins = fromRelationship.entity.relationships!.values
+      if (parent.subQueries.containsKey(fromRelationship.inverse)) {
+        final validJoins = fromRelationship.entity.relationships.values
             .where((r) => !identical(r, fromRelationship))
             .map((r) => "'${r!.name}'")
             .join(", ");
@@ -181,11 +182,9 @@ abstract class QueryMixin<InstanceType extends ManagedObject>
       parent = parent._parentQuery;
     }
 
-    subQueries ??= {};
-
     final subquery = Query<T>(context);
     (subquery as QueryMixin)._parentQuery = this;
-    subQueries![fromRelationship] = subquery;
+    subQueries[fromRelationship] = subquery;
 
     return subquery;
   }

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_dynamic_calls
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -129,7 +127,7 @@ void main() {
       "A recycled controller always sends unhandled requests to the next linked controller",
       () async {
     server.root
-        .link(() => MiddlewareRecyclable())!
+        .link(() => MiddlewareRecyclable())
         .link(() => DefaultController());
     server.root.didAddToChannel();
 
@@ -178,7 +176,7 @@ void main() {
       "A recycled controller sends unhandled request to the next linked recyclable",
       () async {
     server.root
-        .link(() => MiddlewareRecyclable())!
+        .link(() => MiddlewareRecyclable())
         .link(() => DefaultRecyclable());
     server.root.didAddToChannel();
 

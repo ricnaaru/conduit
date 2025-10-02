@@ -1,42 +1,45 @@
 name: conduit
-version: 4.1.0
-homepage: https://github.com/conduit-dart/conduit
 description: A modern HTTP server application framework, ORM and OAuth2 provider with OpenAPI 3.0 integration. Foundation for REST, RPC or GraphQL services.
+version: 5.1.5
+home: https://www.theconduit.dev
+repository: https://github.com/conduit-dart/conduit
+issue_tracker: https://github.com/conduit-dart/conduit/issues
+
 environment:
-  sdk: ">=2.18.6 <3.0.0"
+  sdk: ">=3.7.0 <4.0.0"
+
 dependencies:
-  analyzer: ^5.1.0
-  args: ^2.1.1
-  collection: ^1.15.0
-  conduit_common: ^4.1.0
-  conduit_config: ^4.1.0
-  conduit_core: ^4.1.0
-  conduit_isolate_exec: ^4.1.0
-  conduit_open_api: ^4.1.0
-  conduit_password_hash: ^4.1.0
-  conduit_runtime: ^4.1.0
-  crypto: ^3.0.2
-  io: ^1.0.3
-  logging: ^1.0.0
-  meta: ^1.1.5
-  path: ^1.6.1
-  postgres: ^2.3.1
-  pub_cache: ^0.3.0
-  pub_semver: ^2.0.0
-  yaml: ^3.1.0
+  analyzer: ^7.1.0
+  args: ^2.4.2
+  collection: ^1.18.0
+  conduit_common: ^5.1.5
+  conduit_config: ^5.1.5
+  conduit_core: ^5.1.5
+  conduit_isolate_exec: ^5.1.5
+  conduit_open_api: ^5.1.5
+  conduit_password_hash: ^5.1.5
+  conduit_postgresql: ^5.1.5
+  conduit_runtime: ^5.1.5
+  crypto: ^3.0.3
+  io: ^1.0.4
+  logging: ^1.2.0
+  meta: ^1.12.0
+  path: ^1.9.0
+  postgres: ^3.1.1
+  pub_semver: ^2.1.4
+  yaml: ^3.1.2
+
 dev_dependencies:
-  conduit_common_test:
-    path: ../common_test
   conduit_test:
     path: ../test_harness
   fs_test_agent:
     path: ../fs_test_agent
-  http: ^0.13.0
-  lint: ^2.0.0
-  lints: ^2.0.1
-  matcher: ^0.12.12
-  mockito: ^5.3.2
-  test: ^1.21.6
-  web_socket_channel: ^2.2.0
+  http: ^1.2.1
+  lints: ^5.1.1
+  matcher: ^0.12.16+1
+  mockito: ^5.4.4
+  test: ^1.25.2
+  web_socket_channel: ^3.0.0
+
 executables:
   conduit: conduit

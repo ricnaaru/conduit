@@ -1,5 +1,5 @@
-site_name: conduit
+site_name: conduit_core
 docs_dir: doc/api
 
 nav: 
-  - API: "index.html"
+  - Docs: "index.html"

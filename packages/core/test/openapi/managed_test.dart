@@ -1,11 +1,9 @@
-// ignore_for_file: avoid_setters_without_getters
-
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:conduit_common/conduit_common.dart';
+import '../not_tests/helpers.dart';
 import 'package:conduit_core/conduit_core.dart';
-import 'package:conduit_core/src/dev/helpers.dart';
 import 'package:conduit_open_api/v3.dart';
 import 'package:test/test.dart';
 

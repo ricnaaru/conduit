@@ -24,9 +24,14 @@ class Build {
     await Future.forEach<Uri>(
       astsToResolve,
       (astUri) async {
-        final Uri package =
-            (await context.getPackageFromUri(astUri))?.packageUriRoot ?? astUri;
-        return context.analyzer.resolveUnitOrLibraryAt(package);
+        final package = await context.getPackageFromUri(astUri);
+        final Uri packageUri =
+            package?.packageUriRoot.resolve(package.name) ?? astUri;
+        try {
+          await context.analyzer.resolveUnitOrLibraryAt(packageUri);
+        } catch (e) {
+          print('Invalid path at $astUri');
+        }
       },
     );
 
@@ -47,10 +52,10 @@ class Build {
     print("Generated runtime at '${context.buildRuntimeDirectory.uri}'.");
 
     final nameOfPackageBeingCompiled = context.sourceApplicationPubspec.name;
-    final pubspecMap = <String, dynamic>{
+    final pubspecMap = <String, Object>{
       'name': 'runtime_target',
       'version': '1.0.0',
-      'environment': {'sdk': '>=2.18.6 <3.0.0'},
+      'environment': {'sdk': '>=3.4.0 <4.0.0'},
       'dependency_overrides': {}
     };
     final overrides = pubspecMap['dependency_overrides'] as Map;
@@ -114,7 +119,6 @@ class Build {
     print("Fetching dependencies (--offline --no-precompile)...");
     await getDependencies();
     print("Finished fetching dependencies.");
-
     if (!context.forTests) {
       print("Compiling...");
       await compile(context.targetScriptFileUri, context.executableUri);
@@ -134,7 +138,6 @@ class Build {
     );
     if (res.exitCode != 0) {
       print("${res.stdout}");
-      print("${res.stderr}");
       throw StateError(
         "'pub get' failed with the following message: ${res.stderr}",
       );
@@ -147,6 +150,8 @@ class Build {
       [
         "compile",
         "exe",
+        ...(context.environment?.entries.map((e) => "-D${e.key}=${e.value}") ??
+            []),
         "-v",
         srcUri.toFilePath(windows: Platform.isWindows),
         "-o",
@@ -156,6 +161,7 @@ class Build {
           .toFilePath(windows: Platform.isWindows),
       runInShell: true,
     );
+
     if (res.exitCode != 0) {
       throw StateError(
         "'dart2native' failed with the following message: ${res.stderr}",

@@ -7,7 +7,7 @@ import 'package:conduit_core/src/runtime/orm/entity_builder.dart';
 import 'package:conduit_core/src/runtime/orm/entity_mirrors.dart';
 import 'package:conduit_core/src/runtime/orm/validator_builder.dart';
 import 'package:conduit_core/src/utilities/mirror_helpers.dart';
-import 'package:conduit_core/src/utilities/text_case.dart';
+import 'package:recase/recase.dart';
 
 class PropertyBuilder {
   PropertyBuilder(this.parent, this.declaration)
@@ -72,7 +72,7 @@ class PropertyBuilder {
   DeleteRule? deleteRule;
   List<ValidatorBuilder>? _validators;
 
-  void compile(List<EntityBuilder>? entityBuilders) {
+  void compile(final List<EntityBuilder> entityBuilders) {
     if (type == null) {
       if (relate != null) {
         relatedProperty =
@@ -102,7 +102,7 @@ class PropertyBuilder {
     }
   }
 
-  void validate(List<EntityBuilder>? entityBuilders) {
+  void validate(final List<EntityBuilder> entityBuilders) {
     if (type == null) {
       if (!isRelationship ||
           relationshipType == ManagedRelationshipType.belongsTo) {
@@ -172,11 +172,7 @@ class PropertyBuilder {
         indexed: true,
         nullable: nullable,
         includedInDefaultResultSet: includeInDefaultResultSet,
-        validators: validators!
-            .map((v) => v.managedValidator)
-            .where((v) => v != null)
-            .cast<ManagedValidator>()
-            .toList(),
+        validators: validators!.map((v) => v.managedValidator).toList(),
         responseModel: parent.responseModel,
         responseKey: responseKey,
       );
@@ -287,10 +283,11 @@ class PropertyBuilder {
         : name;
   }
 
-  EntityBuilder _getRelatedEntityBuilderFrom(List<EntityBuilder>? builders) {
+  EntityBuilder _getRelatedEntityBuilderFrom(
+      final List<EntityBuilder> builders) {
     final expectedInstanceType = getDeclarationType();
     if (!relate!.isDeferred) {
-      return builders!.firstWhere(
+      return builders.firstWhere(
         (b) => b.instanceType == expectedInstanceType,
         orElse: () {
           throw ManagedDataModelErrorImpl.noDestinationEntity(
@@ -302,7 +299,7 @@ class PropertyBuilder {
       );
     }
 
-    final possibleEntities = builders!.where((e) {
+    final possibleEntities = builders.where((e) {
       return e.tableDefinitionType == expectedInstanceType ||
           e.tableDefinitionType.isSubtypeOf(expectedInstanceType);
     }).toList();

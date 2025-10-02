@@ -32,6 +32,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "crifurch",
+      "name": "Artem Semirenko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11064662?v=4",
+      "profile": "https://github.com/crifurch",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "dimoshka",
+      "name": "Dmytro Prylutskyi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3213606?v=4",
+      "profile": "https://github.com/Dimoshka",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -39,5 +58,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "conduit",
-  "projectOwner": "conduit-dart"
+  "projectOwner": "conduit-dart",
+  "commitType": "docs"
 }

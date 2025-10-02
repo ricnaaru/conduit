@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 120))
+library;
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
@@ -105,7 +107,6 @@ void main() {
 
       var responseReturned = false;
       final responseFuture = testClient.request("/hello").get();
-      // ignore: unawaited_futures
       responseFuture.whenComplete(() => responseReturned = true);
 
       await Future.delayed(const Duration(milliseconds: 100));
@@ -122,7 +123,6 @@ void main() {
 
       var responseReturned = false;
       var responseFuture = testClient.request("/hello").get();
-      // ignore: unawaited_futures
       responseFuture.whenComplete(() => responseReturned = true);
 
       await Future.delayed(const Duration(milliseconds: 100));
@@ -135,7 +135,7 @@ void main() {
 
       responseReturned = false;
       responseFuture = testClient.request("/hello").get();
-      // ignore: unawaited_futures
+
       responseFuture.whenComplete(() => responseReturned = true);
 
       await Future.delayed(const Duration(milliseconds: 100));
@@ -149,7 +149,7 @@ void main() {
 
       var responseReturned = false;
       final responseFuture = testClient.request("/hello").get();
-      // ignore: unawaited_futures
+
       responseFuture.whenComplete(() => responseReturned = true);
 
       await Future.delayed(const Duration(milliseconds: 100));
@@ -207,13 +207,13 @@ void main() {
   });
 }
 
-Future<Null> Function(List) spawnFunc(int port) {
+Future Function(List) spawnFunc(int port) {
   return (List pair) async {
     final path = pair.first as String;
     final delay = pair.last as int;
     final testClient = Agent.onPort(port);
     sleep(Duration(seconds: delay));
-    await testClient.request(path).get().catchError((_) {});
+    await testClient.request(path).get();
   };
 }
 

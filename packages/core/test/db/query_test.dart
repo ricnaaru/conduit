@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_dynamic_calls, avoid_catching_errors
-
-import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_core/conduit_core.dart';
 import 'package:test/test.dart';
+
+import '../not_tests/postgres_test_config.dart';
 
 void main() {
   late ManagedContext ctx;
@@ -130,8 +129,8 @@ void main() {
       ..id = 1
       ..name = "bob";
 
-    expect(q.values.backing.contents!.keys, ["parent"]);
-    expect(q.values.backing.contents!["parent"].backing.contents, {"id": 1});
+    expect(q.values.backing.contents.keys, ["parent"]);
+    expect(q.values.backing.contents["parent"].backing.contents, {"id": 1});
 
     try {
       q.values.parent.name = "bob";
@@ -177,8 +176,8 @@ void main() {
         () {
       final q = Query<Child>(ctx);
       q.values = Child()..parent = (Root()..name = "fred");
-      expect(q.values.backing.contents!.keys, ["parent"]);
-      expect(q.values.backing.contents!["parent"].backing.contents, {});
+      expect(q.values.backing.contents.keys, ["parent"]);
+      expect(q.values.backing.contents["parent"].backing.contents, {});
     });
 
     test(
@@ -202,8 +201,8 @@ void main() {
           ..name = "fred")
         ..name = "fred";
 
-      expect(q.values.backing.contents!.keys, ["parent", "name"]);
-      expect(q.values.backing.contents!["parent"].backing.contents, {"id": 1});
+      expect(q.values.backing.contents.keys, ["parent", "name"]);
+      expect(q.values.backing.contents["parent"].backing.contents, {"id": 1});
     });
   });
 }

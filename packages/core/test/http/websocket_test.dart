@@ -1,6 +1,8 @@
-// ignore_for_file: avoid_dynamic_calls
+// ignore_for_file: null_argument_to_non_null_type
 
 @Timeout(Duration(seconds: 120))
+library;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -161,7 +163,7 @@ class TestController extends ResourceController {
   }
 
   @Operation.get()
-  Future<Response?> testMethod() {
+  Future<Response> testMethod() {
     _stopwatch.start();
     final httpRequest = request!.raw;
     WebSocketTransformer.upgrade(httpRequest).then(_processConnection);
@@ -187,7 +189,7 @@ class ChatController extends ResourceController {
   }
 
   @Operation.get()
-  Future<Response?> newChat(@Bind.query('user') String user) async {
+  Future<Response> newChat(@Bind.query('user') String user) async {
     final httpRequest = request!.raw;
     _socket[user] = await WebSocketTransformer.upgrade(httpRequest);
     _socket[user]!.listen((event) => handleEvent(event as String, user));

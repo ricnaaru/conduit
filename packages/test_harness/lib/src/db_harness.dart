@@ -26,7 +26,7 @@ import 'package:test/test.dart';
 ///               await Query.insertObject(...);
 ///             }
 ///         }
-abstract class TestHarnessORMMixin {
+mixin TestHarnessORMMixin {
   /// Must override to return [ManagedContext] of application under test.
   ///
   /// An [ApplicationChannel] should expose its [ManagedContext] service as a property.
@@ -69,7 +69,7 @@ abstract class TestHarnessORMMixin {
         isTemporary: true);
 
     for (var cmd in builder.commands) {
-      logger?.info("$cmd");
+      logger?.info(cmd);
       await context!.persistentStore.execute(cmd);
     }
   }

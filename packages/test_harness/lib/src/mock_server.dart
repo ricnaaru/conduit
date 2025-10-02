@@ -57,7 +57,7 @@ abstract class MockServer<T> {
 /// correct request was sent and your application's behavior can be validated against the possible responses from the other server.
 ///
 /// An instance of this type listens on 'localhost' on [port]. Your application should use configuration values to provide the base URL and port
-/// of another server. During testing, your application should use the base URL 'http://localhost:<port>' and instantiate an mock HTTP
+/// of another server. During testing, your application should use the base URL 'http://localhost:\<port>' and instantiate an mock HTTP
 /// server with that port.
 ///
 /// By default, an instance of this type returns a 503 error response, indicating that the service can't be reached. Different
@@ -122,7 +122,8 @@ class MockHTTPServer extends MockServer<Request> {
   /// it returns is sent back to the client.
   ///
   /// Optionally includes a [delay] before sending the response to simulate long-running tasks or network issues.
-  void queueHandler(Response handler(Request request), {Duration? delay}) {
+  void queueHandler(Response Function(Request request) handler,
+      {Duration? delay}) {
     _responseQueue.add(
         _MockServerResponse(handler: handler, delay: delay ?? defaultDelay));
   }
@@ -139,8 +140,8 @@ class MockHTTPServer extends MockServer<Request> {
   /// Begins listening for HTTP requests on [port].
   @override
   Future open() async {
-    server =
-        await HttpServer.bind(InternetAddress.loopbackIPv4, port, shared: true);
+    server = await HttpServer.bind(InternetAddress.loopbackIPv4, port,
+        shared: false);
     server.map(Request.new).listen((req) async {
       add(req);
 

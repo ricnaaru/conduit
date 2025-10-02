@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_catching_errors
-
 import 'package:conduit_core/src/db/managed/data_model.dart';
 import 'package:conduit_core/src/db/managed/entity.dart';
 import 'package:conduit_core/src/db/managed/relationship_type.dart';
@@ -14,13 +12,13 @@ class ValidatorBuilder {
   final PropertyBuilder property;
   final Validate metadata;
   dynamic _state;
-  ManagedValidator? _validator;
+  late ManagedValidator _validator;
 
-  ManagedValidator? get managedValidator => _validator;
+  ManagedValidator get managedValidator => _validator;
 
-  void compile(List<EntityBuilder>? entityBuilders) {}
+  void compile(final List<EntityBuilder> entityBuilders) {}
 
-  void validate(List<EntityBuilder>? entityBuilders) {
+  void validate(final List<EntityBuilder> entityBuilders) {
     if (property.isRelationship) {
       if (property.relationshipType != ManagedRelationshipType.belongsTo) {
         throw ManagedDataModelError(
@@ -29,7 +27,7 @@ class ValidatorBuilder {
       }
     }
     Type? type;
-    PropertyBuilder? prop = property;
+    PropertyBuilder prop = property;
     if (property.isRelationship) {
       if (property.relationshipType != ManagedRelationshipType.belongsTo) {
         throw ManagedDataModelError(
@@ -42,7 +40,7 @@ class ValidatorBuilder {
     }
 
     try {
-      _state = metadata.compile(prop.type, relationshipInverseType: type);
+      _state = metadata.compile(prop.type!, relationshipInverseType: type);
     } on ValidateCompilationError catch (e) {
       throw ManagedDataModelError(
         "Invalid '@Validate' on property '${property.parent.name}.${property.name}'. Reason: ${e.reason}",

@@ -1,1 +1,4 @@
-include: package:lint/analysis_options.yaml
+analyzer:
+  errors:
+    empty_catches: ignore
+include: package:lints/recommended.yaml

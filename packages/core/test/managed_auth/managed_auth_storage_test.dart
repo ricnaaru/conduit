@@ -1,19 +1,18 @@
-// ignore_for_file: avoid_catching_errors
-
 import 'dart:async';
 import 'dart:io';
 
-import 'package:conduit_common_test/conduit_common_test.dart';
 import 'package:conduit_core/conduit_core.dart';
 import 'package:conduit_core/managed_auth.dart';
 import 'package:conduit_test/conduit_test.dart';
 import 'package:test/test.dart';
 
+import '../not_tests/postgres_test_config.dart';
+
 // These tests mostly duplicate authenticate_test.dart, but also add a few more
 // to manage long-term storage/cleanup of tokens and related items.
 void main() {
   late ManagedAuthDelegate<User> storage;
-  ManagedContext? context;
+  late ManagedContext context;
 
   setUp(() async {
     context = await PostgresTestConfig()
@@ -56,7 +55,7 @@ void main() {
           ..redirectURI = ac.redirectURI,
       )
           .map((mc) {
-        final q = Query<ManagedAuthClient>(context!)..values = mc;
+        final q = Query<ManagedAuthClient>(context)..values = mc;
         return q.insert();
       }),
     );
@@ -65,8 +64,7 @@ void main() {
   });
 
   tearDown(() async {
-    await context?.close();
-    context = null;
+    await context.close();
   });
 
   group("Client behavior", () {
@@ -89,18 +87,18 @@ void main() {
 
     test("Cannot revoke null client", () async {
       try {
-        await auth.removeClient(null);
+        await auth.removeClient('');
         expect(true, false);
         // ignore: empty_catches
       } on AuthServerException {}
 
-      final q = Query<ManagedAuthClient>(context!);
+      final q = Query<ManagedAuthClient>(context);
       expect(await q.fetch(), hasLength(5));
     });
 
     test("Revoking unknown client has no impact", () async {
       await auth.removeClient("nonsense");
-      final q = Query<ManagedAuthClient>(context!);
+      final q = Query<ManagedAuthClient>(context);
       expect(await q.fetch(), hasLength(5));
     });
 
@@ -114,7 +112,7 @@ void main() {
       );
       await auth.addClient(client);
 
-      final q = Query<ManagedAuthClient>(context!)
+      final q = Query<ManagedAuthClient>(context)
         ..where((o) => o.id).equalTo("pub-id");
       final result0 = await q.fetchOne();
       expect(result0, isNotNull);
@@ -146,9 +144,9 @@ void main() {
       }
     });
 
-    test("If client id is null, exception is thrown", () async {
+    test("If client id is empty, exception is thrown", () async {
       final client = generateAPICredentialPair(
-        null,
+        '',
         null,
         hashLength: auth.hashLength,
         hashRounds: auth.hashRounds,
@@ -158,9 +156,7 @@ void main() {
       try {
         await auth.addClient(client);
         fail('unreachable');
-      } on QueryException catch (e) {
-        expect(e.event, QueryExceptionEvent.input);
-      }
+      } on ArgumentError catch (_) {}
     });
 
     test("If client has redirect uri and no secret, exception is thrown",
@@ -186,7 +182,7 @@ void main() {
       )..allowedScopes = ["scope"].map((s) => AuthScope(s)).toList();
       await auth.addClient(client);
 
-      final q = Query<ManagedAuthClient>(context!)
+      final q = Query<ManagedAuthClient>(context)
         ..where((o) => o.id).equalTo("confidential-id");
       final result = (await q.fetchOne())!.asClient();
       expect(result.id, "confidential-id");
@@ -560,7 +556,7 @@ void main() {
       }
 
       // Make sure we don't have duplicates in the db
-      final q = Query<ManagedAuthToken>(context!);
+      final q = Query<ManagedAuthToken>(context);
       expect(await q.fetch(), hasLength(1));
     });
 
@@ -572,9 +568,9 @@ void main() {
       } on AuthServerException {}
     });
 
-    test("Cannot refresh token that is null", () async {
+    test("Cannot refresh token that is empty", () async {
       try {
-        await auth.refresh(null, "com.stablekernel.app1", "kilimanjaro");
+        await auth.refresh('', "com.stablekernel.app1", "kilimanjaro");
         expect(true, false);
         // ignore: empty_catches
       } on AuthServerException {}
@@ -590,7 +586,7 @@ void main() {
 
     test("Cannot refresh token if client id is missing", () async {
       try {
-        await auth.refresh(initialToken.refreshToken, null, "kilimanjaro");
+        await auth.refresh(initialToken.refreshToken, '', "kilimanjaro");
         expect(true, false);
         // ignore: empty_catches
       } on AuthServerException {}
@@ -772,19 +768,20 @@ void main() {
       }
     });
 
-    test("Generate auth code with no client id", () async {
-      try {
-        await auth.authenticateForCode(
-          createdUser.username,
-          User.defaultPassword,
-          null,
-        );
-        expect(true, false);
-      } on AuthServerException catch (e) {
-        expect(e.client, isNull);
-        expect(e.reason, AuthRequestError.invalidClient);
-      }
-    });
+    // Note: No longer supporting nullable client id
+    // test("Generate auth code with no client id", () async {
+    //   try {
+    //     await auth.authenticateForCode(
+    //       createdUser.username,
+    //       User.defaultPassword,
+    //       null,
+    //     );
+    //     expect(true, false);
+    //   } on AuthServerException catch (e) {
+    //     expect(e.client, isNull);
+    //     expect(e.reason, AuthRequestError.invalidClient);
+    //   }
+    // });
 
     test("Code no longer available if owner authentcatable is 'revoked'",
         () async {
@@ -887,7 +884,7 @@ void main() {
         // ignore: empty_catches
       } on AuthServerException {}
 
-      final q = Query<ManagedAuthToken>(context!)
+      final q = Query<ManagedAuthToken>(context)
         ..where((o) => o.code).equalTo(code.code);
       expect(await q.fetch(), isEmpty);
     });
@@ -916,7 +913,7 @@ void main() {
       }
 
       // Ensure that the associated auth code is also destroyed
-      final authCodeQuery = Query<ManagedAuthToken>(context!);
+      final authCodeQuery = Query<ManagedAuthToken>(context);
       expect(await authCodeQuery.fetch(), isEmpty);
     });
 
@@ -958,13 +955,13 @@ void main() {
       }
 
       // Ensure that the associated auth code is also destroyed
-      final authCodeQuery = Query<ManagedAuthToken>(context!);
+      final authCodeQuery = Query<ManagedAuthToken>(context);
       expect(await authCodeQuery.fetch(), isEmpty);
     });
 
-    test("Null client ID fails", () async {
+    test("Empty client ID fails", () async {
       try {
-        await auth.exchange(code.code, null, "mckinley");
+        await auth.exchange(code.code, '', "mckinley");
 
         expect(true, false);
         // ignore: empty_catches
@@ -1073,7 +1070,7 @@ void main() {
         expect(e.reason, AuthRequestError.invalidGrant);
       }
 
-      final tokenQuery = Query<ManagedAuthToken>(context!);
+      final tokenQuery = Query<ManagedAuthToken>(context);
       expect(await tokenQuery.fetch(), isEmpty);
     });
 
@@ -1144,7 +1141,7 @@ void main() {
         const TypeMatcher<Authorization>(),
       );
 
-      final tokenQuery = Query<ManagedAuthToken>(context!);
+      final tokenQuery = Query<ManagedAuthToken>(context);
       expect(await tokenQuery.fetch(), hasLength(3));
     });
 
@@ -1244,7 +1241,7 @@ void main() {
         expect(e.reason, AuthRequestError.invalidGrant);
       }
 
-      final tokenQuery = Query<ManagedAuthToken>(context!);
+      final tokenQuery = Query<ManagedAuthToken>(context);
       expect(await tokenQuery.fetch(), isEmpty);
     });
   });
@@ -1273,11 +1270,11 @@ void main() {
         "mckinley",
       );
 
-      final codeQuery = Query<ManagedAuthToken>(context!)
+      final codeQuery = Query<ManagedAuthToken>(context)
         ..where((o) => o.code).equalTo(exchangedCode.code);
       expect(await codeQuery.fetch(), hasLength(1));
 
-      final tokenQuery = Query<ManagedAuthToken>(context!)
+      final tokenQuery = Query<ManagedAuthToken>(context)
         ..where((o) => o.accessToken).equalTo(exchangedToken.accessToken);
       await tokenQuery.delete();
 
@@ -1317,7 +1314,7 @@ void main() {
       }
 
       // Insert the 'race condition' code
-      final manualInsertQuery = Query<ManagedAuthToken>(context!)
+      final manualInsertQuery = Query<ManagedAuthToken>(context)
         ..values = manualCode;
       manualCode = await manualInsertQuery.insert();
 
@@ -1328,7 +1325,7 @@ void main() {
         User.defaultPassword,
         "com.stablekernel.redirect",
       );
-      final codeQuery = Query<ManagedAuthToken>(context!);
+      final codeQuery = Query<ManagedAuthToken>(context);
       var codesInDB = (await codeQuery.fetch()).map((ac) => ac.code).toList();
 
       // These codes are in chronological order
@@ -1405,7 +1402,7 @@ void main() {
       }
 
       // Insert the 'race condition' token
-      final manualInsertQuery = Query<ManagedAuthToken>(context!)
+      final manualInsertQuery = Query<ManagedAuthToken>(context)
         ..values = manualToken;
       manualToken = await manualInsertQuery.insert();
 
@@ -1417,7 +1414,7 @@ void main() {
         "com.stablekernel.app1",
         "kilimanjaro",
       );
-      final tokenQuery = Query<ManagedAuthToken>(context!);
+      final tokenQuery = Query<ManagedAuthToken>(context);
       var tokensInDB =
           (await tokenQuery.fetch()).map((ac) => ac.accessToken).toList();
 
@@ -1564,7 +1561,7 @@ void main() {
             ..redirectURI = ac.redirectURI,
         )
             .map((mc) {
-          final q = Query<ManagedAuthClient>(context!)..values = mc;
+          final q = Query<ManagedAuthClient>(context)..values = mc;
           return q.insert();
         }),
       );
@@ -1876,7 +1873,7 @@ void main() {
         requestedScopes: [AuthScope("user"), AuthScope("location:add")],
       );
 
-      final q = Query<ManagedAuthClient>(context!)
+      final q = Query<ManagedAuthClient>(context)
         ..where((o) => o.id).equalTo("all.redirect")
         ..values.allowedScope = "user location:add.readonly";
       await q.updateOne();
