@@ -11,7 +11,8 @@ environment:
 dependencies:
   analyzer: ^7.1.0
   args: ^2.0.0
-  conduit_isolate_exec: ^5.1.5
+  conduit_isolate_exec:
+    path: ../isolate_exec
   io: ^1.0.4
   package_config: ^2.1.0
   path: ^1.9.0
