@@ -9,7 +9,8 @@ environment:
   sdk: ">=3.7.0 <4.0.0"
 
 dependencies:
-  conduit_open_api: ^5.1.5
+  conduit_open_api:
+    path: ../open_api
 
 dev_dependencies:
   lints: ^5.1.1
