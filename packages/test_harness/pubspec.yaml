@@ -11,7 +11,8 @@ environment:
 dependencies:
   test: ^1.25.2
   matcher: ^0.12.16+1
-  conduit_core: ^5.1.5
+  conduit_core:
+    path: ../core
 
 dev_dependencies:
   conduit_postgresql:
